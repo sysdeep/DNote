@@ -10,6 +10,7 @@ class NSNode(object):
 		self.tree_rk 	= 0
 		self.tree_level = 0
 		self.name 		= ""
+		self.uuid		= ""
 		
 		
 
@@ -18,7 +19,8 @@ class NSNode(object):
 			"tree_lk" 		: self.tree_lk,
 			"tree_rk"		: self.tree_rk,
 			"tree_level"	: self.tree_level,
-			"name"			: self.name
+			"name"			: self.name,
+			"uuid"			: self.uuid
 		}
 
 		return data
@@ -30,6 +32,7 @@ class NSNode(object):
 		self.tree_rk 	= data["tree_rk"]
 		self.tree_level = data["tree_level"]
 		self.name 		= data["name"]
+		self.uuid 		= data["uuid"]
 
 
 	def __repr__(self):

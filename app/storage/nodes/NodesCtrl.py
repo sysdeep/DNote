@@ -38,12 +38,16 @@ class NodesCtrl(object):
 
 		# log.debug("создание файлов")
 		node.write_meta()
-		node.write_page() 
+		node.write_page()
+
+		return node_uuid
 
 
 
-	def get_node(self, uuid):
-		pass
+	def get_node(self, node_path):
+		node = Node()
+		node.load(node_path)
+		return node
 
 	def remove_node(self, uuid):
 		pass

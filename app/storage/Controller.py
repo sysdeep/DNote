@@ -44,14 +44,16 @@ class Controller(object):
 	def create_top_node(self, name):
 		log.debug("создание новой ноды - top")
 
-		self.nodes_ctrl.create_node(name)
+		node_uuid = self.nodes_ctrl.create_node(name)
 
-		self.project.create_node_top(name)
+		self.project.create_node_top(node_uuid, name)
 		self.project.write_file()
 
 
 
-
+	def get_node(self, uuid):
+		node_path = os.path.join(self.project_path, "nodes", uuid)
+		return self.nodes_ctrl.get_node(node_path)
 
 
 

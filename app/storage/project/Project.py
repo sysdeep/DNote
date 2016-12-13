@@ -47,9 +47,10 @@ class Project(object):
 
 
 
-	def create_node_top(self, name):
+	def create_node_top(self, uuid, name):
 		root_node = self.tree.root
 		node = self.tree.create_node(root_node)
+		node.uuid = uuid
 		node.name = name
 
 

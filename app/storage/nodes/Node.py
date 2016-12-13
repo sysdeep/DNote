@@ -51,6 +51,9 @@ class Node(object):
 		self.name = name
 		self.meta.name = name
 
+	def write_node(self):
+		self.write_meta()
+		self.write_page()
 
 
 	def write_meta(self):
