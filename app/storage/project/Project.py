@@ -35,7 +35,6 @@ class Project(object):
 
 
 	def load(self):
-
 		log.debug("загрузка проекта")
 
 		with open(self.path, "r", encoding="utf-8") as fd:
@@ -45,6 +44,34 @@ class Project(object):
 		self.name = data["name"]
 
 		self.tree.load(data["tree"])
+
+
+
+	def create_node_top(self, name):
+		root_node = self.tree.root
+		node = self.tree.create_node(root_node)
+		node.name = name
+
+
+
+
+
+	def write_file(self):
+		log.debug("write project: " + self.path)
+
+		tree_data = self.tree.export()
+
+		data = {
+			"name"		: self.name,
+			"tree"		: tree_data
+		}
+
+		data_json = json.dumps(data, indent=4)
+
+		with open(self.path, "w", encoding="utf-8") as fd:
+			data = fd.write(data_json)
+
+
 
 
 

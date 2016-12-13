@@ -1,0 +1,11 @@
+{
+	"name" 	: "test project",
+	"tree"	: [
+		{
+			"tree_lk" 		: 0,
+			"tree_rk" 		: 1,
+			"tree_level"	: 0,
+			"name"			: "root"
+		}
+	]
+}

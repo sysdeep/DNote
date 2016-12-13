@@ -21,7 +21,7 @@ class Page(object):
 	def load(self, node_path):
 		"""загрузка данных из файла"""
 		self.path = os.path.join(node_path, self.file) 
-		log.debug("загрузка данных из файла: " + self.path)
+		# log.debug("загрузка данных из файла: " + self.path)
 		with open(self.path, "r", encoding="utf-8") as fd:
 			self.raw_text = fd.read()
 
@@ -29,7 +29,7 @@ class Page(object):
 
 	def write_file(self, node_path):
 		self.path = os.path.join(node_path, self.file)
-		log.debug("write page: " + self.path)
+		# log.debug("write page: " + self.path)
 
 
 		

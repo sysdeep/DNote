@@ -75,6 +75,9 @@ class NSTree(object):
 		new_node.tree_lk = parent_rk
 		new_node.tree_rk = parent_rk + 1
 
+
+		print(new_node.tree_rk)
+
 		self.nodes.append(new_node)
 		
 	
@@ -103,6 +106,9 @@ class NSTree(object):
 			node = NSNode()
 			node.load(node_data)
 			self.nodes.append(node)
+
+			if node_data["tree_lk"] == 0:
+				self.root = node
 
 
 
@@ -141,13 +147,13 @@ class NSTree(object):
 
 
 
-	# def export(self):
-	# 	data = []
-	# 	for node in self.nodes:
-	# 		row = node.export()
-	# 		data.append(row)
+	def export(self):
+		data = []
+		for node in self.nodes:
+			row = node.export()
+			data.append(row)
 
-	# 	return data
+		return data
 
 
 

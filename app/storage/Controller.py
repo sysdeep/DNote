@@ -1,15 +1,16 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-	Controller - объект, контролирующий создание, изменение, получение и удаление нод
+	Controller - объект, управляющий нодами и деревом проекта
 """
 import uuid
 import os
 
 from app import log
-from app.rc import DIR_PROJECT_NODES
+from app.rc import DIR_PROJECT_NODES, DIR_PROJECT
 
-from .nodes.Node import Node
+from .nodes.NodesCtrl import NodesCtrl
+from .project.Project import Project
 
 
 
@@ -17,38 +18,39 @@ from .nodes.Node import Node
 
 class Controller(object):
 	def __init__(self):
-		self.nodes_path = DIR_PROJECT_NODES
+		self.nodes_ctrl = NodesCtrl()
+		self.project	= Project()
+
+		self.project_path = ""
 
 
-	def create_node(self):
+
+	def load_project_default(self):
+		self.load_project(DIR_PROJECT)
+
+
+	def load_project(self, project_path):
+		self.project_path = project_path
+		self.project.set_project_dir(self.project_path)
+		self.project.load()
+
+
+
+
+	def create_node(self, name):
 		log.debug("создание новой ноды")
-		node_uuid = str(uuid.uuid1())
-		log.debug(node_uuid)
-
-		node = Node()
-		node.set_uuid(node_uuid)
 
 
-		node_dir_path = os.path.join(self.nodes_path, node_uuid)
-		node.path = node_dir_path
+	def create_top_node(self, name):
+		log.debug("создание новой ноды - top")
 
-		log.debug("создание каталога")
-		os.mkdir(node_dir_path)
+		self.nodes_ctrl.create_node(name)
 
-		log.debug("создание файлов")
-		node.write_meta()
-		node.write_page() 
+		self.project.create_node_top(name)
+		self.project.write_file()
 
 
 
-	def get_node(self, uuid):
-		pass
-
-	def remove_node(self, uuid):
-		pass
-
-	def update_node(self, uuid):
-		pass
 
 
 
@@ -62,4 +64,16 @@ if __name__ == '__main__':
 	
 
 	controller = Controller()
-	controller.create_node()
+	controller.load_project_default()
+	# controller.create_node()
+
+	controller.project.tree.print_nodes()
+
+
+	# controller.create_top_node("test_1")
+	# controller.create_top_node("test_2")
+	# controller.create_top_node("test_3")
+
+
+
+	# controller.project.tree.print_nodes()

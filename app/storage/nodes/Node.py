@@ -31,6 +31,7 @@ class Node(object):
 	def __init__(self):
 		self.path = ""
 		self.uuid = ""
+		self.name = ""
 		self.meta = Meta()
 		self.page = Page()
 
@@ -43,7 +44,12 @@ class Node(object):
 
 
 	def set_uuid(self, uuid):
+		self.uuid = uuid
 		self.meta.uuid = uuid
+
+	def set_name(self, name):
+		self.name = name
+		self.meta.name = name
 
 
 

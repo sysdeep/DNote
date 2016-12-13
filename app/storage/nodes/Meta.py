@@ -24,7 +24,7 @@ class Meta(object):
 	def load(self, node_path):
 		"""загрузка данных из файла"""
 		self.path = os.path.join(node_path, self.meta_file) 
-		log.debug("загрузка данных из файла: " + self.path)
+		# log.debug("загрузка данных из файла: " + self.path)
 		with open(self.path, "r", encoding="utf-8") as fd:
 			data = fd.read()
 
@@ -43,7 +43,7 @@ class Meta(object):
 
 	def write_file(self, node_path):
 		self.path = os.path.join(node_path, self.meta_file)
-		log.debug("write meta: " + self.path)
+		# log.debug("write meta: " + self.path)
 
 		data = {
 			"ntype"		: self.ntype,

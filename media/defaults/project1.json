@@ -1,0 +1,17 @@
+{
+	"name" 	: "test project",
+	"tree"	: [
+		{
+			"tree_lk" 		: 0,
+			"tree_rk" 		: 3,
+			"tree_level"	: 0,
+			"name"			: "root"
+		},
+		{
+			"tree_lk" 		: 1,
+			"tree_rk" 		: 2,
+			"tree_level"	: 1,
+			"name"			: "dir1"
+		}
+	]
+}

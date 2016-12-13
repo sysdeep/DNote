@@ -30,3 +30,7 @@ class NSNode(object):
 		self.tree_rk 	= data["tree_rk"]
 		self.tree_level = data["tree_level"]
 		self.name 		= data["name"]
+
+
+	def __repr__(self):
+		return "{} - lk: {}, rk: {}".format(self.name, self.tree_lk, self.tree_rk)
