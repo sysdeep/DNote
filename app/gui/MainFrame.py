@@ -36,7 +36,6 @@ class MainFrame(QWidget):
 		tree_side = QVBoxLayout()
 		self.main_layout.addLayout(tree_side)
 		
-		tree_side.addWidget(QLabel("tree side"))
 
 		self.tree_view = Tree()
 		self.tree_view.select_cb = self.__on_select_node
@@ -53,7 +52,7 @@ class MainFrame(QWidget):
 		node_side = QVBoxLayout()
 		self.main_layout.addLayout(node_side)
 
-		node_side.addWidget(QLabel("node side"))
+		
 
 		self.node_info = NodeInfo()
 		node_side.addWidget(self.node_info)
