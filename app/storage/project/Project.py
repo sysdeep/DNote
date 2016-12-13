@@ -7,11 +7,66 @@
 
 		nodes		- каталог со всеми нодами
 		trash		- каталог с удалёнными нодами
-		tree.json	- файл, описывающий дерево каталогов
+		project.json	- файл, описывающий дерево каталогов
 
 """
+import os
+import json
+
+from app import log
+from app.rc import FILE_PROJECT
+
+from .NSTree import NSTree
+
 
 
 class Project(object):
 	def __init__(self):
-		pass
+		self.file_name = "project.json"
+		self.path = ""
+
+		self.name = ""
+		self.tree = NSTree()
+
+
+
+	def set_project_dir(self, project_path):
+		self.path = os.path.join(project_path, self.file_name)
+
+
+	def load(self):
+
+		log.debug("загрузка проекта")
+
+		with open(self.path, "r", encoding="utf-8") as fd:
+			data_json = fd.read()
+
+		data = json.loads(data_json)
+		self.name = data["name"]
+
+		self.tree.load(data["tree"])
+
+
+
+	def __repr__(self):
+		return "{}".format(self.name)
+
+
+
+
+	
+
+if __name__ == '__main__':
+	
+	from app.rc import DIR_PROJECT
+
+	project = Project()
+	project.set_project_dir(DIR_PROJECT)
+	project.load()
+
+	print(project)
+
+
+	project.tree.print_nodes()
+
+

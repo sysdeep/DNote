@@ -21,8 +21,9 @@ class Controller(object):
 
 
 	def create_node(self):
+		log.debug("создание новой ноды")
 		node_uuid = str(uuid.uuid1())
-		print(node_uuid)
+		log.debug(node_uuid)
 
 		node = Node()
 		node.set_uuid(node_uuid)
@@ -31,8 +32,10 @@ class Controller(object):
 		node_dir_path = os.path.join(self.nodes_path, node_uuid)
 		node.path = node_dir_path
 
+		log.debug("создание каталога")
 		os.mkdir(node_dir_path)
 
+		log.debug("создание файлов")
 		node.write_meta()
 		node.write_page() 
 

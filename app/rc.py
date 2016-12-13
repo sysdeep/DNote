@@ -12,6 +12,7 @@ DIR_SELF = os.path.dirname(os.path.abspath(__file__))
 
 DIR_PROJECT = os.path.normpath(os.path.join(DIR_SELF, "..", "..", "sdir"))
 DIR_PROJECT_NODES = os.path.join(DIR_PROJECT, "nodes")
+FILE_PROJECT	= os.path.join(DIR_PROJECT, "project.json")
 # FILE_JSON = os.path.normpath(os.path.join(DIR_SELF, "..", "..", "sdir.json"))
 
 
