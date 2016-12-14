@@ -65,6 +65,15 @@ class Project(object):
 		return self.tree.find_node_by_uuid(uuid)
 
 
+
+	def set_current_node(self, uuid):
+		for node in self.tree.nodes:
+			if node.uuid == uuid:
+				node.current = True
+			else:
+				node.current = False
+
+
 	def create_node(self, parent_node, uuid, name):
 		node = self.tree.create_node(parent_node)
 		node.uuid = uuid

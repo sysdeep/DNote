@@ -6,11 +6,15 @@
 
 class NSNode(object):
 	def __init__(self):
+
 		self.tree_lk 	= 0
 		self.tree_rk 	= 0
 		self.tree_level = 0
-		self.name 		= ""
-		self.uuid		= ""
+
+		self.name 		= ""			# название ноды
+		self.uuid		= ""			# id
+		self.expanded	= False			# открыта нода или нет
+		self.current	= False			# флаг текущей ноды 
 		
 		
 
@@ -20,7 +24,9 @@ class NSNode(object):
 			"tree_rk"		: self.tree_rk,
 			"tree_level"	: self.tree_level,
 			"name"			: self.name,
-			"uuid"			: self.uuid
+			"uuid"			: self.uuid,
+			"expanded"		: self.expanded,
+			"current"		: self.current
 		}
 
 		return data
@@ -33,6 +39,12 @@ class NSNode(object):
 		self.tree_level = data["tree_level"]
 		self.name 		= data["name"]
 		self.uuid 		= data["uuid"]
+		self.expanded	= data["expanded"]
+		self.current	= data.get("current", False)
+
+
+
+
 
 
 	def __repr__(self):

@@ -3,7 +3,7 @@
 
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QLabel, QPushButton
 # from .Tree import Tree
-
+from app import log
 from app.storage import get_storage
 
 from .tree.Tree import Tree
@@ -33,6 +33,9 @@ class MainFrame(QWidget):
 		self.__make_node_side()
 
 
+		self.start()
+
+
 
 
 	def __make_tree_side(self):
@@ -42,12 +45,18 @@ class MainFrame(QWidget):
 
 		self.tree_view = Tree()
 		self.tree_view.select_cb = self.__on_select_node
+		# self.tree_view.update_tree()
 		tree_side.addWidget(self.tree_view)
 
 
 		tmp_btn_refresh = QPushButton("refresh")
 		tmp_btn_refresh.clicked.connect(lambda: self.tree_view.update_tree())
 		tree_side.addWidget(tmp_btn_refresh)
+
+
+		tmp_btn_save = QPushButton("save")
+		tmp_btn_save.clicked.connect(self.__force_save)
+		tree_side.addWidget(tmp_btn_save)
 
 
 		# self.tree_stat = TreeStat()
@@ -80,18 +89,24 @@ class MainFrame(QWidget):
 
 
 
+	def start(self):
+		"""запуск"""
+		self.tree_view.update_tree()
 
 	def __on_select_node(self, uuid):
-		# print("---->", uuid)
+		"""select node"""
 
-
+		#--- show node data
 		self.current_node = self.storage.get_node(uuid)
-		# print(node)
-
 		self.node_info.update_node(self.current_node)
 		self.node_editor.update_node(self.current_node)
 
-		# self.node_stat.update_node(node_id)
+		#--- update tree node
+		self.storage.project.set_current_node(self.current_node.uuid)
+
+
+
+
 
 	# def update_tree(self):
 	# 	self.tree_view.update_tree()
@@ -114,3 +129,9 @@ class MainFrame(QWidget):
 
 		modal = ModalCreate(parent_node=parent_project_node, parent=self)
 		modal.show()
+
+
+
+	def __force_save(self):
+		log.debug("force save")
+		self.storage.project.write_file()

@@ -21,7 +21,7 @@ class Tree(QTreeView):
 		self.model.setHorizontalHeaderLabels(['name'])
 		self.setModel(self.model)
 		self.setUniformRowHeights(True)
-		# self.setHeaderHidden(True)
+		self.setHeaderHidden(True)
 		self.setFixedWidth(300)
 
 		self.storage = get_storage()
@@ -29,12 +29,15 @@ class Tree(QTreeView):
 		self.select_cb = None
 
 
+		self.current_index = None								# элемент с флагом current = True
+
+		#--- menu
 		self.setContextMenuPolicy(Qt.ActionsContextMenu)
 		file_create_action = QAction("New catalog", self)
 		self.addAction(file_create_action)
 
 		# events.on("update_tree", self.__update_tree)
-		self.__make_tree()
+		# self.__make_tree()
 
 
 		self.clicked.connect(self.__select)
@@ -62,6 +65,22 @@ class Tree(QTreeView):
 			self.__wnode(item, self.model)
 
 
+		#--- выбираем элемент у которого флаг current
+		if self.current_index:
+			self.setCurrentIndex(self.current_index)
+			self.__select(self.current_index)
+			# uuid = self.current_index.data(Qt.UserRole+1)
+			# print(uuid)
+
+
+			# standart_model = index.model()
+			# if standart_model is None:
+			# 	return False
+			# standart_item = index.model().itemFromIndex(index)		# получаем объект строки, созданной выше
+			# self.__select(standart_item.attr_id)					# запуск обработки выделения
+
+
+
 
 	def __wnode(self, node, parent):
 			"""
@@ -80,14 +99,21 @@ class Tree(QTreeView):
 
 
 			row = QStandardItem(node.name)				# элемент строки
-			# row.com_sys_id = node["sys_id"]					# определяем свой атрибут(нужен при выборе)
 			# row.setIcon(icon)				# icon
 			row.setEditable(False)							# editable - false
 
 			row.setData(node.uuid, Qt.UserRole+1)
 
+
+			
+
+
+			
 			parent.appendRow(row)							# добавляем
 
+			if node.current:
+				self.current_index = self.model.indexFromItem(row)
+			# print(index)
 
 			#--- ищем всех деток на уровень ниже(не дальше)
 			# child_items = [node for node in simple_obj_list
@@ -100,6 +126,11 @@ class Tree(QTreeView):
 			#--- для каждого из деток вызываем рекурсию
 			for node in child_items:
 				self.__wnode(node, row)
+
+
+
+			
+
 
 
 	def __select(self, index):
