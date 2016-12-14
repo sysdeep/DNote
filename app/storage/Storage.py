@@ -52,19 +52,37 @@ class Storage(object):
 
 
 
+	
+	def remove_node(self, uuid):
+		log.debug("удаление ноды: " + uuid)
 
+		#--- удаление файлов ноды
+		self.nodes.remove_node(uuid)
 
-	def create_node_top(self, name):
-		log.debug("создание новой ноды - top")
-
-		#--- создание файлов ноды
-		node_uuid = self.nodes.create_node(name)
-
-		#--- создание ноды в файле проекта
-		self.project.create_node_top(node_uuid, name)
+		#--- удаление ноды в файле проекта
+		self.project.remove_node(uuid)
+		# self.project.tree.print_nodes()
+		
 		self.project.write_file()
 
 		return True
+
+
+
+
+
+	# def create_node_top(self, name):
+	# 	"""DEPRICATED"""
+	# 	log.debug("создание новой ноды - top")
+
+	# 	#--- создание файлов ноды
+	# 	node_uuid = self.nodes.create_node(name)
+
+	# 	#--- создание ноды в файле проекта
+	# 	self.project.create_node_top(node_uuid, name)
+	# 	self.project.write_file()
+
+	# 	return True
 
 
 

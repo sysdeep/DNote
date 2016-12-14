@@ -5,6 +5,7 @@
 """
 import uuid
 import os
+import shutil
 
 from app import log
 
@@ -72,8 +73,16 @@ class Nodes(object):
 
 	
 
-	def remove_node(self, uuid):
-		pass
+	def remove_node(self, node_uuid):
+		"""удаление всех файлов ноды"""
+		log.info("удаление всех файлов ноды: " + node_uuid)
+		node_dir_path = os.path.join(self.nodes_path, node_uuid)
+		# shutil.rmtree(node_dir_path, ignore_errors=True)
+		shutil.rmtree(node_dir_path)
+
+
+
+
 
 	def update_node(self, uuid):
 		pass

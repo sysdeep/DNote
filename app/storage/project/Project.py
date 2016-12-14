@@ -79,14 +79,20 @@ class Project(object):
 		node.uuid = uuid
 		node.name = name
 
+		self.set_current_node(uuid)
+
+	def remove_node(self, node_uuid):
+		"""удаление ноды"""
+		log.info("удаление ноды: " + node_uuid)
+		self.tree.remove_node(node_uuid)
 
 
-
-	def create_node_top(self, uuid, name):
-		root_node = self.tree.root
-		node = self.tree.create_node(root_node)
-		node.uuid = uuid
-		node.name = name
+	# def create_node_top(self, uuid, name):
+	# 	"""DEPRICATED"""
+	# 	root_node = self.tree.root
+	# 	node = self.tree.create_node(root_node)
+	# 	node.uuid = uuid
+	# 	node.name = name
 
 
 

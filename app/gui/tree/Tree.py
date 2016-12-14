@@ -5,7 +5,7 @@ from PyQt5.QtWidgets import QWidget, QVBoxLayout, QTreeView, QLabel, QAction
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QIcon, QStandardItemModel, QStandardItem
 
-
+from app import log
 from app.storage import get_storage
 
 # from app.logic import get_tree
@@ -44,23 +44,26 @@ class Tree(QTreeView):
 
 
 	def __update_tree(self):
+		self.current_index = None
 		self.model.clear()
 		self.__make_tree()
 
 
 	def update_tree(self):
-		self.model.clear()
-		self.__make_tree()
+		self.__update_tree()
+
+
+
+
 
 
 	def __make_tree(self):
+		"""строим дерево"""
 
-		#--- запуск обхода дерева
-		root_items = self.tree.get_nodes_level(1)		# все элементы корня
-		# self.tree.print_nodes()
-		# root = self.tree.get_root()
-		# root_items = root.childrens
+		#--- все элементы корня
+		root_items = self.tree.get_nodes_level(1)		
 
+		#--- запуск обхода дерева(рекурсия)
 		for item in root_items:
 			self.__wnode(item, self.model)
 
@@ -69,15 +72,12 @@ class Tree(QTreeView):
 		if self.current_index:
 			self.setCurrentIndex(self.current_index)
 			self.__select(self.current_index)
-			# uuid = self.current_index.data(Qt.UserRole+1)
-			# print(uuid)
+		#--- если текущего нет - первый
+		else:
+			index = self.model.index(0, 0)
+			self.setCurrentIndex(index)
+			self.__select(index)
 
-
-			# standart_model = index.model()
-			# if standart_model is None:
-			# 	return False
-			# standart_item = index.model().itemFromIndex(index)		# получаем объект строки, созданной выше
-			# self.__select(standart_item.attr_id)					# запуск обработки выделения
 
 
 

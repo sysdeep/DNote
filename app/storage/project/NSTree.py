@@ -83,6 +83,35 @@ class NSTree(object):
 	
 
 
+	def __remove(self, node):
+		""""""
+
+		node_lk = node.tree_lk
+		node_rk = node.tree_rk
+
+		#--- 1 - find del nodes
+		del_nodes = [n for n in self.nodes if n.tree_lk >= node_lk and n.tree_rk <= node_rk]
+		# print(del_nodes)
+
+		#--- 2 - remve nodes from list
+		for n in del_nodes:
+			self.nodes.remove(n)
+
+		#--- 3 - update nodes before
+		for n in self.nodes:
+			if n.tree_rk > node_rk and n.tree_lk < node_lk:
+				n.tree_rk -= (node_rk - node_lk + 1) 
+		
+		
+		#--- 4 - update nodes after
+		for n in self.nodes:
+			if n.tree_lk > node_rk:
+				n.tree_lk -= (node_rk - node_lk + 1)
+				n.tree_rk -= (node_rk - node_lk + 1)
+		
+
+
+
 
 	def create_node(self, parent_node):
 		new_node = NSNode()
@@ -97,11 +126,22 @@ class NSTree(object):
 
 
 
+	def remove_node(self, node_uuid):
+		"""удаление заданной ноды из дерева"""
+		log.debug("удаление заданной ноды из дерева: " + node_uuid)
+		node = self.find_node_by_uuid(node_uuid)
+
+		if node:
+			self.__remove(node)
+		
+
+
 	def find_node_by_uuid(self, uuid):
 		result = [node for node in self.nodes if node.uuid == uuid]
 		if result:
 			return result[0]
 		else:
+			log.error("not found node: " + uuid)
 			return None
 
 
