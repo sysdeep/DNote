@@ -36,9 +36,14 @@ class Node(object):
 		self.page = Page()
 
 	def load(self, node_path):
+		"""загрузка данных"""
 		self.path = node_path
-		self.meta.load(self.path)
-		self.page.load(self.path)
+		self.meta.load(self.path)			# meta
+		self.page.load(self.path)			# page
+
+		#--- update self vars
+		self.name = self.meta.name
+		self.uuid = self.meta.uuid
 
 
 

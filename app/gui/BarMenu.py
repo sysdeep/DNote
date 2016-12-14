@@ -5,8 +5,11 @@ from PyQt5.QtWidgets import QAction, QFileDialog
 
 # from app.rc import get_icon_path
 
-from . import events, qicon
-from .ModalScan import ModalScan
+
+
+from .modal_create import ModalCreate
+# from . import events, qicon
+# from .ModalScan import ModalScan
 
 # from .icons import qicon
 # from app.logic import get_project
@@ -22,32 +25,32 @@ from .ModalScan import ModalScan
 
 class BarMenu(object):
 	def __init__(self, parent):
-		self.parent 	= parent
+		self.parent 	= parent				# MainWindow
 		# self.project 	= get_project()
 
 
-		menu = self.parent.menuBar()
-		toolbar = self.parent.addToolBar("Main")
+		# self.menu 		= self.parent.menuBar()
+		self.toolbar 	= self.parent.addToolBar("Main")
 
 		#--- file -------------------------------------------------------------
-		file_menu = menu.addMenu("Файл")
+		# file_menu = menu.addMenu("Файл")
 
 
-		file_open_action = QAction("Open", self.parent)
-		file_open_action.setIcon(qicon("document_open.png"))
-		file_open_action.triggered.connect(lambda: self.__file_open())
+		# file_open_action = QAction("Open", self.parent)
+		# file_open_action.setIcon(qicon("document_open.png"))
+		# file_open_action.triggered.connect(lambda: self.__file_open())
 
-		file_menu.addAction(file_open_action)
-		toolbar.addAction(file_open_action)
+		# file_menu.addAction(file_open_action)
+		# toolbar.addAction(file_open_action)
 
 
 
 		file_create_action = QAction("New catalog", self.parent)
-		file_create_action.setIcon(qicon("document_new.png"))
+		# file_create_action.setIcon(qicon("document_new.png"))
 		file_create_action.triggered.connect(lambda: self.__file_create())
 
-		file_menu.addAction(file_create_action)
-		toolbar.addAction(file_create_action)
+		# file_menu.addAction(file_create_action)
+		self.toolbar.addAction(file_create_action)
 
 		# file_open_dir_action = QAction("Open dir", self.parent)
 		# file_open_dir_action.triggered.connect(lambda: self.__file_open_dir())
@@ -57,10 +60,10 @@ class BarMenu(object):
 		# file_scan_action.triggered.connect(self.__file_scan)
 		# file_menu.addAction(file_scan_action)
 
-		file_save_action = QAction("Save", self.parent)
-		file_save_action.setIcon(qicon("document_save.png"))
-		file_save_action.triggered.connect(lambda: self.__file_save())
-		file_menu.addAction(file_save_action)
+		# file_save_action = QAction("Save", self.parent)
+		# file_save_action.setIcon(qicon("document_save.png"))
+		# file_save_action.triggered.connect(lambda: self.__file_save())
+		# file_menu.addAction(file_save_action)
 
 
 
@@ -86,41 +89,43 @@ class BarMenu(object):
 
 
 
-	def __file_save(self):
-		# print("file_open")
-		dlg = QFileDialog()
-		dlg.setAcceptMode(QFileDialog.AcceptSave)
-		# dlg.setFileMode(QFileDialog.Directory)
-		# dlg.setOption(QFileDialog.ShowDirsOnly, True)
+	# def __file_save(self):
+	# 	# print("file_open")
+	# 	dlg = QFileDialog()
+	# 	dlg.setAcceptMode(QFileDialog.AcceptSave)
+	# 	# dlg.setFileMode(QFileDialog.Directory)
+	# 	# dlg.setOption(QFileDialog.ShowDirsOnly, True)
 
 
-		if dlg.exec_():
-			files = dlg.selectedFiles()
-			print(files)
-			if len(files) > 0:
-			# 	# set_scan_dir(files[0])
-				events.set_save_file(files[0])
+	# 	if dlg.exec_():
+	# 		files = dlg.selectedFiles()
+	# 		print(files)
+	# 		if len(files) > 0:
+	# 		# 	# set_scan_dir(files[0])
+	# 			events.set_save_file(files[0])
 
 
 
 
-	def __file_open(self):
-		dlg = QFileDialog()
-		dlg.setAcceptMode(QFileDialog.AcceptOpen)
-		# dlg.setFileMode(QFileDialog.Directory)
-		# dlg.setOption(QFileDialog.ShowDirsOnly, True)
+	# def __file_open(self):
+	# 	dlg = QFileDialog()
+	# 	dlg.setAcceptMode(QFileDialog.AcceptOpen)
+	# 	# dlg.setFileMode(QFileDialog.Directory)
+	# 	# dlg.setOption(QFileDialog.ShowDirsOnly, True)
 
 
-		if dlg.exec_():
-			files = dlg.selectedFiles()
-			print(files)
-			if len(files) > 0:
-			# 	# set_scan_dir(files[0])
-				events.set_open_file(files[0])
+	# 	if dlg.exec_():
+	# 		files = dlg.selectedFiles()
+	# 		print(files)
+	# 		if len(files) > 0:
+	# 		# 	# set_scan_dir(files[0])
+	# 			events.set_open_file(files[0])
 
 	def __file_create(self):
-		modal = ModalScan(self.parent)
+		modal = ModalCreate(parent_node=None, parent=self.parent)
 		modal.show()
+		# modal = ModalScan(self.parent)
+		# modal.show()
 
 		# name = QFileDialog.getOpenFileName(self.parent, 'open dir')
 		# with open(name[0], "w", encoding='utf-8') as fd:

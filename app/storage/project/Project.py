@@ -22,28 +22,54 @@ from .NSTree import NSTree
 
 class Project(object):
 	def __init__(self):
-		self.file_name = "project.json"
-		self.path = ""
+		self.file_name 		= "project.json"			# название файла проекта
+		self.file_path 		= ""						# полный путь к файлу проекта
+		self.project_path	= ""						# полный путь к каталогу проекта
 
-		self.name = ""
-		self.tree = NSTree()
-
-
-
-	def set_project_dir(self, project_path):
-		self.path = os.path.join(project_path, self.file_name)
+		#--- данные проекта
+		self.name 			= ""						# название проекта
+		self.tree 			= NSTree()					# дерево проекта
 
 
-	def load(self):
-		log.debug("загрузка проекта")
 
-		with open(self.path, "r", encoding="utf-8") as fd:
+	# def set_project_dir(self, project_path):
+	# 	self.file_path = os.path.join(project_path, self.file_name)
+
+
+	def load(self, project_path):
+		"""загрузка данных проекта по указанному пути"""
+		self.project_path = project_path
+		log.debug("загрузка проекта: " + self.project_path)
+		self.file_path = os.path.join(self.project_path, self.file_name)
+
+		with open(self.file_path, "r", encoding="utf-8") as fd:
 			data_json = fd.read()
 
 		data = json.loads(data_json)
+
+
+
 		self.name = data["name"]
 
 		self.tree.load(data["tree"])
+
+
+	def get_tree(self):
+		return self.tree
+
+
+	def get_root_node(self):
+		return self.tree.root
+
+	def find_node_by_uuid(self, uuid):
+		return self.tree.find_node_by_uuid(uuid)
+
+
+	def create_node(self, parent_node, uuid, name):
+		node = self.tree.create_node(parent_node)
+		node.uuid = uuid
+		node.name = name
+
 
 
 
@@ -58,7 +84,7 @@ class Project(object):
 
 
 	def write_file(self):
-		log.debug("write project: " + self.path)
+		log.debug("write project: " + self.file_path)
 
 		tree_data = self.tree.export()
 
@@ -69,7 +95,7 @@ class Project(object):
 
 		data_json = json.dumps(data, indent=4)
 
-		with open(self.path, "w", encoding="utf-8") as fd:
+		with open(self.file_path, "w", encoding="utf-8") as fd:
 			data = fd.write(data_json)
 
 

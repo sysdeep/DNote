@@ -97,6 +97,13 @@ class NSTree(object):
 
 
 
+	def find_node_by_uuid(self, uuid):
+		result = [node for node in self.nodes if node.uuid == uuid]
+		if result:
+			return result[0]
+		else:
+			return None
+
 
 	def load(self, nodes_list):
 		self.nodes = []

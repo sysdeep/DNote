@@ -10,15 +10,26 @@ DIR_SELF = os.path.dirname(os.path.abspath(__file__))
 
 # DIR_ICONS = os.path.join(DIR_MEDIA, "icons")
 
+
+
+
+class Shared:
+	current_project_directory	= ""
+
+
+
+
+
+
+
+
+
+#--- for tests in progress
+
 DIR_PROJECT = os.path.normpath(os.path.join(DIR_SELF, "..", "..", "sdir"))
 DIR_PROJECT_NODES = os.path.join(DIR_PROJECT, "nodes")
 FILE_PROJECT	= os.path.join(DIR_PROJECT, "project.json")
 # FILE_JSON = os.path.normpath(os.path.join(DIR_SELF, "..", "..", "sdir.json"))
-
-
-
-
-
 DIR_TEST_NODE = os.path.join(DIR_PROJECT_NODES, "28bd6ab8-c116-11e6-b160-e0cb4e1afb73")
 
 

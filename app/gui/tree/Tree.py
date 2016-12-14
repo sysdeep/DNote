@@ -1,12 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from PyQt5.QtWidgets import QWidget, QVBoxLayout, QTreeView, QLabel
+from PyQt5.QtWidgets import QWidget, QVBoxLayout, QTreeView, QLabel, QAction
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QIcon, QStandardItemModel, QStandardItem
 
 
-from app.storage import get_tree
+from app.storage import get_storage
 
 # from app.logic import get_tree
 # from app.rc import get_icon_path
@@ -24,8 +24,14 @@ class Tree(QTreeView):
 		# self.setHeaderHidden(True)
 		self.setFixedWidth(300)
 
-		self.tree = get_tree()
+		self.storage = get_storage()
+		self.tree = self.storage.project.get_tree()
 		self.select_cb = None
+
+
+		self.setContextMenuPolicy(Qt.ActionsContextMenu)
+		file_create_action = QAction("New catalog", self)
+		self.addAction(file_create_action)
 
 		# events.on("update_tree", self.__update_tree)
 		self.__make_tree()
@@ -40,6 +46,7 @@ class Tree(QTreeView):
 
 
 	def update_tree(self):
+		self.model.clear()
 		self.__make_tree()
 
 
@@ -47,7 +54,7 @@ class Tree(QTreeView):
 
 		#--- запуск обхода дерева
 		root_items = self.tree.get_nodes_level(1)		# все элементы корня
-		self.tree.print_nodes()
+		# self.tree.print_nodes()
 		# root = self.tree.get_root()
 		# root_items = root.childrens
 

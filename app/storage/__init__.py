@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 
-from .main import set_up, get_tree, get_controller
+from .loader import get_storage, load_default_project
 
 
-set_up()
+# set_up()

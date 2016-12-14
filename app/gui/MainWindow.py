@@ -21,7 +21,7 @@ from .MainFrame import MainFrame
 # from .modals import LoginWindow
 # from ..storage import ulog
 # from app.rc import get_font_path
-# from .BarMenu import BarMenu
+from .BarMenu import BarMenu
 # from .SystemTray import SystemTray
 # from . import events
 
@@ -97,7 +97,7 @@ class MainWindow(QMainWindow):
 		# self.setGeometry(300, 300, 300, 300)
 
 		#--- main menu
-		# menu = BarMenu(self)
+		menu = BarMenu(self)
 
 		#--- mnemo bar
 		self.__make_main()
