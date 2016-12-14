@@ -17,27 +17,43 @@ def on(event_name, cb):
 
 
 
-def set_scan_path(path):
-	emitter.emit("set_scan_path", path)
 
 
-
-def start_scan():
-	emitter.emit("start_scan")
-
-
-def set_save_file(path):
-	emitter.emit("set_save_file", path)
-
-
-def set_open_file(path):
-	emitter.emit("set_open_file", path)
-
+def show_modal_create_node(parent_node=None):
+	emitter.emit("show_modal_create_node", parent_node=None)
 
 
 
 def update_tree():
 	emitter.emit("update_tree")
+
+
+
+
+
+
+
+# def set_scan_path(path):
+# 	emitter.emit("set_scan_path", path)
+
+
+
+# def start_scan():
+# 	emitter.emit("start_scan")
+
+
+# def set_save_file(path):
+# 	emitter.emit("set_save_file", path)
+
+
+# def set_open_file(path):
+# 	emitter.emit("set_open_file", path)
+
+
+
+
+# def update_tree():
+# 	emitter.emit("update_tree")
 
 
 #

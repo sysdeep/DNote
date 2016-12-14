@@ -10,7 +10,7 @@ from app.storage import get_storage
 
 # from app.logic import get_tree
 # from app.rc import get_icon_path
-# from . import events, qicon
+from .. import events
 
 
 class Tree(QTreeView):
@@ -36,7 +36,7 @@ class Tree(QTreeView):
 		file_create_action = QAction("New catalog", self)
 		self.addAction(file_create_action)
 
-		# events.on("update_tree", self.__update_tree)
+		events.on("update_tree", self.__update_tree)
 		# self.__make_tree()
 
 

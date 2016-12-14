@@ -8,7 +8,7 @@ from PyQt5.QtWidgets import QAction, QFileDialog
 
 
 from .modal_create import ModalCreate
-# from . import events, qicon
+from . import events
 # from .ModalScan import ModalScan
 
 # from .icons import qicon
@@ -123,7 +123,9 @@ class BarMenu(object):
 
 	def __file_create(self):
 		modal = ModalCreate(parent_node=None, parent=self.parent)
-		modal.show()
+		modal.exec_()
+
+		events.update_tree()
 		# modal = ModalScan(self.parent)
 		# modal.show()
 

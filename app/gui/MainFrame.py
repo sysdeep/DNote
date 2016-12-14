@@ -11,7 +11,7 @@ from .node.NodeInfo import NodeInfo
 from .node.NodeEditor import NodeEditor
 
 from .modal_create import ModalCreate
-
+from . import events
 
 class MainFrame(QWidget):
 	def __init__(self, parent=None):
@@ -96,7 +96,8 @@ class MainFrame(QWidget):
 
 	def start(self):
 		"""запуск"""
-		self.tree_view.update_tree()
+		# self.tree_view.update_tree()
+		events.update_tree()
 
 
 
@@ -140,7 +141,8 @@ class MainFrame(QWidget):
 		# modal.show()
 		modal.exec_()
 		print("after show")
-		self.tree_view.update_tree()
+		# self.tree_view.update_tree()
+		events.update_tree()
 
 
 
@@ -151,7 +153,8 @@ class MainFrame(QWidget):
 		# print(self.current_node.uuid)
 		self.storage.remove_node(self.current_node.uuid)
 		log.debug("after remove")
-		self.tree_view.update_tree()
+		events.update_tree()
+		# self.tree_view.update_tree()
 
 		# modal = ModalCreate(parent_node=parent_project_node, parent=self)
 		# modal.show()
