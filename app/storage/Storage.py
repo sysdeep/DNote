@@ -42,13 +42,15 @@ class Storage(object):
 		log.debug("создание новой ноды")
 
 		#--- создание файлов ноды
-		node_uuid = self.nodes.create_node(name)
+		# node_uuid = self.nodes.create_node(name)
+		node = self.nodes.create_node(name)
+		node_uuid = node.uuid
 
 		#--- создание ноды в файле проекта
 		self.project.create_node(parent_node, node_uuid, name)
 		self.project.write_file()
 
-		return True
+		return node
 
 
 

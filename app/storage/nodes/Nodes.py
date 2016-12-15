@@ -67,7 +67,8 @@ class Nodes(object):
 		node.write_meta()
 		node.write_page()
 
-		return node_uuid
+		# return node_uuid
+		return node
 
 
 

@@ -34,14 +34,23 @@ class ModalCreate(QDialog):
 		
 		self.main_layout = QHBoxLayout(self)
 
+
+
+		input_layout = QVBoxLayout()
+		self.main_layout.addLayout(input_layout)
+
 		form = QFormLayout()
-		self.main_layout.addLayout(form)
+		input_layout.addLayout(form)
 
 
 		self.edit_name = QLineEdit()
 
 		form.addRow("name", self.edit_name)
 
+
+
+		self.edit_text = QTextEdit()
+		input_layout.addWidget(self.edit_text)
 		
 
 
@@ -63,12 +72,24 @@ class ModalCreate(QDialog):
 
 
 	def __create(self):
+		"""создание новой ноды"""
 
+		#--- название
 		name = self.edit_name.text()
 
-		# print(name)
+		#--- содержимое
+		text = self.edit_text.toPlainText()
 
-		self.storage.create_node(self.parent_node, name)
+
+		#--- создание дефолтных записей ноды
+		node = self.storage.create_node(self.parent_node, name)
+
+		#--- обновление данных
+		node.page.raw_text = text
+		node.write_node()
+
+
+		self.close()
 
 
 

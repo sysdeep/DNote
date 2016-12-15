@@ -12,7 +12,7 @@ class NodeInfo(QGroupBox):
 		self.main_layout = QGridLayout(self)
 
 
-		self.node_items = ("ntype", "uuid", "name", "ctime", "mtime", "atime", "path")
+		self.node_items = ("ntype", "uuid", "name", "ctime", "mtime", "path")
 		self.node_labels = {}
 
 
@@ -28,8 +28,15 @@ class NodeInfo(QGroupBox):
 
 	def update_node(self, node):
 		# print(dir(node))
-		for item in self.node_items:
-			value = getattr(node.meta, item)
+		# for item in self.node_items:
+		# 	value = getattr(node.meta, item)
 
-			label = self.node_labels[item]
-			label.setText(str(value))
+		# 	label = self.node_labels[item]
+		# 	label.setText(str(value))
+
+		self.node_labels["ntype"].setText(node.meta.ntype)
+		self.node_labels["uuid"].setText(node.meta.uuid)
+		self.node_labels["name"].setText(node.meta.name)
+		self.node_labels["path"].setText(node.meta.path)
+		self.node_labels["ctime"].setText(node.meta.get_ctime())
+		self.node_labels["mtime"].setText(node.meta.get_mtime())

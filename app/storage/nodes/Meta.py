@@ -5,6 +5,8 @@
 """
 import json
 import os.path
+import time
+
 from app import log
 
 class Meta(object):
@@ -45,6 +47,12 @@ class Meta(object):
 		self.path = os.path.join(node_path, self.meta_file)
 		# log.debug("write meta: " + self.path)
 
+		now_seconds = time.time()
+		if self.ctime == 0:
+			self.ctime = now_seconds
+
+		self.mtime = now_seconds
+
 		data = {
 			"ntype"		: self.ntype,
 			"uuid"		: self.uuid,
@@ -61,7 +69,18 @@ class Meta(object):
 			data = fd.write(data_json)
 
 
-	
+	def get_date(self, seconds):
+		"""получить дату в читаемом виде"""
+		time_tuple = time.localtime(seconds)
+		result = time.strftime("%Y-%m-%d %H:%M:%S", time_tuple)
+		return result
+
+	def get_ctime(self):
+		return self.get_date(self.ctime)
+
+	def get_mtime(self):
+		return self.get_date(self.mtime)
+
 
 
 	def __repr__(self):
