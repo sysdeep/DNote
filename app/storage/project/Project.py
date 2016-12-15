@@ -95,6 +95,11 @@ class Project(object):
 
 
 
+	def set_node_name(self, node_uuid, name):
+		"""установить новое название ноды"""
+		node = self.find_node_by_uuid(node_uuid)
+		node.name = name
+
 
 
 
