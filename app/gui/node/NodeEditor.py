@@ -4,6 +4,7 @@
 
 from PyQt5.QtWidgets import QGroupBox, QHBoxLayout, QVBoxLayout, QLabel, QTextEdit, QPushButton
 
+from .. import events
 
 class NodeEditor(QGroupBox):
 	def __init__(self, parent=None):
@@ -44,5 +45,9 @@ class NodeEditor(QGroupBox):
 		self.node.page.raw_text = text
 
 		self.node.write_node()
+
+		events.update_current_node()
+
+
 
 

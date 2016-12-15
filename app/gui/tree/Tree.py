@@ -8,8 +8,9 @@ from PyQt5.QtGui import QIcon, QStandardItemModel, QStandardItem
 from app import log
 from app.storage import get_storage
 
+
 # from app.logic import get_tree
-# from app.rc import get_icon_path
+from app.rc import get_icon_path
 from .. import events
 
 
@@ -17,9 +18,9 @@ class Tree(QTreeView):
 	def __init__(self, parent=None):
 		super(Tree, self).__init__(parent)
 
-		self.model = QStandardItemModel()
-		self.model.setHorizontalHeaderLabels(['name'])
-		self.setModel(self.model)
+		self.tmodel = QStandardItemModel()
+		self.tmodel.setHorizontalHeaderLabels(['name'])
+		self.setModel(self.tmodel)
 		self.setUniformRowHeights(True)
 		self.setHeaderHidden(True)
 		self.setFixedWidth(300)
@@ -30,6 +31,8 @@ class Tree(QTreeView):
 
 
 		self.current_index = None								# элемент с флагом current = True
+		self.expand_indexes = []
+
 
 		#--- menu
 		self.setContextMenuPolicy(Qt.ActionsContextMenu)
@@ -41,11 +44,13 @@ class Tree(QTreeView):
 
 
 		self.clicked.connect(self.__select)
+		self.expanded.connect(self.__on_expanded)
+		self.collapsed.connect(self.__on_collapsed)
 
 
 	def __update_tree(self):
 		self.current_index = None
-		self.model.clear()
+		self.tmodel.clear()
 		self.__make_tree()
 
 
@@ -59,13 +64,14 @@ class Tree(QTreeView):
 
 	def __make_tree(self):
 		"""строим дерево"""
+		self.blockSignals(True)
 
 		#--- все элементы корня
 		root_items = self.tree.get_nodes_level(1)		
 
 		#--- запуск обхода дерева(рекурсия)
 		for item in root_items:
-			self.__wnode(item, self.model)
+			self.__wnode(item, self.tmodel)
 
 
 		#--- выбираем элемент у которого флаг current
@@ -74,11 +80,17 @@ class Tree(QTreeView):
 			self.__select(self.current_index)
 		#--- если текущего нет - первый
 		else:
-			index = self.model.index(0, 0)
+			index = self.tmodel.index(0, 0)
 			self.setCurrentIndex(index)
 			self.__select(index)
 
 
+		#--- разворачиваем элементы, у которых стоит флаг expanded
+		for i in self.expand_indexes:
+			self.expand(i)
+		self.expand_indexes = []
+
+		self.blockSignals(False)
 
 
 
@@ -96,10 +108,15 @@ class Tree(QTreeView):
 			# else:
 			# 	icon = QIcon(get_icon_path("list-remove.png"))
 
+			if node.ipack and node.icon:
+				icon = QIcon(get_icon_path(node.ipack, node.icon))
+			else:
+				icon = QIcon(get_icon_path("empty.svg"))
+
 
 
 			row = QStandardItem(node.name)				# элемент строки
-			# row.setIcon(icon)				# icon
+			row.setIcon(icon)				# icon
 			row.setEditable(False)							# editable - false
 
 			row.setData(node.uuid, Qt.UserRole+1)
@@ -112,7 +129,12 @@ class Tree(QTreeView):
 			parent.appendRow(row)							# добавляем
 
 			if node.current:
-				self.current_index = self.model.indexFromItem(row)
+				self.current_index = self.tmodel.indexFromItem(row)
+
+
+			if node.expanded:
+				index = self.tmodel.indexFromItem(row)
+				self.expand_indexes.append(index)
 			# print(index)
 
 			#--- ищем всех деток на уровень ниже(не дальше)
@@ -140,3 +162,12 @@ class Tree(QTreeView):
 
 		if self.select_cb:
 			self.select_cb(uuid)
+
+
+	def __on_expanded(self, model_index):
+		uuid = model_index.data(Qt.UserRole+1)
+		self.storage.project.set_node_expanded(uuid, True)
+
+	def __on_collapsed(self, model_index):
+		uuid = model_index.data(Qt.UserRole+1)
+		self.storage.project.set_node_expanded(uuid, False)

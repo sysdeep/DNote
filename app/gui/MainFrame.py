@@ -11,6 +11,7 @@ from .node.NodeInfo import NodeInfo
 from .node.NodeEditor import NodeEditor
 
 from .modal_create import ModalCreate
+from .modal_icons import ModalIcons
 from . import events
 
 class MainFrame(QWidget):
@@ -35,6 +36,8 @@ class MainFrame(QWidget):
 		#--- start
 		self.start()
 
+
+		events.on("select_icon", self.__set_icon)
 
 
 
@@ -79,6 +82,11 @@ class MainFrame(QWidget):
 		btn_remove_node = QPushButton("remove")
 		btn_remove_node.clicked.connect(self.__remove_node)
 		node_side.addWidget(btn_remove_node)
+
+
+		btn_show_icons = QPushButton("icon")
+		btn_show_icons.clicked.connect(self.__show_icons)
+		node_side.addWidget(btn_show_icons)
 
 
 		self.node_info = NodeInfo()
@@ -164,3 +172,22 @@ class MainFrame(QWidget):
 	def __force_save(self):
 		log.debug("force save")
 		self.storage.project.write_file()
+
+
+
+	def __show_icons(self):
+		modal = ModalIcons(self)
+		modal.show()
+
+	def __set_icon(self, ipack, icon):
+		# print(ipack, icon)
+
+
+
+		project_node = self.storage.project.find_node_by_uuid(self.current_node.uuid)
+
+		project_node.ipack = ipack
+		project_node.icon = icon
+
+		self.storage.project.write_file()
+		events.update_tree()

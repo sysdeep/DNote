@@ -3,7 +3,7 @@
 
 
 from PyQt5.QtWidgets import QGroupBox, QGridLayout, QLabel
-
+from .. import events
 
 class NodeInfo(QGroupBox):
 	def __init__(self, parent=None):
@@ -11,7 +11,7 @@ class NodeInfo(QGroupBox):
 		self.setTitle("info meta")
 		self.main_layout = QGridLayout(self)
 
-
+		self.node = None
 		self.node_items = ("ntype", "uuid", "name", "ctime", "mtime", "path")
 		self.node_labels = {}
 
@@ -26,17 +26,21 @@ class NodeInfo(QGroupBox):
 			self.node_labels[item] = label
 
 
+		#--- events
+		events.on("update_current_node", self.__update_current)
+
+
+
 	def update_node(self, node):
-		# print(dir(node))
-		# for item in self.node_items:
-		# 	value = getattr(node.meta, item)
+		self.node = node
+		self.__update_current()
+		
 
-		# 	label = self.node_labels[item]
-		# 	label.setText(str(value))
 
-		self.node_labels["ntype"].setText(node.meta.ntype)
-		self.node_labels["uuid"].setText(node.meta.uuid)
-		self.node_labels["name"].setText(node.meta.name)
-		self.node_labels["path"].setText(node.meta.path)
-		self.node_labels["ctime"].setText(node.meta.get_ctime())
-		self.node_labels["mtime"].setText(node.meta.get_mtime())
+	def __update_current(self):
+		self.node_labels["ntype"].setText(self.node.meta.ntype)
+		self.node_labels["uuid"].setText(self.node.meta.uuid)
+		self.node_labels["name"].setText(self.node.meta.name)
+		self.node_labels["path"].setText(self.node.meta.path)
+		self.node_labels["ctime"].setText(self.node.meta.get_ctime())
+		self.node_labels["mtime"].setText(self.node.meta.get_mtime())

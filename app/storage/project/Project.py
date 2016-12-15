@@ -87,12 +87,13 @@ class Project(object):
 		self.tree.remove_node(node_uuid)
 
 
-	# def create_node_top(self, uuid, name):
-	# 	"""DEPRICATED"""
-	# 	root_node = self.tree.root
-	# 	node = self.tree.create_node(root_node)
-	# 	node.uuid = uuid
-	# 	node.name = name
+
+	def set_node_expanded(self, node_uuid, status):
+		"""установка состояния раскрытия заданной ноды"""
+		node = self.find_node_by_uuid(node_uuid)
+		node.expanded = status
+
+
 
 
 

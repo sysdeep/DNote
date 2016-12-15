@@ -28,9 +28,13 @@ def update_tree():
 	emitter.emit("update_tree")
 
 
+def update_current_node():
+	emitter.emit("update_current_node")
 
 
 
+def select_icon(ipack, icon):
+	emitter.emit("select_icon", ipack, icon)
 
 
 # def set_scan_path(path):

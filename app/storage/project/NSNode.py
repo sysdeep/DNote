@@ -15,7 +15,8 @@ class NSNode(object):
 		self.uuid		= ""			# id
 		self.expanded	= False			# открыта нода или нет
 		self.current	= False			# флаг текущей ноды 
-		
+		self.icon		= ""			# название иконки
+		self.ipack		= ""			# название пака иконки
 		
 
 	def export(self):
@@ -26,7 +27,9 @@ class NSNode(object):
 			"name"			: self.name,
 			"uuid"			: self.uuid,
 			"expanded"		: self.expanded,
-			"current"		: self.current
+			"current"		: self.current,
+			"icon"			: self.icon,
+			"ipack"			: self.ipack
 		}
 
 		return data
@@ -41,6 +44,8 @@ class NSNode(object):
 		self.uuid 		= data["uuid"]
 		self.expanded	= data["expanded"]
 		self.current	= data.get("current", False)
+		self.icon		= data.get("icon", "")
+		self.ipack		= data.get("ipack", "")
 
 
 
