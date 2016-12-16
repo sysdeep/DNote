@@ -65,15 +65,23 @@ class Tree(QTreeView):
 		create_new_root 	= QAction("Новая корневая запись", self)
 		create_new_parent 	= QAction("Новая запись для данного элемента", self)
 		create_new_level 	= QAction("Новая запись такого же уровня", self)
+		
+		edit_name 			= QAction("Изменить название", self)
+
 		remove_item 		= QAction("Удалить запись", self)
 
-		separator = QAction(self)
-		separator.setSeparator(True)
+		separator1 = QAction(self)
+		separator1.setSeparator(True)
+
+		separator2 = QAction(self)
+		separator2.setSeparator(True)
 		
 		self.addAction(create_new_root)
 		self.addAction(create_new_parent)
 		self.addAction(create_new_level)
-		self.addAction(separator)
+		self.addAction(separator1)
+		self.addAction(edit_name)
+		self.addAction(separator2)
 		self.addAction(remove_item)
 		# self.addSeparetor()
 
@@ -81,11 +89,13 @@ class Tree(QTreeView):
 		create_new_root.setIcon(qicon("filesystems", "folder_blue.png"))
 		create_new_parent.setIcon(qicon("filesystems", "folder_green.png"))
 		create_new_level.setIcon(qicon("filesystems", "folder_orange.png"))
+		edit_name.setIcon(qicon("actions", "edit.png"))
 		remove_item.setIcon(qicon("actions", "remove.png"))
 
 		create_new_root.triggered.connect(self.__act_create_new_root)
 		create_new_parent.triggered.connect(self.__act_create_new_parent)
 		create_new_level.triggered.connect(self.__act_create_new_level)
+		edit_name.triggered.connect(self.__act_edit_name)
 		remove_item.triggered.connect(self.__act_remove_item)
 
 
@@ -231,4 +241,10 @@ class Tree(QTreeView):
 		"""удаление ноды"""
 
 		events.show_remove_node(self.current_uuid)
+
+
+	def __act_edit_name(self):
+		"""редактирование названия"""
+
+		events.show_edit_name(self.current_uuid)
 	#--- user actions ---------------------------------------------------------

@@ -13,6 +13,7 @@ from app.storage import get_storage
 
 from .modal_create import ModalCreate
 from .modal_remove import ModalRemove
+from .modal_edit_name import ModalEditName
 
 
 class Controller(object):
@@ -24,6 +25,7 @@ class Controller(object):
 		#--- events
 		events.on("show_modal_create_node", self.__on_show_modal_create_node)
 		events.on("show_remove_node", self.__on_show_remove_node)
+		events.on("show_edit_name", self.__on_show_edit_name)
 
 
 	
@@ -32,7 +34,7 @@ class Controller(object):
 		modal = ModalCreate(parent_node=parent_node, parent=self.parent)
 		modal.exec_()
 
-		events.update_tree()
+		# events.update_tree()
 
 
 
@@ -42,10 +44,17 @@ class Controller(object):
 		modal = ModalRemove(node_uuid=node_uuid)
 		modal.exec_()
 
-		events.update_tree()
+		# events.update_tree()
 
 
+	def __on_show_edit_name(self, node_uuid):
+		"""отображение модального окна изменения названия"""
 
+		print("edit name")
+		modal = ModalEditName(node_uuid=node_uuid)
+		modal.exec_()
+
+		# events.update_tree()
 
 
 	# def set_save_file(self, path):

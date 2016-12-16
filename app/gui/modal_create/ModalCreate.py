@@ -7,7 +7,7 @@ from PyQt5.QtGui import QFont
 
 
 from app.storage import get_storage
-
+from .. import events
 
 
 
@@ -88,7 +88,9 @@ class ModalCreate(QDialog):
 		node.page.raw_text = text
 		node.write_node()
 
+		events.update_tree()
 
+		
 		self.close()
 
 

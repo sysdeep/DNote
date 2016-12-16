@@ -27,6 +27,10 @@ def show_remove_node(node_uuid):
 	"""запрос на удаление ноды"""
 	emitter.emit("show_remove_node", node_uuid)
 
+def show_edit_name(node_uuid):
+	"""запрос на изменение имени ноды"""
+	emitter.emit("show_edit_name", node_uuid)
+
 
 
 

@@ -27,10 +27,6 @@ class NodeEditor(QGroupBox):
 
 	def __make_gui(self):
 
-		self.name_edit = QLineEdit()
-		self.main_layout.addWidget(self.name_edit)
-
-
 		self.text_edit = QTextEdit()
 		self.main_layout.addWidget(self.text_edit)
 
@@ -52,9 +48,6 @@ class NodeEditor(QGroupBox):
 	def update_node(self, node):
 		self.node = node
 
-		#--- node name
-		name = node.name
-		self.name_edit.setText(name)
 
 		#--- page text
 		text = node.page.raw_text
@@ -66,24 +59,17 @@ class NodeEditor(QGroupBox):
 
 
 		#--- get data
-		name = self.name_edit.text()
 		text = self.text_edit.toPlainText()
 
 
 		#--- update node data
-		self.node.set_name(name)
 		self.node.page.raw_text = text
 		self.node.write_node()
 
 
-		#--- update project data
-		self.storage.project.set_node_name(self.node.uuid, name)
-		self.storage.project.write_file()
-
-
 		#--- send events
-		# events.update_current_node()				# update_tree - вызовет и это
-		events.update_tree()
+		events.update_current_node()				# update_tree - вызовет и это
+		# events.update_tree()
 
 
 

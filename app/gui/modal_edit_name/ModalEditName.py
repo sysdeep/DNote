@@ -13,34 +13,27 @@ from .. import events
 
 
 
-class ModalRemove(QDialog):
+class ModalEditName(QDialog):
 	def __init__(self, node_uuid, parent=None):
-		super(ModalRemove, self).__init__(parent)
+		super(ModalEditName, self).__init__(parent)
 
 		self.main_layout 	= QVBoxLayout(self)
 
 		self.node_uuid 		= node_uuid
 		self.storage 		= get_storage()
+		self.node 			= self.storage.get_node(self.node_uuid)
 		
 		self.node_items 	= ("ntype", "uuid", "name", "ctime", "mtime", "path")
 		self.node_labels 	= {}
 		
 		self.__make_gui()
-		self.__load_data()
 
 
 	def __make_gui(self):
 		
 		
-		info_box = QGridLayout()
-		self.main_layout.addLayout(info_box)
-
-		for index, item in enumerate(self.node_items):
-			info_box.addWidget(QLabel(item), index, 0)
-
-			label = QLabel()
-			info_box.addWidget(label, index, 1)
-			self.node_labels[item] = label
+		self.edit_name = QLineEdit(self.node.name)
+		self.main_layout.addWidget(self.edit_name)
 
 
 		#--- controls
@@ -50,34 +43,40 @@ class ModalRemove(QDialog):
 		btn_close = QPushButton("Close")
 		btn_close.clicked.connect(self.close)
 
-		btn_remove = QPushButton("Remove")
-		btn_remove.clicked.connect(self.__remove)
+		btn_save = QPushButton("Save")
+		btn_save.clicked.connect(self.__save)
 
-		controls.addWidget(btn_remove)
+		controls.addWidget(btn_save)
 		controls.addStretch()
 		controls.addWidget(btn_close)
 
 
 
-	def __load_data(self):
-
-		node = self.storage.get_node(self.node_uuid)
-		self.node_labels["ntype"].setText(node.meta.ntype)
-		self.node_labels["uuid"].setText(node.meta.uuid)
-		self.node_labels["name"].setText(node.meta.name)
-		self.node_labels["path"].setText(node.meta.path)
-		self.node_labels["ctime"].setText(node.meta.get_ctime())
-		self.node_labels["mtime"].setText(node.meta.get_mtime())
 
 
+	def __save(self):
+		"""обновление ноды"""
 
-	def __remove(self):
-		"""удаление ноды"""
 
-		self.storage.remove_node(self.node_uuid)
+		#--- get data
+		name = self.edit_name.text()
 
+
+		#--- update node data
+		self.node.set_name(name)
+		self.node.write_node()
+
+
+		#--- update project data
+		self.storage.project.set_node_name(self.node.uuid, name)
+		self.storage.project.write_file()
+
+
+		#--- send events
 		events.update_tree()
-		
+
+
+		# self.storage.remove_node(self.node_uuid)
 		self.close()
 
 
@@ -107,7 +106,7 @@ if __name__ == "__main__":
 
 	# app.setStyle(QStyleFactory.create("fusion"))
 
-	modal = ModalRemove()
+	modal = ModalEditName()
 	# main_win.DEBUG = True
 	# main_win.start_net()
 	modal.show()
