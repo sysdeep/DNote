@@ -8,7 +8,8 @@ from app.storage import get_storage
 
 from .. import events
 
-
+from .style_python import PythonHighlighter
+from .style_md import MarkdownHighlighter
 
 
 class NodeEditor(QGroupBox):
@@ -30,7 +31,10 @@ class NodeEditor(QGroupBox):
 		self.text_edit = QTextEdit()
 		self.main_layout.addWidget(self.text_edit)
 
-
+		#--- подсветка синтаксиса
+		# self.hh = PythonHighlighter(self.text_edit.document())
+		
+		self.hh = MarkdownHighlighter(self.text_edit)
 
 
 		#--- controls
