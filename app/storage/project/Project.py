@@ -64,6 +64,9 @@ class Project(object):
 	def find_node_by_uuid(self, uuid):
 		return self.tree.find_node_by_uuid(uuid)
 
+	def find_parent_node(self, uuid):
+		return self.tree.find_parent_node(uuid)
+
 
 
 	def set_current_node(self, uuid):

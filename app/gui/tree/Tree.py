@@ -6,11 +6,10 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QIcon, QStandardItemModel, QStandardItem
 
 from app import log
+from app.rc import get_icon_path
 from app.storage import get_storage
 
-
-# from app.logic import get_tree
-from app.rc import get_icon_path
+from ..modal_create import ModalCreate
 from .. import events
 
 
@@ -30,20 +29,22 @@ class Tree(QTreeView):
 		self.select_cb = None
 
 
-		self.current_index = None								# элемент с флагом current = True
-		self.expand_indexes = []
-
+		self.current_uuid 	= None			# текущий uuid элемента
+		self.current_index 	= None			# элемент с флагом current = True - для автоматического выбора(modelIndex)
+		self.expand_indexes = []			# список элементов, которые необходимо раскрыть
 
 		#--- menu
-		self.setContextMenuPolicy(Qt.ActionsContextMenu)
-		file_create_action = QAction("New catalog", self)
-		self.addAction(file_create_action)
+		self.__make_cmenu()
+
+
 
 		events.on("update_tree", self.__update_tree)
 		# self.__make_tree()
 
 
-		self.clicked.connect(self.__select)
+
+		#--- signals
+		self.pressed.connect(self.__on_select)
 		self.expanded.connect(self.__on_expanded)
 		self.collapsed.connect(self.__on_collapsed)
 
@@ -57,6 +58,21 @@ class Tree(QTreeView):
 	def update_tree(self):
 		self.__update_tree()
 
+
+	def __make_cmenu(self):
+		"""контекстное меню"""
+		self.setContextMenuPolicy(Qt.ActionsContextMenu)
+		create_new_root 	= QAction("Новая корневая запись", self)
+		create_new_parent 	= QAction("Новая запись для данного элемента", self)
+		create_new_level 	= QAction("Новая запись такого же уровня", self)
+		
+		self.addAction(create_new_root)
+		self.addAction(create_new_parent)
+		self.addAction(create_new_level)
+
+		create_new_root.triggered.connect(self.__act_create_new_root)
+		create_new_parent.triggered.connect(self.__act_create_new_parent)
+		create_new_level.triggered.connect(self.__act_create_new_level)
 
 
 
@@ -77,12 +93,12 @@ class Tree(QTreeView):
 		#--- выбираем элемент у которого флаг current
 		if self.current_index:
 			self.setCurrentIndex(self.current_index)
-			self.__select(self.current_index)
+			self.__on_select(self.current_index)
 		#--- если текущего нет - первый
 		else:
 			index = self.tmodel.index(0, 0)
 			self.setCurrentIndex(index)
-			self.__select(index)
+			self.__on_select(index)
 
 
 		#--- разворачиваем элементы, у которых стоит флаг expanded
@@ -155,13 +171,12 @@ class Tree(QTreeView):
 
 
 
-	def __select(self, index):
-		
-		uuid = index.data(Qt.UserRole+1)
-		# print(uuid)
+	def __on_select(self, index):
+		"""событие от дерева о выбранном элементе"""		
+		self.current_uuid = index.data(Qt.UserRole+1)
 
 		if self.select_cb:
-			self.select_cb(uuid)
+			self.select_cb(self.current_uuid)
 
 
 	def __on_expanded(self, model_index):
@@ -171,3 +186,34 @@ class Tree(QTreeView):
 	def __on_collapsed(self, model_index):
 		uuid = model_index.data(Qt.UserRole+1)
 		self.storage.project.set_node_expanded(uuid, False)
+
+
+
+
+	#--- user actions ---------------------------------------------------------
+	def __act_create_new_root(self):
+		modal = ModalCreate(parent_node=None, parent=self)
+		modal.exec_()
+		self.update_tree()
+
+
+	def __act_create_new_parent(self):
+		"""выбранная нода - является родительской"""
+		parent_pnode = self.storage.project.find_node_by_uuid(self.current_uuid)
+		modal = ModalCreate(parent_node=parent_pnode, parent=self)
+		modal.exec_()
+		self.update_tree()
+
+	def __act_create_new_level(self):
+		"""выбранная нода - находится у родителя"""
+		parent_pnode = self.storage.project.find_parent_node(self.current_uuid)
+		print(parent_pnode)
+
+		#--- если родитель - корень, то вызываем модал как и у __act_create_new_root
+		if parent_pnode.tree_lk == 0:
+			parent_pnode = None
+			
+		modal = ModalCreate(parent_node=parent_pnode, parent=self)
+		modal.exec_()
+		self.update_tree()
+	#--- user actions ---------------------------------------------------------

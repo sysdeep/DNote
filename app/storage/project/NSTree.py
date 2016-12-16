@@ -145,6 +145,23 @@ class NSTree(object):
 			return None
 
 
+	def find_parent_node(self, node_uuid):
+		"""поиск родителя заданной ноды"""
+		snode = self.find_node_by_uuid(node_uuid)
+
+		result = [node for node in self.nodes
+					if node.tree_lk < snode.tree_lk 
+					and node.tree_rk > snode.tree_rk
+					and node.tree_level == snode.tree_level - 1
+				]
+
+		if result:
+			return result[0]
+		else:
+			log.error("not found parent for node: " + uuid)
+			return None
+
+
 	def load(self, nodes_list):
 		self.nodes = []
 		nodes_list.sort(key=lambda a: a["tree_lk"])
