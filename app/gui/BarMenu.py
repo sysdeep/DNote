@@ -46,7 +46,7 @@ class BarMenu(object):
 
 		#--- create root item
 		file_create_root_item_action = QAction("Создать корневую запись", self.parent)
-		file_create_root_item_action.setIcon(qicon("actions", "document_new.png"))
+		file_create_root_item_action.setIcon(qicon("filesystems", "folder_blue.png"))
 		file_create_root_item_action.triggered.connect(lambda: self.__file_create())
 
 		file_menu.addAction(file_create_root_item_action)

@@ -10,7 +10,7 @@ from app.rc import get_icon_path
 from app.storage import get_storage
 
 from ..modal_create import ModalCreate
-from .. import events
+from .. import events, qicon
 
 
 class Tree(QTreeView):
@@ -65,15 +65,28 @@ class Tree(QTreeView):
 		create_new_root 	= QAction("Новая корневая запись", self)
 		create_new_parent 	= QAction("Новая запись для данного элемента", self)
 		create_new_level 	= QAction("Новая запись такого же уровня", self)
+		remove_item 		= QAction("Удалить запись", self)
+
+		separator = QAction(self)
+		separator.setSeparator(True)
 		
 		self.addAction(create_new_root)
 		self.addAction(create_new_parent)
 		self.addAction(create_new_level)
+		self.addAction(separator)
+		self.addAction(remove_item)
+		# self.addSeparetor()
+
+
+		create_new_root.setIcon(qicon("filesystems", "folder_blue.png"))
+		create_new_parent.setIcon(qicon("filesystems", "folder_green.png"))
+		create_new_level.setIcon(qicon("filesystems", "folder_orange.png"))
+		remove_item.setIcon(qicon("actions", "remove.png"))
 
 		create_new_root.triggered.connect(self.__act_create_new_root)
 		create_new_parent.triggered.connect(self.__act_create_new_parent)
 		create_new_level.triggered.connect(self.__act_create_new_level)
-
+		remove_item.triggered.connect(self.__act_remove_item)
 
 
 
@@ -212,8 +225,14 @@ class Tree(QTreeView):
 		#--- если родитель - корень, то вызываем модал как и у __act_create_new_root
 		if parent_pnode.tree_lk == 0:
 			parent_pnode = None
-			
+
 		modal = ModalCreate(parent_node=parent_pnode, parent=self)
 		modal.exec_()
+		self.update_tree()
+
+
+	def __act_remove_item(self):
+		"""удаление ноды"""
+		self.storage.remove_node(self.current_uuid)
 		self.update_tree()
 	#--- user actions ---------------------------------------------------------
