@@ -205,34 +205,30 @@ class Tree(QTreeView):
 
 	#--- user actions ---------------------------------------------------------
 	def __act_create_new_root(self):
-		modal = ModalCreate(parent_node=None, parent=self)
-		modal.exec_()
-		self.update_tree()
+		events.show_modal_create_node(parent_node=None)
+		
 
 
 	def __act_create_new_parent(self):
 		"""выбранная нода - является родительской"""
 		parent_pnode = self.storage.project.find_node_by_uuid(self.current_uuid)
-		modal = ModalCreate(parent_node=parent_pnode, parent=self)
-		modal.exec_()
-		self.update_tree()
+		events.show_modal_create_node(parent_node=parent_pnode)
+		
 
 	def __act_create_new_level(self):
 		"""выбранная нода - находится у родителя"""
 		parent_pnode = self.storage.project.find_parent_node(self.current_uuid)
-		print(parent_pnode)
 
 		#--- если родитель - корень, то вызываем модал как и у __act_create_new_root
 		if parent_pnode.tree_lk == 0:
 			parent_pnode = None
 
-		modal = ModalCreate(parent_node=parent_pnode, parent=self)
-		modal.exec_()
-		self.update_tree()
+		events.show_modal_create_node(parent_node=parent_pnode)
+		
 
 
 	def __act_remove_item(self):
 		"""удаление ноды"""
-		self.storage.remove_node(self.current_uuid)
-		self.update_tree()
+
+		events.show_remove_node(self.current_uuid)
 	#--- user actions ---------------------------------------------------------

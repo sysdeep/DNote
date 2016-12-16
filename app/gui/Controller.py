@@ -1,38 +1,62 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+"""
+	Controller - обслуживает все евенты
+"""
 
-import json
-import os
+
+# import json
+# import os
 from . import events
 from app import log
-from app.logic import load_tree, store_tree
-# from .utils.WalkerDispatcher import WalkerDispatcher
+from app.storage import get_storage
 
+from .modal_create import ModalCreate
+from .modal_remove import ModalRemove
 
 
 class Controller(object):
-	def __init__(self):
+	def __init__(self, parent):
+		self.parent 	= parent
+		self.storage 	= get_storage()
 
 
-
-		# events.on("set_scan_path", self.set_scan_path)
-		events.on("set_save_file", self.set_save_file)
-		events.on("set_open_file", self.set_open_file)
-		# events.on("start_scan", self.start_scan)
+		#--- events
+		events.on("show_modal_create_node", self.__on_show_modal_create_node)
+		events.on("show_remove_node", self.__on_show_remove_node)
 
 
 	
+	def __on_show_modal_create_node(self, parent_node):
+		"""отображение модального окна создания новой записи"""
+		modal = ModalCreate(parent_node=parent_node, parent=self.parent)
+		modal.exec_()
 
-
-	def set_save_file(self, path):
-
-		store_tree(path)
-	
-
-
-	def set_open_file(self, path):
-		log.info("open db file: " + path)
-		load_tree(path)
 		events.update_tree()
+
+
+
+	def __on_show_remove_node(self, node_uuid):
+		"""отображение модального окна удаления записи"""
+
+		modal = ModalRemove(node_uuid=node_uuid)
+		modal.exec_()
+
+		events.update_tree()
+
+
+
+
+
+	# def set_save_file(self, path):
+
+	# 	store_tree(path)
+	
+
+
+	# def set_open_file(self, path):
+	# 	log.info("open db file: " + path)
+	# 	load_tree(path)
+	# 	events.update_tree()
 
 

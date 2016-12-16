@@ -21,6 +21,7 @@ from .MainFrame import MainFrame
 # from .modals import LoginWindow
 # from ..storage import ulog
 # from app.rc import get_font_path
+from .Controller import Controller
 from .BarMenu import BarMenu
 # from .SystemTray import SystemTray
 # from . import events
@@ -61,7 +62,7 @@ class MainWindow(QMainWindow):
 
 
 
-		# self.controller = Controller()
+		self.controller = Controller(parent=self)
 
 
 		#

@@ -20,7 +20,20 @@ def on(event_name, cb):
 
 
 def show_modal_create_node(parent_node=None):
-	emitter.emit("show_modal_create_node", parent_node=None)
+	"""запрос на создание новой ноды"""
+	emitter.emit("show_modal_create_node", parent_node)
+
+def show_remove_node(node_uuid):
+	"""запрос на удаление ноды"""
+	emitter.emit("show_remove_node", node_uuid)
+
+
+
+
+
+
+
+
 
 
 

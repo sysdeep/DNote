@@ -143,29 +143,20 @@ class MainFrame(QWidget):
 
 	def __create_node(self):
 		"""создание новой ноды от родителя"""
-
 		parent_project_node = self.storage.project.find_node_by_uuid(self.current_node.uuid)
-		modal = ModalCreate(parent_node=parent_project_node, parent=self)
-		# modal.show()
-		modal.exec_()
-		print("after show")
-		# self.tree_view.update_tree()
-		events.update_tree()
+		events.show_modal_create_node(parent_node=parent_project_node)
+
 
 
 
 	def __remove_node(self):
 		"""удаление ноды от родителя"""
+	
 		log.debug("запрос на удаление ноды: " + self.current_node.name)
-		# parent_project_node = self.storage.project.find_node_by_uuid(self.current_node.uuid)
-		# print(self.current_node.uuid)
-		self.storage.remove_node(self.current_node.uuid)
-		log.debug("after remove")
-		events.update_tree()
-		# self.tree_view.update_tree()
 
-		# modal = ModalCreate(parent_node=parent_project_node, parent=self)
-		# modal.show()
+		events.show_remove_node(self.current_node.uuid)
+
+	
 
 
 
