@@ -7,7 +7,6 @@ from PyQt5.QtWidgets import QAction, QFileDialog
 
 
 
-from .modal_create import ModalCreate
 from . import events, qicon
 # from .ModalScan import ModalScan
 

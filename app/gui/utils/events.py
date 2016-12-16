@@ -31,6 +31,10 @@ def show_edit_name(node_uuid):
 	"""запрос на изменение имени ноды"""
 	emitter.emit("show_edit_name", node_uuid)
 
+def show_edit_icon(node_uuid):
+	"""запрос на изменение иконки ноды"""
+	emitter.emit("show_edit_icon", node_uuid)
+
 
 
 
@@ -50,8 +54,8 @@ def update_current_node():
 
 
 
-def select_icon(ipack, icon):
-	emitter.emit("select_icon", ipack, icon)
+def selected_icon(ipack, icon):
+	emitter.emit("selected_icon", ipack, icon)
 
 
 # def set_scan_path(path):

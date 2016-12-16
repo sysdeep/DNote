@@ -37,7 +37,7 @@ DIR_TEST_NODE = os.path.join(DIR_PROJECT_NODES, "28bd6ab8-c116-11e6-b160-e0cb4e1
 
 
 
-ICON_PACKS = ("Elementary", "Flat", "Universal", "Oxy")
+ICON_PACKS = ("Elementary", "Flat", "Universal")
 
 def get_icon_path(*icon_subpath):
 	return os.path.join(DIR_ICONS, *icon_subpath)

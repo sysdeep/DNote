@@ -9,7 +9,6 @@ from app import log
 from app.rc import get_icon_path
 from app.storage import get_storage
 
-from ..modal_create import ModalCreate
 from .. import events, qicon
 
 
@@ -67,6 +66,7 @@ class Tree(QTreeView):
 		create_new_level 	= QAction("Новая запись такого же уровня", self)
 		
 		edit_name 			= QAction("Изменить название", self)
+		edit_icon 			= QAction("Изменить иконки", self)
 
 		remove_item 		= QAction("Удалить запись", self)
 
@@ -81,6 +81,7 @@ class Tree(QTreeView):
 		self.addAction(create_new_level)
 		self.addAction(separator1)
 		self.addAction(edit_name)
+		self.addAction(edit_icon)
 		self.addAction(separator2)
 		self.addAction(remove_item)
 		# self.addSeparetor()
@@ -90,12 +91,14 @@ class Tree(QTreeView):
 		create_new_parent.setIcon(qicon("filesystems", "folder_green.png"))
 		create_new_level.setIcon(qicon("filesystems", "folder_orange.png"))
 		edit_name.setIcon(qicon("actions", "edit.png"))
+		edit_icon.setIcon(qicon("actions", "frame_image.png"))
 		remove_item.setIcon(qicon("actions", "remove.png"))
 
 		create_new_root.triggered.connect(self.__act_create_new_root)
 		create_new_parent.triggered.connect(self.__act_create_new_parent)
 		create_new_level.triggered.connect(self.__act_create_new_level)
 		edit_name.triggered.connect(self.__act_edit_name)
+		edit_icon.triggered.connect(self.__act_edit_icon)
 		remove_item.triggered.connect(self.__act_remove_item)
 
 
@@ -247,4 +250,9 @@ class Tree(QTreeView):
 		"""редактирование названия"""
 
 		events.show_edit_name(self.current_uuid)
+
+	def __act_edit_icon(self):
+		"""редактирование иконки"""
+
+		events.show_edit_icon(self.current_uuid)
 	#--- user actions ---------------------------------------------------------

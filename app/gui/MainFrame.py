@@ -10,9 +10,9 @@ from .tree.Tree import Tree
 from .node.NodeInfo import NodeInfo
 from .node.NodeEditor import NodeEditor
 
-from .modal_create import ModalCreate
-from .modal_icons import ModalIcons
 from . import events
+
+
 
 class MainFrame(QWidget):
 	def __init__(self, parent=None):
@@ -37,7 +37,6 @@ class MainFrame(QWidget):
 		self.start()
 
 
-		events.on("select_icon", self.__set_icon)
 
 
 
@@ -72,21 +71,6 @@ class MainFrame(QWidget):
 	def __make_node_side(self):
 		node_side = QVBoxLayout()
 		self.main_layout.addLayout(node_side)
-
-		
-		btn_new_node = QPushButton("create")
-		btn_new_node.clicked.connect(self.__create_node)
-		node_side.addWidget(btn_new_node)
-
-
-		btn_remove_node = QPushButton("remove")
-		btn_remove_node.clicked.connect(self.__remove_node)
-		node_side.addWidget(btn_remove_node)
-
-
-		btn_show_icons = QPushButton("icon")
-		btn_show_icons.clicked.connect(self.__show_icons)
-		node_side.addWidget(btn_show_icons)
 
 
 		self.node_info = NodeInfo()
@@ -133,30 +117,8 @@ class MainFrame(QWidget):
 
 
 
-	# def update_tree(self):
-	# 	self.tree_view.update_tree()
 
 
-
-
-
-
-	def __create_node(self):
-		"""создание новой ноды от родителя"""
-		parent_project_node = self.storage.project.find_node_by_uuid(self.current_node.uuid)
-		events.show_modal_create_node(parent_node=parent_project_node)
-
-
-
-
-	def __remove_node(self):
-		"""удаление ноды от родителя"""
-	
-		log.debug("запрос на удаление ноды: " + self.current_node.name)
-
-		events.show_remove_node(self.current_node.uuid)
-
-	
 
 
 
@@ -165,20 +127,3 @@ class MainFrame(QWidget):
 		self.storage.project.write_file()
 
 
-
-	def __show_icons(self):
-		modal = ModalIcons(self)
-		modal.show()
-
-	def __set_icon(self, ipack, icon):
-		# print(ipack, icon)
-
-
-
-		project_node = self.storage.project.find_node_by_uuid(self.current_node.uuid)
-
-		project_node.ipack = ipack
-		project_node.icon = icon
-
-		self.storage.project.write_file()
-		events.update_tree()

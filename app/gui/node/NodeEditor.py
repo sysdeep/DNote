@@ -37,10 +37,26 @@ class NodeEditor(QGroupBox):
 		controls = QHBoxLayout()
 		self.main_layout.addLayout(controls)
 
+
+		btn_new_node = QPushButton("create")
+		btn_new_node.clicked.connect(self.__create_node)
+
+
+		btn_remove_node = QPushButton("remove")
+		btn_remove_node.clicked.connect(self.__remove_node)
+
+
+		btn_show_icons = QPushButton("icon")
+		btn_show_icons.clicked.connect(self.__show_icons)
+
+
+
 		btn_save = QPushButton("save")
 		btn_save.clicked.connect(self.__save)
 
-
+		controls.addWidget(btn_new_node)
+		controls.addWidget(btn_remove_node)
+		controls.addWidget(btn_show_icons)
 		controls.addStretch()
 		controls.addWidget(btn_save)
 
@@ -72,5 +88,17 @@ class NodeEditor(QGroupBox):
 		# events.update_tree()
 
 
+	def __create_node(self):
+		"""создание новой ноды от родителя"""
+		parent_project_node = self.storage.project.find_node_by_uuid(self.node.uuid)
+		events.show_modal_create_node(parent_node=parent_project_node)
 
+	def __remove_node(self):
+		"""удаление ноды от родителя"""
+
+		events.show_remove_node(self.node.uuid)
+
+	def __show_icons(self):
+
+		events.show_edit_icon(self.node.uuid)
 

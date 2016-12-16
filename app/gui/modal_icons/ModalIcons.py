@@ -93,27 +93,11 @@ class ModalIcons(QDialog):
 	def __create(self):
 		""""""
 		
-		events.select_icon(self.current_ipack, self.current_icon)
+		events.selected_icon(self.current_ipack, self.current_icon)
 
 		self.close()
 
-		# #--- название
-		# name = self.edit_name.text()
-
-		# #--- содержимое
-		# text = self.edit_text.toPlainText()
-
-
-		# #--- создание дефолтных записей ноды
-		# node = self.storage.create_node(self.parent_node, name)
-
-		# #--- обновление данных
-		# node.page.raw_text = text
-		# node.write_node()
-
-
-		# self.close()
-
+	
 
 
 
