@@ -2,4 +2,4 @@
 # -*- coding: utf-8 -*-
 
 from .utils import events
-# from .utils.icons import qicon
+from .utils.icons import qicon

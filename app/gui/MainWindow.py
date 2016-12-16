@@ -24,7 +24,7 @@ from .MainFrame import MainFrame
 from .BarMenu import BarMenu
 # from .SystemTray import SystemTray
 # from . import events
-
+from . import qicon
 # from app.logic import twalker
 # from app.rc import DIR_SCAN
 
@@ -137,52 +137,21 @@ class MainWindow(QMainWindow):
 		central_box.addWidget(main_frame)
 
 
-		# #--- bottom_field
-		# bottom_field = QHBoxLayout()
+	
 
-		# quit_btn = QPushButton("Выход")
-		# quit_btn.clicked.connect(self.exit)
-
-		# bottom_field.addStretch(1)
-		# bottom_field.addWidget(quit_btn)
+		#--- controls
+		controls_bar = QHBoxLayout()
+		central_box.addLayout(controls_bar)
 
 
+		btn_exit = QPushButton("Выход")
+		btn_exit.setIcon(qicon("actions", "system_shutdown.png"))
+		btn_exit.clicked.connect(self.exit)
 
-		btn = QPushButton("Exit")
-		btn.clicked.connect(self.exit)
-		central_box.addWidget(btn)
+		controls_bar.addStretch()
+		controls_bar.addWidget(btn_exit)
 
-		# #--- mnemo
-		# #-- временно корректируем на момент отладки штоб не появлялись ползунки
-		# max_x = self.max_x - 30
-		# max_y = self.max_y - 80
-		# self.mnemo = BarMnemo(max_xx=max_x, max_yy=max_y, parent=self)
-		# self.mnemo.setContentsMargins(0, 0, 0, 0)
-
-
-
-		# central_box.addWidget(self.mnemo)
-		# central_box.addLayout(bottom_field)
-
-
-		# tree = get_tree()
-		# load_tree_demo()
-
-		# main_frame.update_tree()
-
-
-
-
-
-
-
-	#
-	#
-	# def customEvent(self, event):
-	# 	#process idle_queue_dispatcher events
-	# 	# event.callback()
-	# 	print(event.data)
-
+	
 
 
 

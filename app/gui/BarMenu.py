@@ -8,7 +8,7 @@ from PyQt5.QtWidgets import QAction, QFileDialog
 
 
 from .modal_create import ModalCreate
-from . import events
+from . import events, qicon
 # from .ModalScan import ModalScan
 
 # from .icons import qicon
@@ -29,11 +29,11 @@ class BarMenu(object):
 		# self.project 	= get_project()
 
 
-		# self.menu 		= self.parent.menuBar()
+		self.menu 		= self.parent.menuBar()
 		self.toolbar 	= self.parent.addToolBar("Main")
 
 		#--- file -------------------------------------------------------------
-		# file_menu = menu.addMenu("Файл")
+		file_menu = self.menu.addMenu("Файл")
 
 
 		# file_open_action = QAction("Open", self.parent)
@@ -44,13 +44,13 @@ class BarMenu(object):
 		# toolbar.addAction(file_open_action)
 
 
+		#--- create root item
+		file_create_root_item_action = QAction("Создать корневую запись", self.parent)
+		file_create_root_item_action.setIcon(qicon("actions", "document_new.png"))
+		file_create_root_item_action.triggered.connect(lambda: self.__file_create())
 
-		file_create_action = QAction("New catalog", self.parent)
-		# file_create_action.setIcon(qicon("document_new.png"))
-		file_create_action.triggered.connect(lambda: self.__file_create())
-
-		# file_menu.addAction(file_create_action)
-		self.toolbar.addAction(file_create_action)
+		file_menu.addAction(file_create_root_item_action)
+		self.toolbar.addAction(file_create_root_item_action)
 
 		# file_open_dir_action = QAction("Open dir", self.parent)
 		# file_open_dir_action.triggered.connect(lambda: self.__file_open_dir())
@@ -65,6 +65,15 @@ class BarMenu(object):
 		# file_save_action.triggered.connect(lambda: self.__file_save())
 		# file_menu.addAction(file_save_action)
 
+
+
+		#--- exit
+		file_exit_action = QAction("&Закрыть", self.parent)
+		file_exit_action.setShortcut("Ctrl+Q")
+		file_exit_action.setStatusTip("Закрыть приложение")
+		file_exit_action.setIcon(qicon("actions", "system_shutdown.png"))
+		file_exit_action.triggered.connect(self.parent.exit)
+		file_menu.addAction(file_exit_action)
 
 
 	# def __file_open_dir(self):
