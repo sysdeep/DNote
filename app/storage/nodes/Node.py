@@ -15,7 +15,7 @@
 
 from .Meta import Meta
 from .Page import Page
-
+from .Files import Files
 
 
 
@@ -32,14 +32,18 @@ class Node(object):
 		self.path = ""
 		self.uuid = ""
 		self.name = ""
+
 		self.meta = Meta()
 		self.page = Page()
+		self.files = Files()
+
 
 	def load(self, node_path):
 		"""загрузка данных"""
 		self.path = node_path
 		self.meta.load(self.path)			# meta
 		self.page.load(self.path)			# page
+		self.files.load(self.path)
 
 		#--- update self vars
 		self.name = self.meta.name
@@ -60,12 +64,19 @@ class Node(object):
 		self.write_meta()
 		self.write_page()
 
+	
+
+
 
 	def write_meta(self):
 		self.meta.write_file(self.path)
 
 	def write_page(self):
 		self.page.write_file(self.path)
+
+	def create_files(self):
+		self.files.create_files(self.path)
+
 
 
 	def __repr__(self):

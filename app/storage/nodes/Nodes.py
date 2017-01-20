@@ -66,6 +66,7 @@ class Nodes(object):
 		# log.debug("создание файлов")
 		node.write_meta()
 		node.write_page()
+		node.create_files()
 
 		# return node_uuid
 		return node

@@ -36,6 +36,9 @@ def show_edit_icon(node_uuid):
 	emitter.emit("show_edit_icon", node_uuid)
 
 
+def show_edit_files(node):
+	"""запрос на изменение иконки ноды"""
+	emitter.emit("show_edit_files", node)
 
 
 

@@ -33,8 +33,7 @@ class NodeEditor(QGroupBox):
 
 		#--- подсветка синтаксиса
 		# self.hh = PythonHighlighter(self.text_edit.document())
-		
-		self.hh = MarkdownHighlighter(self.text_edit)
+		# self.hh = MarkdownHighlighter(self.text_edit)
 
 
 		#--- controls

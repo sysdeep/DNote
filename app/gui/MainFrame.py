@@ -9,6 +9,7 @@ from app.storage import get_storage
 from .tree.Tree import Tree
 from .node.NodeInfo import NodeInfo
 from .node.NodeEditor import NodeEditor
+from .node.NodeFiles import NodeFiles
 
 from . import events
 
@@ -78,6 +79,10 @@ class MainFrame(QWidget):
 		# self.node_stat = NodeStat()
 		# node_side.addWidget(self.node_stat)
 
+		self.node_files = NodeFiles()
+		node_side.addWidget(self.node_files)
+
+
 		self.node_editor = NodeEditor()
 		node_side.addWidget(self.node_editor)
 
@@ -109,6 +114,7 @@ class MainFrame(QWidget):
 		self.current_node = self.storage.get_node(uuid)
 		self.node_info.update_node(self.current_node)
 		self.node_editor.update_node(self.current_node)
+		self.node_files.update_node(self.current_node)
 
 		#--- update tree node
 		self.storage.project.set_current_node(self.current_node.uuid)
