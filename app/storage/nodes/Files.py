@@ -6,6 +6,7 @@
 import json
 import os
 import time
+import shutil
 
 from app import log
 
@@ -52,6 +53,17 @@ class Files(object):
 	def create_files(self, node_path):
 		self.path = os.path.join(node_path, self.dir_name)
 		os.mkdir(self.path)
+
+
+	def create_file(self, src_file_path):
+		file_name = os.path.basename(src_file_path)
+
+		dest_file_path = os.path.join(self.path, file_name)
+
+		print(dest_file_path)
+
+		shutil.copyfile(src_file_path, dest_file_path)
+
 
 	# def write_file(self, node_path):
 	# 	self.path = os.path.join(node_path, self.meta_file)

@@ -5,11 +5,13 @@ from PyQt5.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QLabel, QPushButt
 # from .Tree import Tree
 from app import log
 from app.storage import get_storage
+from app import shared
 
 from .tree.Tree import Tree
 from .node.NodeInfo import NodeInfo
 from .node.NodeEditor import NodeEditor
 from .node.NodeFiles import NodeFiles
+from .node.NodeControls import NodeControls
 
 from . import events
 
@@ -74,6 +76,9 @@ class MainFrame(QWidget):
 		self.main_layout.addLayout(node_side)
 
 
+		self.node_controls = NodeControls()
+		node_side.addWidget(self.node_controls)
+
 		self.node_info = NodeInfo()
 		node_side.addWidget(self.node_info)
 		# self.node_stat = NodeStat()
@@ -112,11 +117,12 @@ class MainFrame(QWidget):
 
 		#--- show node data
 		self.current_node = self.storage.get_node(uuid)
+		shared.set_current_node(self.current_node)
 		self.node_info.update_node(self.current_node)
 		self.node_editor.update_node(self.current_node)
 		self.node_files.update_node(self.current_node)
 
-		#--- update tree node
+		#--- update tree node(in project.json)
 		self.storage.project.set_current_node(self.current_node.uuid)
 
 

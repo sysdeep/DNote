@@ -16,6 +16,7 @@ from .modal_remove import ModalRemove
 from .modal_edit_name import ModalEditName
 from .modal_icons import ModalIcons
 from .modal_files import ModalFiles
+from .modals.NodeInfo import NodeInfo
 
 
 class Controller(object):
@@ -30,6 +31,7 @@ class Controller(object):
 		events.on("show_edit_name", self.__on_show_edit_name)
 		events.on("show_edit_icon", self.__on_show_edit_icon)
 		events.on("show_edit_files", self.__on_show_edit_files)
+		events.on("show_node_info", self.__on_show_node_info)
 
 		events.on("selected_icon", self.__on_selected_icon)
 
@@ -89,6 +91,14 @@ class Controller(object):
 		
 		# self.current_uuid = node_uuid
 		modal = ModalFiles(node, parent=self.parent)
+		modal.exec_()
+
+
+	def __on_show_node_info(self, node):
+		"""отображение модального окна информации о ноде"""
+		
+		# self.current_uuid = node_uuid
+		modal = NodeInfo(node, parent=self.parent)
 		modal.exec_()
 
 

@@ -78,6 +78,12 @@ class Node(object):
 		self.files.create_files(self.path)
 
 
+	def create_file(self, src_file_path):
+		"""создание файла"""
+		print("node.create_file: ", src_file_path)
+		self.files.create_file(src_file_path)
+		self.write_meta()
+
 
 	def __repr__(self):
 		return "{} - {}".format(self.meta.uuid, self.meta.name)

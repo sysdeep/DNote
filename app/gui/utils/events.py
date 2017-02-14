@@ -40,7 +40,8 @@ def show_edit_files(node):
 	"""запрос на изменение иконки ноды"""
 	emitter.emit("show_edit_files", node)
 
-
+def show_node_info(node):
+	emitter.emit("show_node_info", node)
 
 
 

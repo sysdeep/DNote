@@ -41,15 +41,15 @@ class NodeEditor(QGroupBox):
 		self.main_layout.addLayout(controls)
 
 
-		btn_new_node = QPushButton("create")
+		btn_new_node = QPushButton("old create")
 		btn_new_node.clicked.connect(self.__create_node)
 
 
-		btn_remove_node = QPushButton("remove")
+		btn_remove_node = QPushButton("old remove")
 		btn_remove_node.clicked.connect(self.__remove_node)
 
 
-		btn_show_icons = QPushButton("icon")
+		btn_show_icons = QPushButton("old icon")
 		btn_show_icons.clicked.connect(self.__show_icons)
 
 
