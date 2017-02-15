@@ -65,6 +65,16 @@ class Files(object):
 		shutil.copyfile(src_file_path, dest_file_path)
 
 
+
+	def remove_file(self, file_name):
+		file_path = os.path.join(self.path, file_name)
+
+		if os.path.exists(file_path):
+			os.unlink(file_path)
+		else:
+			log.error("file not exists: {}".format(file_path))
+
+
 	# def write_file(self, node_path):
 	# 	self.path = os.path.join(node_path, self.meta_file)
 	# 	# log.debug("write meta: " + self.path)

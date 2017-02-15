@@ -60,6 +60,9 @@ class Node(object):
 		self.name = name
 		self.meta.name = name
 
+
+
+
 	def write_node(self):
 		self.write_meta()
 		self.write_page()
@@ -74,9 +77,13 @@ class Node(object):
 	def write_page(self):
 		self.page.write_file(self.path)
 
+	
+	
 	def create_files(self):
 		self.files.create_files(self.path)
 
+
+	#--- separates
 
 	def create_file(self, src_file_path):
 		"""создание файла"""
@@ -84,6 +91,11 @@ class Node(object):
 		self.files.create_file(src_file_path)
 		self.write_meta()
 
+
+	def remove_file(self, file_name):
+		"""удаление заданного файла"""
+		self.files.remove_file(file_name)
+		self.write_meta()
 
 	def __repr__(self):
 		return "{} - {}".format(self.meta.uuid, self.meta.name)

@@ -3,6 +3,7 @@
 
 
 from PyQt5.QtWidgets import QGroupBox, QGridLayout, QLabel, QPushButton, QListWidget, QHBoxLayout, QVBoxLayout, QListWidgetItem, QFileDialog
+from PyQt5.QtCore import Qt
 from .. import events
 
 class NodeFiles(QGroupBox):
@@ -36,6 +37,7 @@ class NodeFiles(QGroupBox):
 		self.main_layout.addLayout(edit_box)
 
 		self.clist = QListWidget()
+		self.clist.itemClicked.connect(self.__on_select_item)
 		edit_box.addWidget(self.clist)
 
 
@@ -45,10 +47,17 @@ class NodeFiles(QGroupBox):
 		btn_add = QPushButton("add")
 		btn_add.clicked.connect(self.__on_add_action)
 
-		btn_remove = QPushButton("remove")
+		self.btn_remove = QPushButton("remove")
+		self.btn_remove.clicked.connect(self.__on_remove_action)
+		self.btn_remove.setDisabled(True)
+
 		actions_box.addWidget(btn_add)
-		actions_box.addWidget(btn_remove)
+		actions_box.addWidget(self.btn_remove)
 		actions_box.addStretch()
+
+
+
+		self.current_file = None
 
 
 		#--- events
@@ -88,7 +97,7 @@ class NodeFiles(QGroupBox):
 			# icon = QIcon(get_icon_path(self.current_ipack, f))
 			# item = QListWidgetItem(icon, f)
 			item = QListWidgetItem(f)
-			# item.setData(Qt.UserRole+1, f)
+			item.setData(Qt.UserRole+1, f)
 			self.clist.addItem(item)
 
 	
@@ -105,3 +114,17 @@ class NodeFiles(QGroupBox):
 
 			#--- send events
 			events.update_current_node()				# update_tree - вызовет и это
+
+
+
+	def __on_remove_action(self):
+		print(self.current_file)
+		self.node.remove_file(self.current_file)
+
+
+	def __on_select_item(self, list_item):
+		self.current_file = list_item.data(Qt.UserRole+1)
+		
+
+		if not self.btn_remove.isEnabled():
+			self.btn_remove.setDisabled(False)
