@@ -9,6 +9,7 @@
 # import os
 from . import events
 from app import log
+from app import shared
 from app.storage import get_storage
 
 from .modal_create import ModalCreate
@@ -31,7 +32,7 @@ class Controller(object):
 		events.on("show_edit_name", self.__on_show_edit_name)
 		events.on("show_edit_icon", self.__on_show_edit_icon)
 		events.on("show_edit_files", self.__on_show_edit_files)
-		events.on("show_node_info", self.__on_show_node_info)
+		events.on("show_current_node_info", self.__on_show_current_node_info)
 
 		events.on("selected_icon", self.__on_selected_icon)
 
@@ -59,7 +60,7 @@ class Controller(object):
 		"""отображение модального окна изменения названия"""
 
 		
-		modal = ModalEditName(node_uuid=node_uuid, parent=self.parent)
+		modal = ModalEditName(parent=self.parent)
 		modal.exec_()
 
 
@@ -94,10 +95,10 @@ class Controller(object):
 		modal.exec_()
 
 
-	def __on_show_node_info(self, node):
+	def __on_show_current_node_info(self):
 		"""отображение модального окна информации о ноде"""
 		
-		# self.current_uuid = node_uuid
+		node = self.storage.get_current_node()
 		modal = NodeInfo(node, parent=self.parent)
 		modal.exec_()
 

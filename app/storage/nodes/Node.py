@@ -32,6 +32,7 @@ class Node(object):
 		self.path = node_path
 		self.uuid = uuid
 		self.name = ""
+		self.storage = None					# ссылка на хранилище
 
 		self.meta = Meta(self.path)
 		self.page = Page(self.path)
@@ -91,7 +92,31 @@ class Node(object):
 		"""???"""
 		self.page.write_file()
 
-	
+
+
+
+	def update_page_text(self, text):
+		"""записать данные в страницу"""
+		self.page.raw_text = text
+		self.page.write_file()
+		self.meta.write_file()
+		self.__event_updated()
+
+
+	def update_node_name(self, name):
+		"""обновление названия ноды"""
+		self.name = name
+		self.meta.name = name
+		self.meta.write_file()
+		self.__event_updated()
+
+
+
+
+	def __event_updated(self):
+		if self.storage:
+			self.storage.emit("node_updated")
+
 	
 	# def create_files(self):
 	# 	self.files.create_files(self.path)
@@ -106,6 +131,7 @@ class Node(object):
 
 		#--- обновление метаданных
 		self.meta.write_file()
+		self.__event_updated()
 
 
 	def remove_file(self, file_name):
@@ -115,6 +141,7 @@ class Node(object):
 
 		#--- обновление метаданных
 		self.meta.write_file()
+		self.__event_updated()
 
 
 

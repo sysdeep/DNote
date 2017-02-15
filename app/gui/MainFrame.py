@@ -36,6 +36,10 @@ class MainFrame(QWidget):
 		self.__make_tree_side()
 		self.__make_node_side()
 
+
+		self.storage.eon("node_selected", self.__on_node_selected)
+		self.storage.eon("node_updated", self.__on_node_updated)
+
 		#--- start
 		self.start()
 
@@ -76,21 +80,29 @@ class MainFrame(QWidget):
 		self.main_layout.addLayout(node_side)
 
 
+		#--- node name
+		self.label_node_name = QLabel()
+		node_side.addWidget(self.label_node_name)
+
+		#--- toolbar
 		self.node_controls = NodeControls()
 		node_side.addWidget(self.node_controls)
 
-		self.node_info = NodeInfo()
-		node_side.addWidget(self.node_info)
+		# self.node_info = NodeInfo()
+		# node_side.addWidget(self.node_info)
 		# self.node_stat = NodeStat()
 		# node_side.addWidget(self.node_stat)
 
-		self.node_files = NodeFiles()
-		node_side.addWidget(self.node_files)
+		
 
-
+		#--- edit text
 		self.node_editor = NodeEditor()
 		node_side.addWidget(self.node_editor)
 
+
+		#--- node files
+		self.node_files = NodeFiles()
+		node_side.addWidget(self.node_files)
 
 		# node_side.addStretch()
 
@@ -106,7 +118,7 @@ class MainFrame(QWidget):
 
 
 	def __on_select_node(self, uuid):
-		"""select node"""
+		"""select node from tree..."""
 
 		if uuid is None:
 			log.warning("uuid = None")
@@ -118,9 +130,9 @@ class MainFrame(QWidget):
 		#--- show node data
 		self.current_node = self.storage.get_node(uuid)
 		shared.set_current_node(self.current_node)
-		self.node_info.update_node(self.current_node)
-		self.node_editor.update_node(self.current_node)
-		self.node_files.update_node(self.current_node)
+		# self.node_info.update_node(self.current_node)
+		# self.node_editor.update_node(self.current_node)
+		# self.node_files.update_node(self.current_node)
 
 		#--- update tree node(in project.json)
 		self.storage.project.set_current_node(self.current_node.uuid)
@@ -128,6 +140,16 @@ class MainFrame(QWidget):
 
 
 
+
+	def __on_node_selected(self):
+		"""from storage"""
+		node = self.storage.get_current_node()
+		self.label_node_name.setText(node.name)
+
+	def __on_node_updated(self):
+		"""from storage"""
+		# node = self.storage.get_current_node()
+		self.label_node_name.setText(self.current_node.name)
 
 
 

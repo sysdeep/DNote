@@ -14,14 +14,14 @@ from .. import events
 
 
 class ModalEditName(QDialog):
-	def __init__(self, node_uuid, parent=None):
+	def __init__(self, parent=None):
 		super(ModalEditName, self).__init__(parent)
 
 		self.main_layout 	= QVBoxLayout(self)
 
-		self.node_uuid 		= node_uuid
+		
 		self.storage 		= get_storage()
-		self.node 			= self.storage.get_node(self.node_uuid)
+		self.node 			= self.storage.get_current_node()
 		
 		self.node_items 	= ("ntype", "uuid", "name", "ctime", "mtime", "path")
 		self.node_labels 	= {}
@@ -63,8 +63,9 @@ class ModalEditName(QDialog):
 
 
 		#--- update node data
-		self.node.set_name(name)
-		self.node.write_node()
+		self.node.update_node_name(name)
+		# self.node.set_name(name)
+		# self.node.write_node()
 
 
 		#--- update project data

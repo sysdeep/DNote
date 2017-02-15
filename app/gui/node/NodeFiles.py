@@ -5,6 +5,17 @@
 from PyQt5.QtWidgets import QGroupBox, QGridLayout, QLabel, QPushButton, QListWidget, QHBoxLayout, QVBoxLayout, QListWidgetItem, QFileDialog
 from PyQt5.QtCore import Qt
 from .. import events
+from app.storage import get_storage
+
+
+
+
+
+
+
+
+
+
 
 class NodeFiles(QGroupBox):
 	def __init__(self, parent=None):
@@ -13,25 +24,8 @@ class NodeFiles(QGroupBox):
 		self.main_layout = QVBoxLayout(self)
 
 		self.node = None
+		self.storage = get_storage()
 		
-		grid = QGridLayout()
-		self.main_layout.addLayout(grid)
-
-		self.label_files_len = QLabel()
-		grid.addWidget(QLabel("files:"), 0, 0)
-		grid.addWidget(self.label_files_len, 0, 1)
-
-		btn_show = QPushButton("show")
-		btn_show.clicked.connect(self.__show_files_modal)
-		self.main_layout.addWidget(btn_show)
-		# for index, item in enumerate(self.node_items):
-		# 	self.main_layout.addWidget(QLabel(item), index, 0)
-
-		# 	label = QLabel()
-		# 	self.main_layout.addWidget(label, index, 1)
-		# 	self.node_labels[item] = label
-
-
 
 		edit_box = QHBoxLayout()
 		self.main_layout.addLayout(edit_box)
@@ -60,23 +54,22 @@ class NodeFiles(QGroupBox):
 		self.current_file = None
 
 
+		self.storage.eon("node_selected", self.__update_node_data)
 		#--- events
-		events.on("update_current_node", self.__update_current)
+		# events.on("update_current_node", self.__update_current)
 
 
 
-	def update_node(self, node):
-		self.node = node
-		self.__update_current()
-		self.__load_files()
+	# def update_node(self, node):
+	# 	self.node = node
+	# 	self.__update_current()
+	# 	self.__load_files()
 		
 
 
-	def __update_current(self):
-
-		node_files = self.node.files
-
-		self.label_files_len.setText( str(len(node_files.files)) )
+	def __update_node_data(self):
+		self.node = self.storage.get_current_node()
+		self.__load_files()
 		
 
 	def __show_files_modal(self):

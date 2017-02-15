@@ -27,7 +27,7 @@ def show_remove_node(node_uuid):
 	"""запрос на удаление ноды"""
 	emitter.emit("show_remove_node", node_uuid)
 
-def show_edit_name(node_uuid):
+def show_edit_name(node_uuid=None):
 	"""запрос на изменение имени ноды"""
 	emitter.emit("show_edit_name", node_uuid)
 
@@ -40,8 +40,9 @@ def show_edit_files(node):
 	"""запрос на изменение иконки ноды"""
 	emitter.emit("show_edit_files", node)
 
-def show_node_info(node):
-	emitter.emit("show_node_info", node)
+def show_current_node_info():
+	"""запрос на отображение модала с информацией о тек. ноде"""
+	emitter.emit("show_current_node_info")
 
 
 

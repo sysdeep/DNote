@@ -67,6 +67,7 @@ class Tree(QTreeView):
 		
 		edit_name 			= QAction("Изменить название", self)
 		edit_icon 			= QAction("Изменить иконки", self)
+		show_info 			= QAction("Информация", self)
 
 		remove_item 		= QAction("Удалить запись", self)
 
@@ -82,6 +83,7 @@ class Tree(QTreeView):
 		self.addAction(separator1)
 		self.addAction(edit_name)
 		self.addAction(edit_icon)
+		self.addAction(show_info)
 		self.addAction(separator2)
 		self.addAction(remove_item)
 		# self.addSeparetor()
@@ -92,6 +94,7 @@ class Tree(QTreeView):
 		create_new_level.setIcon(qicon("filesystems", "folder_orange.png"))
 		edit_name.setIcon(qicon("actions", "edit.png"))
 		edit_icon.setIcon(qicon("actions", "frame_image.png"))
+		show_info.setIcon(qicon("actions", "kdeprint_printer_infos.png"))
 		remove_item.setIcon(qicon("actions", "remove.png"))
 
 		create_new_root.triggered.connect(self.__act_create_new_root)
@@ -99,6 +102,7 @@ class Tree(QTreeView):
 		create_new_level.triggered.connect(self.__act_create_new_level)
 		edit_name.triggered.connect(self.__act_edit_name)
 		edit_icon.triggered.connect(self.__act_edit_icon)
+		show_info.triggered.connect(self.__act_show_info)
 		remove_item.triggered.connect(self.__act_remove_item)
 
 
@@ -255,4 +259,10 @@ class Tree(QTreeView):
 		"""редактирование иконки"""
 
 		events.show_edit_icon(self.current_uuid)
+
+
+	def __act_show_info(self):
+		"""информация о ноде"""
+
+		events.show_current_node_info()
 	#--- user actions ---------------------------------------------------------

@@ -7,7 +7,7 @@ import uuid
 import os
 
 from app import log
-
+from app.lib import EventEmitter
 
 from .nodes.Nodes import Nodes
 from .project.Project import Project
@@ -22,7 +22,8 @@ class Storage(object):
 		self.project		= Project()					# управление файлом проекта
 		self.project_path 	= ""						# полный путь к каталогу проекта
 
-
+		self.current_node	= None						# тек. нода
+		self.__emitter		= EventEmitter()
 
 
 	def load_project(self, project_path):
@@ -32,20 +33,30 @@ class Storage(object):
 		self.nodes.set_project_path(self.project_path)
 
 
+	def get_current_node(self):
+		return self.current_node
 
 
-
+	def get_node(self, uuid):
+		"""получить заданную ноду из хранилища"""
+		node = self.nodes.get_node(uuid)
+		node.storage = self
+		self.current_node = node
+		self.emit("node_selected")
+		return node
 
 
 
 	def create_node(self, parent_node, name):
+		"""создать новую ноду"""
 		log.debug("создание новой ноды")
 
 		#--- создание файлов ноды
-		# node_uuid = self.nodes.create_node(name)
 		node = self.nodes.create_node(name)
 		node_uuid = node.uuid
-
+		node.storage = self
+		self.current_node = node
+		self.emit("node_selected")
 		#--- создание ноды в файле проекта
 		self.project.create_node(parent_node, node_uuid, name)
 		self.project.write_file()
@@ -56,6 +67,7 @@ class Storage(object):
 
 	
 	def remove_node(self, uuid):
+		"""удалить заданную ноду"""
 		log.debug("удаление ноды: " + uuid)
 
 		#--- удаление файлов ноды
@@ -67,30 +79,33 @@ class Storage(object):
 		
 		self.project.write_file()
 
+		self.current_node = None
 		return True
 
 
 
 
 
-	# def create_node_top(self, name):
-	# 	"""DEPRICATED"""
-	# 	log.debug("создание новой ноды - top")
 
-	# 	#--- создание файлов ноды
-	# 	node_uuid = self.nodes.create_node(name)
+	#--- events ---------------------------------------------------------------
+	def eon(self, event_name, cb):
+		"""подписаться на события"""
+		self.__emitter.eon(event_name, cb)
 
-	# 	#--- создание ноды в файле проекта
-	# 	self.project.create_node_top(node_uuid, name)
-	# 	self.project.write_file()
+	def eoff(self, event_name, cb):
+		self.__emitter.eoff(event_name, cb)
 
-	# 	return True
+	def emit(self, event, *args, **kwargs):
+		self.__emitter.emit(event, *args, **kwargs)
+	#--- events ---------------------------------------------------------------
 
 
 
-	def get_node(self, uuid):
-		# node_path = os.path.join(self.project_path, "nodes", uuid)
-		return self.nodes.get_node(uuid)
+
+
+
+
+
 
 
 
