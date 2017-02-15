@@ -115,11 +115,14 @@ class NodeFiles(QGroupBox):
 			#--- send events
 			events.update_current_node()				# update_tree - вызовет и это
 
+		self.__load_files()
 
 
 	def __on_remove_action(self):
 		print(self.current_file)
 		self.node.remove_file(self.current_file)
+
+		self.__load_files()
 
 
 	def __on_select_item(self, list_item):

@@ -11,24 +11,26 @@ from app import log
 
 
 class Page(object):
-	def __init__(self):
+	def __init__(self, node_path):
 		self.file 	= "__page.page"		# файл
-		self.path 	= ""
+		self.node_path = node_path
+		self.path = os.path.join(self.node_path, self.file) 
 		self.raw_text 	= ""
 
+		# self.load()
 
 
-	def load(self, node_path):
+	def load(self):
 		"""загрузка данных из файла"""
-		self.path = os.path.join(node_path, self.file) 
+		# self.path = os.path.join(node_path, self.file) 
 		# log.debug("загрузка данных из файла: " + self.path)
 		with open(self.path, "r", encoding="utf-8") as fd:
 			self.raw_text = fd.read()
 
 		
 
-	def write_file(self, node_path):
-		self.path = os.path.join(node_path, self.file)
+	def write_file(self):
+		# self.path = os.path.join(node_path, self.file)
 		# log.debug("write page: " + self.path)
 
 
