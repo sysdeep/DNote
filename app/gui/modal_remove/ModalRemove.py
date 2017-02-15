@@ -75,8 +75,6 @@ class ModalRemove(QDialog):
 		"""удаление ноды"""
 
 		self.storage.remove_node(self.node_uuid)
-
-		events.update_tree()
 		
 		self.close()
 

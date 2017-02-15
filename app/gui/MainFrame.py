@@ -37,8 +37,8 @@ class MainFrame(QWidget):
 		self.__make_node_side()
 
 
-		self.storage.eon("node_selected", self.__on_node_selected)
-		self.storage.eon("node_updated", self.__on_node_updated)
+		# self.storage.eon("node_selected", self.__on_node_selected)
+		# self.storage.eon("node_updated", self.__on_node_updated)
 
 		#--- start
 		self.start()
@@ -80,10 +80,6 @@ class MainFrame(QWidget):
 		self.main_layout.addLayout(node_side)
 
 
-		#--- node name
-		self.label_node_name = QLabel()
-		node_side.addWidget(self.label_node_name)
-
 		#--- toolbar
 		self.node_controls = NodeControls()
 		node_side.addWidget(self.node_controls)
@@ -110,8 +106,8 @@ class MainFrame(QWidget):
 
 	def start(self):
 		"""запуск"""
-		# self.tree_view.update_tree()
-		events.update_tree()
+		self.tree_view.update_tree()
+		
 
 
 
@@ -141,15 +137,15 @@ class MainFrame(QWidget):
 
 
 
-	def __on_node_selected(self):
-		"""from storage"""
-		node = self.storage.get_current_node()
-		self.label_node_name.setText(node.name)
+	# def __on_node_selected(self):
+	# 	"""from storage"""
+	# 	node = self.storage.get_current_node()
+	# 	self.label_node_name.setText(node.name)
 
-	def __on_node_updated(self):
-		"""from storage"""
-		# node = self.storage.get_current_node()
-		self.label_node_name.setText(self.current_node.name)
+	# def __on_node_updated(self):
+	# 	"""from storage"""
+	# 	# node = self.storage.get_current_node()
+	# 	self.label_node_name.setText(self.current_node.name)
 
 
 

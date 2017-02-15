@@ -17,7 +17,7 @@ from app import log
 from app.rc import FILE_PROJECT
 
 from .NSTree import NSTree
-
+from app.lib import EventEmitter
 
 
 class Project(object):
@@ -30,6 +30,7 @@ class Project(object):
 		self.name 			= ""						# название проекта
 		self.tree 			= NSTree()					# дерево проекта
 
+		self.__emitter		= EventEmitter()
 
 
 	# def set_project_dir(self, project_path):
@@ -47,11 +48,11 @@ class Project(object):
 
 		data = json.loads(data_json)
 
-
-
 		self.name = data["name"]
 
 		self.tree.load(data["tree"])
+		self.emit("loaded")
+
 
 
 	def get_tree(self):
@@ -70,6 +71,7 @@ class Project(object):
 
 
 	def set_current_node(self, uuid):
+		"""установить флаг текущей ноды - у других сбросить"""
 		for node in self.tree.nodes:
 			if node.uuid == uuid:
 				node.current = True
@@ -83,11 +85,14 @@ class Project(object):
 		node.name = name
 
 		self.set_current_node(uuid)
+		self.emit("node_created")
+
 
 	def remove_node(self, node_uuid):
 		"""удаление ноды"""
 		log.info("удаление ноды: " + node_uuid)
 		self.tree.remove_node(node_uuid)
+		self.emit("node_removed")
 
 
 
@@ -102,6 +107,8 @@ class Project(object):
 		"""установить новое название ноды"""
 		node = self.find_node_by_uuid(node_uuid)
 		node.name = name
+
+		
 
 
 
@@ -122,7 +129,20 @@ class Project(object):
 		with open(self.file_path, "w", encoding="utf-8") as fd:
 			data = fd.write(data_json)
 
+		self.emit("updated")
 
+
+	#--- events ---------------------------------------------------------------
+	def eon(self, event_name, cb):
+		"""подписаться на события"""
+		self.__emitter.eon(event_name, cb)
+
+	def eoff(self, event_name, cb):
+		self.__emitter.eoff(event_name, cb)
+
+	def emit(self, event, *args, **kwargs):
+		self.__emitter.emit(event, *args, **kwargs)
+	#--- events ---------------------------------------------------------------
 
 
 

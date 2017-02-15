@@ -83,7 +83,7 @@ class Controller(object):
 		project_node.icon = icon
 
 		self.storage.project.write_file()
-		events.update_tree()
+		
 	#--- icons ----------------------------------------------------------------
 
 

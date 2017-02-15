@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from PyQt5.QtWidgets import QLabel, QDialog, QPushButton, QHBoxLayout, QVBoxLayout, QGridLayout, QFileDialog, QTextEdit, QFormLayout, QLineEdit
+from PyQt5.QtWidgets import QLabel, QDialog, QPushButton, QHBoxLayout, QVBoxLayout, QGridLayout, QComboBox, QTextEdit, QFormLayout, QLineEdit
 from PyQt5.QtGui import QFont
 
 
@@ -22,18 +22,37 @@ class ModalEditName(QDialog):
 		
 		self.storage 		= get_storage()
 		self.node 			= self.storage.get_current_node()
+		self.types 			= self.storage.get_node_types()
 		
-		self.node_items 	= ("ntype", "uuid", "name", "ctime", "mtime", "path")
-		self.node_labels 	= {}
 		
 		self.__make_gui()
+		self.__load_data()
 
 
 	def __make_gui(self):
 		
 		
+		# self.edit_name = QLineEdit(self.node.name)
+		# self.main_layout.addWidget(self.edit_name)
+
+		#--- edit
+		
+
+		form = QFormLayout()
+		self.main_layout.addLayout(form)
+
+
 		self.edit_name = QLineEdit(self.node.name)
-		self.main_layout.addWidget(self.edit_name)
+
+		self.edit_type = QComboBox()
+		self.edit_type.addItems(self.types)
+
+
+
+
+		form.addRow("Название", self.edit_name)
+		form.addRow("Тип", self.edit_type)
+
 
 
 		#--- controls
@@ -51,6 +70,10 @@ class ModalEditName(QDialog):
 		controls.addWidget(btn_close)
 
 
+	def __load_data(self):
+		ntype = self.node.meta.ntype
+		index = self.types.index(ntype)
+		self.edit_type.setCurrentIndex(index)
 
 
 
@@ -62,7 +85,12 @@ class ModalEditName(QDialog):
 		name = self.edit_name.text()
 
 
+		#--- тип
+		index = self.edit_type.currentIndex()
+		node_type = self.types[index]
+
 		#--- update node data
+		self.node.meta.ntype = node_type
 		self.node.update_node_name(name)
 		# self.node.set_name(name)
 		# self.node.write_node()
@@ -74,7 +102,7 @@ class ModalEditName(QDialog):
 
 
 		#--- send events
-		events.update_tree()
+		# events.update_tree()
 
 
 		# self.storage.remove_node(self.node_uuid)

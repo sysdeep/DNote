@@ -12,7 +12,7 @@ from app import log
 from .Node import Node
 
 
-
+NODE_TYPES = ("text", "markdown")
 
 
 class Nodes(object):

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from PyQt5.QtWidgets import QLabel, QDialog, QPushButton, QHBoxLayout, QVBoxLayout, QGridLayout, QFileDialog, QTextEdit, QFormLayout, QLineEdit
+from PyQt5.QtWidgets import QLabel, QDialog, QPushButton, QHBoxLayout, QVBoxLayout, QGridLayout, QFileDialog, QTextEdit, QFormLayout, QLineEdit, QComboBox
 from PyQt5.QtGui import QFont
 
 
@@ -19,6 +19,7 @@ class ModalCreate(QDialog):
 	def __init__(self, parent_node=None, parent=None):
 		super(ModalCreate, self).__init__(parent)
 
+		self.setWindowTitle("Создание новой записи")
 		self.storage 		= get_storage()
 		
 		if parent_node is None:
@@ -26,16 +27,26 @@ class ModalCreate(QDialog):
 		else:
 			self.parent_node 	= parent_node
 
-		
+
+		self.types = self.storage.get_node_types()
+
+
+		self.main_layout = QVBoxLayout(self)
 		self.__make_gui()
+
+
+
+
 
 
 	def __make_gui(self):
 		
-		self.main_layout = QHBoxLayout(self)
+
+		label_root_name = QLabel("Родитель: {}".format(self.parent_node.name))
+		self.main_layout.addWidget(label_root_name)		
 
 
-
+		#--- edit
 		input_layout = QVBoxLayout()
 		self.main_layout.addLayout(input_layout)
 
@@ -45,7 +56,14 @@ class ModalCreate(QDialog):
 
 		self.edit_name = QLineEdit()
 
-		form.addRow("name", self.edit_name)
+		self.edit_type = QComboBox()
+		self.edit_type.addItems(self.types)
+
+
+
+
+		form.addRow("Название", self.edit_name)
+		form.addRow("Тип", self.edit_type)
 
 
 
@@ -54,18 +72,18 @@ class ModalCreate(QDialog):
 		
 
 
-
-		controls = QVBoxLayout()
+		#--- controls
+		controls = QHBoxLayout()
 		self.main_layout.addLayout(controls)
 
-		btn_close = QPushButton("Close")
+		btn_close = QPushButton("Закрыть")
 		btn_close.clicked.connect(self.close)
 
-		btn_create = QPushButton("Create")
+		btn_create = QPushButton("Создать")
 		btn_create.clicked.connect(self.__create)
 
-		controls.addWidget(btn_create)
 		controls.addStretch()
+		controls.addWidget(btn_create)
 		controls.addWidget(btn_close)
 
 
@@ -77,6 +95,11 @@ class ModalCreate(QDialog):
 		#--- название
 		name = self.edit_name.text()
 
+		#--- тип
+		index = self.edit_type.currentIndex()
+		node_type = self.types[index]
+
+
 		#--- содержимое
 		text = self.edit_text.toPlainText()
 
@@ -85,10 +108,12 @@ class ModalCreate(QDialog):
 		node = self.storage.create_node(self.parent_node, name)
 
 		#--- обновление данных
-		node.page.raw_text = text
-		node.write_node()
+		node.meta.ntype = node_type
+		node.update_page_text(text)
+		# node.page.raw_text = text
+		# node.write_node()
 
-		events.update_tree()
+		# events.update_tree()
 
 		
 		self.close()

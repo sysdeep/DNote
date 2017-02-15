@@ -3,7 +3,9 @@
 
 
 from PyQt5.QtWidgets import QGroupBox, QHBoxLayout, QVBoxLayout, QLabel, QTextEdit, QPushButton, QLineEdit
+from PyQt5.QtWebKitWidgets import QWebView
 
+from vendors import markdown
 from app.storage import get_storage
 
 from .. import events
@@ -11,6 +13,18 @@ from .. import events
 from .style_python import PythonHighlighter
 from .style_md import MarkdownHighlighter
 
+
+
+html = '''<html>
+<head>
+<title>A Sample Page</title>
+</head>
+<body>
+<h1>Hello, World!</h1>
+<hr />
+I have nothing to say.
+</body>
+</html>'''
 
 class NodeEditor(QGroupBox):
 	def __init__(self, parent=None):
@@ -23,7 +37,8 @@ class NodeEditor(QGroupBox):
 
 		self.__make_gui()
 
-		self.storage.eon("node_selected", self.__update_node_data)
+		self.storage.eon("node_selected", self.__on_node_selected)
+		self.storage.eon("node_updated", self.__on_node_updated)
 
 
 
@@ -38,32 +53,63 @@ class NodeEditor(QGroupBox):
 		# self.hh = MarkdownHighlighter(self.text_edit)
 
 
+		self.web = QWebView()
+		self.main_layout.addWidget(self.web)
+		# self.web.setHtml(html)
+
 		#--- controls
 		controls = QHBoxLayout()
 		self.main_layout.addLayout(controls)
 
 
 
+		self.btn_view_edit = QPushButton("edit")
+		self.btn_view_edit.clicked.connect(self.__on_set_view_edit)
 
+		self.btn_view_web = QPushButton("web")
+		self.btn_view_web.clicked.connect(self.__on_set_view_web)
 
-		btn_save = QPushButton("save")
-		btn_save.clicked.connect(self.__save)
+		self.btn_save = QPushButton("save")
+		self.btn_save.clicked.connect(self.__save)
 
+		controls.addWidget(self.btn_view_web)
+		controls.addWidget(self.btn_view_edit)
 		controls.addStretch()
-		controls.addWidget(btn_save)
+		controls.addWidget(self.btn_save)
 
 
 
-	def __update_node_data(self):
+	def __on_node_selected(self):
 		# self.node = node
 
 		self.node = self.storage.get_current_node()
+		
+		self.setTitle(self.node.name)
 
-
-		#--- page text
 		text = self.node.page.raw_text
-		self.text_edit.setText(text)
 
+		if self.node.meta.ntype == "text":
+			self.__set_view_text(text)
+		elif self.node.meta.ntype == "markdown":
+			self.__set_view_markdown(text)
+		else:
+			pass
+		#--- page text
+		
+		
+		# self.web.setHtml(text)
+
+		
+
+
+
+
+	def __on_node_updated(self):
+		self.setTitle(self.node.name)
+
+		text = self.node.page.raw_text
+		html = markdown.markdown(text)
+		self.web.setHtml(html)
 
 
 
@@ -83,4 +129,32 @@ class NodeEditor(QGroupBox):
 		# events.update_tree()
 
 
-	
+
+	def __set_view_text(self, text):
+		self.__on_set_view_edit()
+		self.text_edit.setText(text)
+		self.btn_view_web.setDisabled(True)
+		
+
+
+	def __set_view_markdown(self, text):
+		self.__on_set_view_web()
+		self.text_edit.setText(text)
+		html = markdown.markdown(text)
+		self.web.setHtml(html)
+
+
+
+	def __on_set_view_edit(self):
+		self.web.hide()
+		self.text_edit.show()
+		self.btn_view_edit.setDisabled(True)
+		self.btn_view_web.setEnabled(True)
+		self.btn_save.setEnabled(True)
+
+	def __on_set_view_web(self):
+		self.web.show()
+		self.text_edit.hide()
+		self.btn_view_web.setDisabled(True)
+		self.btn_view_edit.setEnabled(True)
+		self.btn_save.setEnabled(False)

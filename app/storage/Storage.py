@@ -9,7 +9,7 @@ import os
 from app import log
 from app.lib import EventEmitter
 
-from .nodes.Nodes import Nodes
+from .nodes.Nodes import Nodes, NODE_TYPES
 from .project.Project import Project
 
 
@@ -84,7 +84,8 @@ class Storage(object):
 
 
 
-
+	def get_node_types(self):
+		return NODE_TYPES
 
 
 	#--- events ---------------------------------------------------------------
@@ -103,7 +104,7 @@ class Storage(object):
 
 
 
-
+	
 
 
 

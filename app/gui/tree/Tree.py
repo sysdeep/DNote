@@ -37,7 +37,10 @@ class Tree(QTreeView):
 
 
 
-		events.on("update_tree", self.__update_tree)
+		# events.on("update_tree", self.__update_tree)
+		# self.storage.project.eon("node_created", self.__update_tree)
+		# self.storage.project.eon("node_removed", self.__update_tree)
+		self.storage.project.eon("updated", self.__update_tree)
 		# self.__make_tree()
 
 
