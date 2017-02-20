@@ -17,10 +17,10 @@ DATA = {
 
 def set_up():
 	log.info("set up")
-	storage = Storage()
+	storage = Storage(DIR_PROJECT)
 
 	#--- for development only
-	storage.load_project(DIR_PROJECT)
+	# storage.load_project(DIR_PROJECT)
 	#--- for development only
 	
 	DATA["storage"] = storage
@@ -51,7 +51,23 @@ def load_default_project():
 
 
 
+def open_storage(path):
+	log.info("opening storage: {}".format(path))
 
+
+	if DATA["storage"]:
+		DATA["storage"].shutdown()
+		DATA["storage"] = None
+
+	storage = Storage(path)
+	DATA["storage"] = storage
+	return storage
+
+
+
+
+def create_storage(name, path):
+	pass
 
 # def get_tree():
 # 	controller = get_controller()

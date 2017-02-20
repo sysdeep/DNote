@@ -55,6 +55,16 @@ class Project(object):
 
 
 
+
+	def create(self, name, path):
+		log.debug("создание проекта")
+		self.project_path 	= path
+		self.name 			= name
+		self.file_path 		= os.path.join(self.project_path, self.file_name)
+
+		
+
+
 	def get_tree(self):
 		return self.tree
 
@@ -130,6 +140,15 @@ class Project(object):
 			data = fd.write(data_json)
 
 		self.emit("updated")
+
+
+
+
+
+
+
+
+
 
 
 	#--- events ---------------------------------------------------------------

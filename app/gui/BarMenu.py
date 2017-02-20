@@ -8,6 +8,8 @@ from PyQt5.QtWidgets import QAction, QFileDialog
 
 
 from . import events, qicon
+from .modals.CreateNotebook import CreateNotebook
+from .modals.OpenNotebook import OpenNotebook
 # from .ModalScan import ModalScan
 
 # from .icons import qicon
@@ -36,6 +38,25 @@ class BarMenu(object):
 
 
 
+		#--- create new notebook
+		file_create_new_notebook = QAction("Создать новый блокнот", self.parent)
+		file_create_new_notebook.setIcon(qicon("actions", "document_new.png"))
+		file_create_new_notebook.triggered.connect(lambda: self.__file_create_new_notebook())
+
+		file_menu.addAction(file_create_new_notebook)
+		self.toolbar.addAction(file_create_new_notebook)
+
+
+
+		#--- open notebook
+		file_open_notebook = QAction("Открыть блокнот", self.parent)
+		file_open_notebook.setIcon(qicon("actions", "document_open.png"))
+		file_open_notebook.triggered.connect(lambda: self.__file_open_notebook())
+
+		file_menu.addAction(file_open_notebook)
+		self.toolbar.addAction(file_open_notebook)
+
+
 		#--- create root item
 		file_create_root_item_action = QAction("Создать корневую запись", self.parent)
 		file_create_root_item_action.setIcon(qicon("filesystems", "folder_blue.png"))
@@ -58,4 +79,12 @@ class BarMenu(object):
 	def __file_create_root_item_action(self):
 		events.show_modal_create_node(parent_node=None)
 
+	
+	def __file_create_new_notebook(self):
+		modal = CreateNotebook(self.parent)
+		modal.show()
 
+
+	def __file_open_notebook(self):
+		modal = OpenNotebook(self.parent)
+		modal.show()

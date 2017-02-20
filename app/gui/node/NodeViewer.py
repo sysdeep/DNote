@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 
-from PyQt5.QtWidgets import QGroupBox, QHBoxLayout, QVBoxLayout, QLabel, QTextEdit, QPushButton, QLineEdit
+from PyQt5.QtWidgets import QGroupBox, QHBoxLayout, QVBoxLayout, QLabel, QTextEdit, QPushButton, QLineEdit, QTabWidget
 from PyQt5.QtWebKitWidgets import QWebView
 
 from vendors import markdown
@@ -15,18 +15,8 @@ from ..modals.NodeHtmlViewer import NodeHtmlViewer
 from .style_python import PythonHighlighter
 from .style_md import MarkdownHighlighter
 
-
-
-html = '''<html>
-<head>
-<title>A Sample Page</title>
-</head>
-<body>
-<h1>Hello, World!</h1>
-<hr />
-I have nothing to say.
-</body>
-</html>'''
+from .NodeView import NodeViewe
+from .NodeEdit import NodeEdit
 
 
 
@@ -53,26 +43,37 @@ class NodeViewer(QGroupBox):
 	def __make_gui(self):
 
 
-		self.web = QWebView()
-		self.main_layout.addWidget(self.web)
+		tabs = QTabWidget()
+		self.main_layout.addWidget(tabs)
+
+
+		node_view = NodeViewe()
+		node_edit = NodeEdit()
+
+		tabs.addTab(node_view, "Просмотр")
+		tabs.addTab(node_edit, "Редактирование")
+
+
+		# self.web = QWebView()
+		# self.main_layout.addWidget(self.web)
 		# self.web.setHtml(html)
 
-		#--- controls
-		controls = QHBoxLayout()
-		self.main_layout.addLayout(controls)
+		# #--- controls
+		# controls = QHBoxLayout()
+		# self.main_layout.addLayout(controls)
 
 
-		self.btn_show_edit = QPushButton("show_edit")
-		self.btn_show_edit.clicked.connect(self.__on_show_edit)
+		# self.btn_show_edit = QPushButton("show_edit")
+		# self.btn_show_edit.clicked.connect(self.__on_show_edit)
 
-		self.btn_show_html = QPushButton("show_html")
-		self.btn_show_html.clicked.connect(self.__on_show_html)
+		# self.btn_show_html = QPushButton("show_html")
+		# self.btn_show_html.clicked.connect(self.__on_show_html)
 
 
 
-		controls.addStretch()
-		controls.addWidget(self.btn_show_edit)
-		controls.addWidget(self.btn_show_html)
+		# controls.addStretch()
+		# controls.addWidget(self.btn_show_edit)
+		# controls.addWidget(self.btn_show_html)
 
 
 
@@ -119,28 +120,28 @@ class NodeViewer(QGroupBox):
 
 		self.setTitle(self.node.name + "["+self.node.meta.ntype+"]")
 
-		text = self.node.page.raw_text
+		# text = self.node.page.raw_text
 
-		if self.node.meta.ntype == "text":
-			# self.web.setHtml(text)
-			html = markdown.markdown(text)
-			self.web.setHtml(html)
-		elif self.node.meta.ntype == "markdown":
-			html = markdown.markdown(text)
-			self.web.setHtml(html)
-
-
+		# if self.node.meta.ntype == "text":
+		# 	# self.web.setHtml(text)
+		# 	html = markdown.markdown(text)
+		# 	self.web.setHtml(html)
+		# elif self.node.meta.ntype == "markdown":
+		# 	html = markdown.markdown(text)
+		# 	self.web.setHtml(html)
 
 
 
 
 
 
-	def __on_show_edit(self):
-		modal = NodeEditor(self.node, self)
-		modal.show()
 
 
-	def __on_show_html(self):
-		modal = NodeHtmlViewer(self.node, self)
-		modal.show()
+	# def __on_show_edit(self):
+	# 	modal = NodeEditor(self.node, self)
+	# 	modal.show()
+
+
+	# def __on_show_html(self):
+	# 	modal = NodeHtmlViewer(self.node, self)
+	# 	modal.show()

@@ -17,21 +17,32 @@ from .project.Project import Project
 
 
 class Storage(object):
-	def __init__(self):
+	def __init__(self, project_path):
 		self.nodes 			= Nodes()					# управление нодами
 		self.project		= Project()					# управление файлом проекта
-		self.project_path 	= ""						# полный путь к каталогу проекта
+		self.project_path 	= project_path				# полный путь к каталогу проекта
 
 		self.current_node	= None						# тек. нода
 		self.__emitter		= EventEmitter()
 
+		self.__load()
 
-	def load_project(self, project_path):
+	# def load_project(self, project_path):
+	# 	"""загрузить проект по заданному пути"""
+	# 	self.project_path 	= project_path
+	# 	self.project.load(self.project_path)
+	# 	self.nodes.set_project_path(self.project_path)
+
+	def __load(self):
 		"""загрузить проект по заданному пути"""
-		self.project_path 	= project_path
 		self.project.load(self.project_path)
 		self.nodes.set_project_path(self.project_path)
 
+
+	# def create_project(self, name, path):
+	# 	"""создать новое хранилище"""
+	# 	self.project_path = path
+	# 	self.pro
 
 	def get_current_node(self):
 		return self.current_node
@@ -86,6 +97,13 @@ class Storage(object):
 
 	def get_node_types(self):
 		return NODE_TYPES
+
+
+
+
+
+	def shutdown(self):
+		self.__emitter.eoffa()
 
 
 	#--- events ---------------------------------------------------------------
