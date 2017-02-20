@@ -10,6 +10,7 @@ from app import shared
 from .tree.Tree import Tree
 from .node.NodeInfo import NodeInfo
 from .node.NodeEditor import NodeEditor
+from .node.NodeViewer import NodeViewer
 from .node.NodeFiles import NodeFiles
 from .node.NodeControls import NodeControls
 
@@ -92,8 +93,12 @@ class MainFrame(QWidget):
 		
 
 		#--- edit text
-		self.node_editor = NodeEditor()
-		node_side.addWidget(self.node_editor)
+		# self.node_editor = NodeEditor()
+		# node_side.addWidget(self.node_editor)
+
+		self.node_viewer = NodeViewer()
+		node_side.addWidget(self.node_viewer)
+
 
 
 		#--- node files

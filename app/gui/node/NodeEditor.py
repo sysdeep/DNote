@@ -9,6 +9,7 @@ from vendors import markdown
 from app.storage import get_storage
 
 from .. import events
+from ..modals.NodeEditor import NodeEditor as NodeEditorModal
 
 from .style_python import PythonHighlighter
 from .style_md import MarkdownHighlighter
@@ -69,11 +70,18 @@ class NodeEditor(QGroupBox):
 		self.btn_view_web = QPushButton("web")
 		self.btn_view_web.clicked.connect(self.__on_set_view_web)
 
+
+		self.btn_show_edit = QPushButton("show_edit")
+		self.btn_show_edit.clicked.connect(self.__on_show_edit)
+
+
 		self.btn_save = QPushButton("save")
 		self.btn_save.clicked.connect(self.__save)
 
 		controls.addWidget(self.btn_view_web)
 		controls.addWidget(self.btn_view_edit)
+		controls.addStretch()
+		controls.addWidget(self.btn_show_edit)
 		controls.addStretch()
 		controls.addWidget(self.btn_save)
 
@@ -158,3 +166,10 @@ class NodeEditor(QGroupBox):
 		self.btn_view_web.setDisabled(True)
 		self.btn_view_edit.setEnabled(True)
 		self.btn_save.setEnabled(False)
+
+
+
+
+	def __on_show_edit(self):
+		modal = NodeEditorModal(self.node, self)
+		modal.show()
