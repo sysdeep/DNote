@@ -10,7 +10,7 @@
 from . import events
 from app import log
 from app import shared
-from app.storage import get_storage
+from app.storage import smanager
 
 from .modal_create import ModalCreate
 from .modal_remove import ModalRemove
@@ -23,7 +23,7 @@ from .modals.NodeInfo import NodeInfo
 class Controller(object):
 	def __init__(self, parent):
 		self.parent 	= parent
-		self.storage 	= get_storage()
+		self.storage 	= smanager.get_storage()
 		self.current_uuid	= None
 
 		#--- events
@@ -77,12 +77,12 @@ class Controller(object):
 	def __on_selected_icon(self, ipack, icon):
 		"""событие о выбранной иконке"""
 
-		project_node = self.storage.project.find_node_by_uuid(self.current_uuid)
+		project_node = smanager.storage.project.find_node_by_uuid(self.current_uuid)
 
 		project_node.ipack = ipack
 		project_node.icon = icon
 
-		self.storage.project.write_file()
+		smanager.storage.project.write_file()
 		
 	#--- icons ----------------------------------------------------------------
 

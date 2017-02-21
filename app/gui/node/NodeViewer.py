@@ -17,7 +17,7 @@ from .style_md import MarkdownHighlighter
 
 from .NodeView import NodeViewe
 from .NodeEdit import NodeEdit
-
+from .NodeFiles import NodeFiles
 
 
 
@@ -52,9 +52,11 @@ class NodeViewer(QGroupBox):
 
 		node_view = NodeViewe()
 		node_edit = NodeEdit()
+		node_files = NodeFiles()
 
 		tabs.addTab(node_view, "Просмотр")
 		tabs.addTab(node_edit, "Редактирование")
+		tabs.addTab(node_files, "Файлы")
 
 
 		# self.web = QWebView()

@@ -17,8 +17,8 @@ from app import log
 from app.rc import FILE_PROJECT
 
 from .NSTree import NSTree
-from app.lib import EventEmitter
 
+from .. import sevents
 
 class Project(object):
 	def __init__(self):
@@ -30,7 +30,6 @@ class Project(object):
 		self.name 			= ""						# название проекта
 		self.tree 			= NSTree()					# дерево проекта
 
-		self.__emitter		= EventEmitter()
 
 
 	# def set_project_dir(self, project_path):
@@ -51,7 +50,7 @@ class Project(object):
 		self.name = data["name"]
 
 		self.tree.load(data["tree"])
-		self.emit("loaded")
+		sevents.project_loaded()
 
 
 
@@ -95,14 +94,14 @@ class Project(object):
 		node.name = name
 
 		self.set_current_node(uuid)
-		self.emit("node_created")
+		sevents.project_node_created()
 
 
 	def remove_node(self, node_uuid):
 		"""удаление ноды"""
 		log.info("удаление ноды: " + node_uuid)
 		self.tree.remove_node(node_uuid)
-		self.emit("node_removed")
+		sevents.project_node_removed()
 
 
 
@@ -139,7 +138,7 @@ class Project(object):
 		with open(self.file_path, "w", encoding="utf-8") as fd:
 			data = fd.write(data_json)
 
-		self.emit("updated")
+		sevents.project_updated()
 
 
 
@@ -151,19 +150,7 @@ class Project(object):
 
 
 
-	#--- events ---------------------------------------------------------------
-	def eon(self, event_name, cb):
-		"""подписаться на события"""
-		self.__emitter.eon(event_name, cb)
-
-	def eoff(self, event_name, cb):
-		self.__emitter.eoff(event_name, cb)
-
-	def emit(self, event, *args, **kwargs):
-		self.__emitter.emit(event, *args, **kwargs)
-	#--- events ---------------------------------------------------------------
-
-
+	
 
 	def __repr__(self):
 		return "{}".format(self.name)

@@ -4,7 +4,7 @@
 from PyQt5.QtWidgets import QGroupBox, QGridLayout, QLabel, QWidget, QHBoxLayout, QVBoxLayout, QPushButton, QToolBar
 
 from app import shared
-from app.storage import get_storage
+from app.storage import smanager
 
 from .. import events, qicon
 
@@ -13,7 +13,7 @@ class NodeControls(QWidget):
 	def __init__(self, parent=None):
 		super(NodeControls, self).__init__(parent)
 
-		self.storage = get_storage()
+		# self.storage = get_storage()
 
 		self.main_layout = QHBoxLayout(self)
 
@@ -63,18 +63,18 @@ class NodeControls(QWidget):
 
 	def __create_node(self):
 		"""создание новой ноды от родителя"""
-		node = shared.get_current_node()
-		parent_project_node = self.storage.project.find_node_by_uuid(node.uuid)
+		node = smanager.storage.get_current_node()
+		parent_project_node = smanager.storage.project.find_node_by_uuid(node.uuid)
 		events.show_modal_create_node(parent_node=parent_project_node)
 
 	def __remove_node(self):
 		"""удаление ноды от родителя"""
-		node = shared.get_current_node()
+		node = smanager.storage.get_current_node()
 		events.show_remove_node(node.uuid)
 
 	def __show_icons(self):
 
-		node = shared.get_current_node()
+		node = smanager.storage.get_current_node()
 		events.show_edit_icon(node.uuid)
 
 

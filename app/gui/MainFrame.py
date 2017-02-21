@@ -103,8 +103,8 @@ class MainFrame(QWidget):
 
 
 		#--- node files
-		self.node_files = NodeFiles()
-		node_side.addWidget(self.node_files)
+		# self.node_files = NodeFiles()
+		# node_side.addWidget(self.node_files)
 
 		# node_side.addStretch()
 

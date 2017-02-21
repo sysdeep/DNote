@@ -24,6 +24,19 @@ def storage_created():
 #--- manager ------------------------------------------------------------------
 
 
+#--- project ------------------------------------------------------------------
+def project_loaded():
+	__event_emitter.emit("project_loaded")
+
+def project_node_created():
+	__event_emitter.emit("project_node_created")
+
+def project_node_removed():
+	__event_emitter.emit("project_node_removed")
+
+def project_updated():
+	__event_emitter.emit("project_updated")
+#--- project ------------------------------------------------------------------
 
 #--- storage ------------------------------------------------------------------
 def node_selected():

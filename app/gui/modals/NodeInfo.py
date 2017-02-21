@@ -7,10 +7,6 @@ from PyQt5.QtGui import QFont
 
 
 
-from app.storage import get_storage
-
-
-
 class NodeInfo(QDialog):
 	def __init__(self, node, parent=None):
 		super(NodeInfo, self).__init__(parent)

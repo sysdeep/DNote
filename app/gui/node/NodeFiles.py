@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 
-from PyQt5.QtWidgets import QGroupBox, QGridLayout, QLabel, QPushButton, QListWidget, QHBoxLayout, QVBoxLayout, QListWidgetItem, QFileDialog
+from PyQt5.QtWidgets import QWidget, QGridLayout, QLabel, QPushButton, QListWidget, QHBoxLayout, QVBoxLayout, QListWidgetItem, QFileDialog
 from PyQt5.QtCore import Qt
 from .. import events
 from app.storage import get_storage, smanager, sevents
@@ -17,10 +17,11 @@ from app.storage import get_storage, smanager, sevents
 
 
 
-class NodeFiles(QGroupBox):
+class NodeFiles(QWidget):
 	def __init__(self, parent=None):
 		super(NodeFiles, self).__init__(parent)
-		self.setTitle("files")
+		
+
 		self.main_layout = QVBoxLayout(self)
 
 		self.node = None
@@ -107,7 +108,7 @@ class NodeFiles(QGroupBox):
 			self.node.create_file(fname[0])
 
 			#--- send events
-			events.update_current_node()				# update_tree - вызовет и это
+			# events.update_current_node()				# update_tree - вызовет и это
 
 		self.__load_files()
 
