@@ -53,12 +53,16 @@ class Tree(QTreeView):
 		self.collapsed.connect(self.__on_collapsed)
 
 
+		# self.__remake_tree()
+
 
 	def __remake_tree(self):
 		print("remake tree")
 
 		self.storage = smanager.get_storage()
 		self.tree = self.storage.project.get_tree()
+
+		print(self.storage)
 
 		self.current_uuid 	= None			# текущий uuid элемента
 		self.current_index 	= None			# элемент с флагом current = True - для автоматического выбора(modelIndex)
@@ -199,6 +203,7 @@ class Tree(QTreeView):
 
 			if node.current:
 				self.current_index = self.tmodel.indexFromItem(row)
+				self.current_uuid = node.uuid
 
 
 			if node.expanded:
@@ -226,11 +231,24 @@ class Tree(QTreeView):
 
 	def __on_select(self, index):
 		"""событие от дерева о выбранном элементе"""		
-		self.current_uuid = index.data(Qt.UserRole+1)
+		uuid = index.data(Qt.UserRole+1)
+		log.debug("tree on select: " + uuid)
+
+		node = smanager.storage.get_node(uuid)
+
+
+
+		if uuid != self.current_uuid:
+			log.debug("tree - update current for project")
+			self.current_uuid = uuid
+			#--- update tree node(in project.json)
+			smanager.storage.project.set_current_node(node.uuid)
 
 		# print(self.current_index)
-		if self.select_cb:
-			self.select_cb(self.current_uuid)
+		# print(self.select_cb)
+		# if self.select_cb:
+		# 	print("cb")
+		# 	self.select_cb(self.current_uuid)
 
 
 	def __on_expanded(self, model_index):

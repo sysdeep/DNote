@@ -102,7 +102,7 @@ class NodeFiles(QWidget):
 	def __on_add_action(self):
 		fname = QFileDialog.getOpenFileName(self, "Open")			# (file_name, file_filter)
 
-		print(fname)
+		# print(fname)
 
 		if fname[0]:
 			self.node.create_file(fname[0])
@@ -114,7 +114,7 @@ class NodeFiles(QWidget):
 
 
 	def __on_remove_action(self):
-		print(self.current_file)
+		# print(self.current_file)
 		self.node.remove_file(self.current_file)
 
 		self.__load_files()

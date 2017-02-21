@@ -55,7 +55,7 @@ class MainFrame(QWidget):
 		
 
 		self.tree_view = Tree()
-		self.tree_view.select_cb = self.__on_select_node
+		# self.tree_view.select_cb = self.__on_select_node
 		# self.tree_view.update_tree()
 		tree_side.addWidget(self.tree_view)
 
@@ -113,7 +113,7 @@ class MainFrame(QWidget):
 	def start(self):
 		"""запуск"""
 		self.tree_view.update_tree()
-		
+		# pass
 
 
 
@@ -134,6 +134,7 @@ class MainFrame(QWidget):
 
 		#--- show node data
 		self.current_node = storage.get_node(uuid)
+		print(self.current_node)
 		
 		# shared.set_current_node(self.current_node)
 		
