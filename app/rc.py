@@ -10,6 +10,7 @@ DIR_MEDIA 		= os.path.normpath(os.path.join(DIR_SELF, "..", "media"))
 DIR_ICONS		= os.path.join(DIR_MEDIA, "icons")
 DIR_UI_ICONS 	= os.path.join(DIR_MEDIA, "ui_icons")
 
+DIR_DEFAULTS	= os.path.join(DIR_MEDIA, "defaults")
 
 
 

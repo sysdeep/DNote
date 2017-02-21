@@ -4,7 +4,7 @@
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QLabel, QPushButton
 # from .Tree import Tree
 from app import log
-from app.storage import get_storage
+from app.storage import get_storage, smanager
 from app import shared
 
 from .tree.Tree import Tree
@@ -30,7 +30,8 @@ class MainFrame(QWidget):
 		# self.tree_view = Tree()
 		# self.main_layout.addWidget(self.tree_view)
 
-		self.storage = get_storage()
+		self.storage = smanager.get_storage()
+		# self.storage = get_storage()
 		self.current_node = None
 
 		#--- make
@@ -128,15 +129,20 @@ class MainFrame(QWidget):
 
 		log.debug("on select: " + uuid)
 
+
+		storage = smanager.get_storage()
+
 		#--- show node data
-		self.current_node = self.storage.get_node(uuid)
-		shared.set_current_node(self.current_node)
+		self.current_node = storage.get_node(uuid)
+		
+		# shared.set_current_node(self.current_node)
+		
 		# self.node_info.update_node(self.current_node)
 		# self.node_editor.update_node(self.current_node)
 		# self.node_files.update_node(self.current_node)
 
 		#--- update tree node(in project.json)
-		self.storage.project.set_current_node(self.current_node.uuid)
+		storage.project.set_current_node(self.current_node.uuid)
 
 
 

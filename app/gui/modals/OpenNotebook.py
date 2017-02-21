@@ -6,7 +6,7 @@ import os
 from PyQt5.QtWidgets import QLabel, QDialog, QPushButton, QHBoxLayout, QVBoxLayout, QGridLayout, QFileDialog, QTextEdit, QFormLayout, QLineEdit
 from PyQt5.QtGui import QFont
 
-from app.storage import open_storage
+from app.storage import smanager
 
 
 
@@ -20,7 +20,7 @@ class OpenNotebook(QDialog):
 
 
 		
-		self.edit_path = QLineEdit()
+		self.edit_path = QLineEdit("/home/nia/Development/_Python/_DNote/sdir1/")
 		
 		self.main_layout.addWidget(self.edit_path)
 
@@ -49,7 +49,9 @@ class OpenNotebook(QDialog):
 
 		print(path)
 
-		open_storage(path)
+		smanager.open_storage(path)
+
+		self.close()
 
 
 

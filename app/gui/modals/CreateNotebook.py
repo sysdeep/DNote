@@ -6,6 +6,7 @@ import os
 from PyQt5.QtWidgets import QLabel, QDialog, QPushButton, QHBoxLayout, QVBoxLayout, QGridLayout, QFileDialog, QTextEdit, QFormLayout, QLineEdit
 from PyQt5.QtGui import QFont
 
+from app.storage import smanager
 
 
 
@@ -18,7 +19,7 @@ class CreateNotebook(QDialog):
 
 
 		self.edit_name = QLineEdit()
-		self.edit_path = QLineEdit()
+		self.edit_path = QLineEdit("/home/nia/Development/_Python/_DNote/tests")
 		self.main_layout.addWidget(self.edit_name)
 		self.main_layout.addWidget(self.edit_path)
 
@@ -49,13 +50,15 @@ class CreateNotebook(QDialog):
 
 		print(name, path)
 
-		#--- create root
-		node_path = os.path.join(path, name)
 
-		try:
-			os.mkdir(node_path)
-		except:
-			print("Error!!!!")
+		smanager.create_storage(name, path)
+		#--- create root
+		# node_path = os.path.join(path, name)
+
+		# try:
+		# 	os.mkdir(node_path)
+		# except:
+		# 	print("Error!!!!")
 
 
 

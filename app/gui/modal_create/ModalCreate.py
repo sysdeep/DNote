@@ -6,7 +6,7 @@ from PyQt5.QtGui import QFont
 
 
 
-from app.storage import get_storage
+from app.storage import smanager
 from .. import events
 
 
@@ -20,7 +20,7 @@ class ModalCreate(QDialog):
 		super(ModalCreate, self).__init__(parent)
 
 		self.setWindowTitle("Создание новой записи")
-		self.storage 		= get_storage()
+		self.storage 		= smanager.get_storage()
 		
 		if parent_node is None:
 			self.parent_node = self.storage.project.get_root_node()

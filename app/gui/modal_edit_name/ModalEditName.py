@@ -5,7 +5,7 @@ from PyQt5.QtWidgets import QLabel, QDialog, QPushButton, QHBoxLayout, QVBoxLayo
 from PyQt5.QtGui import QFont
 
 
-from app.storage import get_storage
+from app.storage import smanager
 from .. import events
 
 
@@ -20,7 +20,7 @@ class ModalEditName(QDialog):
 		self.main_layout 	= QVBoxLayout(self)
 
 		
-		self.storage 		= get_storage()
+		self.storage 		= smanager.get_storage()
 		self.node 			= self.storage.get_current_node()
 		self.types 			= self.storage.get_node_types()
 		

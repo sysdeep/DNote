@@ -6,7 +6,7 @@ from PyQt5.QtWidgets import QGroupBox, QHBoxLayout, QVBoxLayout, QLabel, QTextEd
 from PyQt5.QtWebKitWidgets import QWebView
 
 from vendors import markdown
-from app.storage import get_storage
+from app.storage import get_storage, smanager, sevents
 
 from .. import events
 from ..modals.NodeEditor import NodeEditor
@@ -30,12 +30,15 @@ class NodeViewer(QGroupBox):
 		self.main_layout = QVBoxLayout(self)
 
 		self.node = None
-		self.storage = get_storage()
+		self.storage = smanager.get_storage()
+		# self.storage = get_storage()
 
 		self.__make_gui()
 
-		self.storage.eon("node_selected", self.__on_node_selected)
-		self.storage.eon("node_updated", self.__on_node_updated)
+		sevents.eon("node_selected", self.__on_node_selected)
+		# sevents.eon("storage_opened", self.__on_storage_opened)
+		# self.storage.eon("node_selected", self.__on_node_selected)
+		sevents.eon("node_updated", self.__on_node_updated)
 
 
 
@@ -80,7 +83,7 @@ class NodeViewer(QGroupBox):
 	def __on_node_selected(self):
 		# self.node = node
 
-		self.node = self.storage.get_current_node()
+		self.node = smanager.storage.get_current_node()
 		
 		
 
@@ -132,7 +135,8 @@ class NodeViewer(QGroupBox):
 
 
 
-
+	# def __on_storage_opened(self):
+	# 	self.storage = smanager.get_storage()
 
 
 

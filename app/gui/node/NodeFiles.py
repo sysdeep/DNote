@@ -5,7 +5,7 @@
 from PyQt5.QtWidgets import QGroupBox, QGridLayout, QLabel, QPushButton, QListWidget, QHBoxLayout, QVBoxLayout, QListWidgetItem, QFileDialog
 from PyQt5.QtCore import Qt
 from .. import events
-from app.storage import get_storage
+from app.storage import get_storage, smanager, sevents
 
 
 
@@ -24,7 +24,8 @@ class NodeFiles(QGroupBox):
 		self.main_layout = QVBoxLayout(self)
 
 		self.node = None
-		self.storage = get_storage()
+		self.storage = smanager.get_storage()
+		# self.storage = get_storage()
 		
 
 		edit_box = QHBoxLayout()
@@ -54,7 +55,7 @@ class NodeFiles(QGroupBox):
 		self.current_file = None
 
 
-		self.storage.eon("node_selected", self.__update_node_data)
+		sevents.eon("node_selected", self.__update_node_data)
 		#--- events
 		# events.on("update_current_node", self.__update_current)
 
@@ -68,7 +69,7 @@ class NodeFiles(QGroupBox):
 
 
 	def __update_node_data(self):
-		self.node = self.storage.get_current_node()
+		self.node = smanager.storage.get_current_node()
 		self.__load_files()
 		
 

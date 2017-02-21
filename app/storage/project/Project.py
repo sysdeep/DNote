@@ -173,6 +173,17 @@ class Project(object):
 
 	
 
+
+
+
+
+
+
+
+
+
+	
+
 if __name__ == '__main__':
 	
 	from app.rc import DIR_PROJECT

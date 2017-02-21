@@ -7,7 +7,7 @@ from PyQt5.QtGui import QIcon, QStandardItemModel, QStandardItem
 
 from app import log
 from app.rc import get_icon_path
-from app.storage import get_storage
+from app.storage import get_storage, smanager, sevents
 
 from .. import events, qicon
 
@@ -23,7 +23,8 @@ class Tree(QTreeView):
 		self.setHeaderHidden(True)
 		self.setFixedWidth(300)
 
-		self.storage = get_storage()
+		# self.storage = get_storage()
+		self.storage = smanager.get_storage()
 		self.tree = self.storage.project.get_tree()
 		self.select_cb = None
 
@@ -42,6 +43,7 @@ class Tree(QTreeView):
 		# self.storage.project.eon("node_removed", self.__update_tree)
 		self.storage.project.eon("updated", self.__update_tree)
 		# self.__make_tree()
+		sevents.eon("storage_opened", self.__remake_tree)
 
 
 
@@ -49,6 +51,24 @@ class Tree(QTreeView):
 		self.pressed.connect(self.__on_select)
 		self.expanded.connect(self.__on_expanded)
 		self.collapsed.connect(self.__on_collapsed)
+
+
+
+	def __remake_tree(self):
+		print("remake tree")
+
+		self.storage = smanager.get_storage()
+		self.tree = self.storage.project.get_tree()
+
+		self.current_uuid 	= None			# текущий uuid элемента
+		self.current_index 	= None			# элемент с флагом current = True - для автоматического выбора(modelIndex)
+		self.expand_indexes = []			# список элементов, которые необходимо раскрыть
+
+
+		# print(self.storage.project_path)
+		self.__update_tree()
+
+
 
 
 	def __update_tree(self):
@@ -208,6 +228,7 @@ class Tree(QTreeView):
 		"""событие от дерева о выбранном элементе"""		
 		self.current_uuid = index.data(Qt.UserRole+1)
 
+		# print(self.current_index)
 		if self.select_cb:
 			self.select_cb(self.current_uuid)
 

@@ -6,7 +6,7 @@ from PyQt5.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QLabel, QTextEdit
 from PyQt5.QtWebKitWidgets import QWebView
 
 from vendors import markdown
-from app.storage import get_storage
+from app.storage import get_storage, smanager, sevents
 
 from .. import events
 
@@ -22,11 +22,12 @@ class NodeEdit(QWidget):
 		self.main_layout = QVBoxLayout(self)
 
 		self.node = None
-		self.storage = get_storage()
+		self.storage = smanager.get_storage()
+		# self.storage = get_storage()
 
 		self.__make_gui()
 
-		self.storage.eon("node_selected", self.__on_node_selected)
+		sevents.eon("node_selected", self.__on_node_selected)
 		# self.storage.eon("node_updated", self.__on_node_updated)
 
 
@@ -55,7 +56,7 @@ class NodeEdit(QWidget):
 
 
 	def __on_node_selected(self):
-		self.node = self.storage.get_current_node()
+		self.node = smanager.storage.get_current_node()
 		self.__set_content()
 		
 

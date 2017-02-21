@@ -30,6 +30,7 @@ def set_up():
 
 
 def get_storage():
+	return None
 	storage = DATA.get("storage")
 	if storage is None:
 		storage = set_up()

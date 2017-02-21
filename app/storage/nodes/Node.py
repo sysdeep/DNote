@@ -17,7 +17,7 @@ from .Meta import Meta
 from .Page import Page
 from .Files import Files
 
-
+from .. import sevents
 
 
 
@@ -114,8 +114,9 @@ class Node(object):
 
 
 	def __event_updated(self):
-		if self.storage:
-			self.storage.emit("node_updated")
+		sevents.node_updated()
+		# if self.storage:
+		# 	self.storage.emit("node_updated")
 
 	
 	# def create_files(self):

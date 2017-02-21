@@ -1,0 +1,27 @@
+{
+    "name": "init",
+    "tree": [
+        {
+            "tree_rk": 3,
+            "tree_level": 0,
+            "uuid": "0",
+            "icon": "",
+            "name": "root",
+            "ipack": "",
+            "expanded": false,
+            "current": false,
+            "tree_lk": 0
+        },
+        {
+            "tree_rk": 2,
+            "tree_level": 1,
+            "uuid": "3fada052-c1cb-11e6-96ab-e0cb4e1afb73",
+            "icon": "",
+            "name": "Start",
+            "ipack": "",
+            "expanded": false,
+            "current": true,
+            "tree_lk": 1
+        }
+    ]
+}

@@ -7,10 +7,11 @@ import uuid
 import os
 
 from app import log
-from app.lib import EventEmitter
+# from app.lib import EventEmitter
 
 from .nodes.Nodes import Nodes, NODE_TYPES
 from .project.Project import Project
+from . import sevents
 
 
 
@@ -23,7 +24,7 @@ class Storage(object):
 		self.project_path 	= project_path				# полный путь к каталогу проекта
 
 		self.current_node	= None						# тек. нода
-		self.__emitter		= EventEmitter()
+		# self.__emitter		= EventEmitter()
 
 		self.__load()
 
@@ -32,6 +33,14 @@ class Storage(object):
 	# 	self.project_path 	= project_path
 	# 	self.project.load(self.project_path)
 	# 	self.nodes.set_project_path(self.project_path)
+
+
+	# def create(self):
+
+
+
+	# def open(self):
+	# 	self.__load()
 
 	def __load(self):
 		"""загрузить проект по заданному пути"""
@@ -47,13 +56,17 @@ class Storage(object):
 	def get_current_node(self):
 		return self.current_node
 
+	def set_current_node(self, node):
+		self.current_node = node
+		sevents.node_selected()
 
 	def get_node(self, uuid):
 		"""получить заданную ноду из хранилища"""
 		node = self.nodes.get_node(uuid)
 		node.storage = self
-		self.current_node = node
-		self.emit("node_selected")
+		# self.current_node = node
+		# self.emit("node_selected")
+		self.set_current_node(node)
 		return node
 
 
@@ -66,8 +79,9 @@ class Storage(object):
 		node = self.nodes.create_node(name)
 		node_uuid = node.uuid
 		node.storage = self
-		self.current_node = node
-		self.emit("node_selected")
+		# self.current_node = node
+		# self.emit("node_selected")
+		self.set_current_node(node)
 		#--- создание ноды в файле проекта
 		self.project.create_node(parent_node, node_uuid, name)
 		self.project.write_file()
@@ -102,20 +116,20 @@ class Storage(object):
 
 
 
-	def shutdown(self):
-		self.__emitter.eoffa()
+	# def shutdown(self):
+	# 	self.__emitter.eoffa()
 
 
 	#--- events ---------------------------------------------------------------
-	def eon(self, event_name, cb):
-		"""подписаться на события"""
-		self.__emitter.eon(event_name, cb)
+	# def eon(self, event_name, cb):
+	# 	"""подписаться на события"""
+	# 	self.__emitter.eon(event_name, cb)
 
-	def eoff(self, event_name, cb):
-		self.__emitter.eoff(event_name, cb)
+	# def eoff(self, event_name, cb):
+	# 	self.__emitter.eoff(event_name, cb)
 
-	def emit(self, event, *args, **kwargs):
-		self.__emitter.emit(event, *args, **kwargs)
+	# def emit(self, event, *args, **kwargs):
+	# 	self.__emitter.emit(event, *args, **kwargs)
 	#--- events ---------------------------------------------------------------
 
 
