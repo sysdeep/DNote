@@ -8,8 +8,8 @@ from app.storage import get_storage, smanager
 from app import shared
 
 from .tree.Tree import Tree
-from .node.NodeInfo import NodeInfo
-from .node.NodeEditor import NodeEditor
+# from .node.NodeInfo import NodeInfo
+# from .node.NodeEditor import NodeEditor
 from .node.NodeViewer import NodeViewer
 from .node.NodeFiles import NodeFiles
 from .node.NodeControls import NodeControls

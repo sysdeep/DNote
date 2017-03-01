@@ -37,6 +37,11 @@ class OpenNotebook(QDialog):
 		btn_create = QPushButton("Open")
 		btn_create.clicked.connect(self.__on_open)
 
+
+		btn_select = QPushButton("Select")
+		btn_select.clicked.connect(self.__on_select)
+
+		c_box.addWidget(btn_select)
 		c_box.addStretch()
 		c_box.addWidget(btn_create)
 		c_box.addWidget(btn_close)
@@ -52,6 +57,19 @@ class OpenNotebook(QDialog):
 		smanager.open_storage(path)
 
 		self.close()
+
+
+
+	def __on_select(self):
+		fname = QFileDialog.getExistingDirectory(self, "Open notebook", "/home/nia/Development/_Python/_DNote/")
+
+		print(fname)
+
+		self.edit_path.setText(fname)
+
+		# if fname[0]:
+		# 	self.node.create_file(fname[0])
+
 
 
 

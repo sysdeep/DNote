@@ -15,10 +15,9 @@ from app.storage import smanager
 from .modal_create import ModalCreate
 from .modal_remove import ModalRemove
 from .modal_edit_name import ModalEditName
-from .modal_icons import ModalIcons
 from .modal_files import ModalFiles
 from .modals.NodeInfo import NodeInfo
-
+from .modals.ModalIcons import ModalIcons
 
 class Controller(object):
 	def __init__(self, parent):

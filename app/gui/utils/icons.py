@@ -15,19 +15,25 @@ def qicon(*section_icon):
 
 
 
+
+
+
+
+
 #--- соответствие иконок стандартным методам
-# QFDEF = {
-# 	"ok"		: "dialog-ok.png",
-# 	"cancel"	: "process-stop.png",
-# 	"close"		: "window-close.png",
-# 	"refresh"	: "view-refresh.png",
-# }
+QFDEF = {
+	"ok"		: ("actions", "apply.png"),
+	"cancel"	: ("actions", "button_cancel.png"),
+	"close"		: ("actions", "application_exit.png"),
+	"not_found"	: ("actions", "footprint.png"),
+	# "refresh"	: "view-refresh.png",
+}
 
 # # "actions", "system_shutdown.png"
 
-# def dicon(name):
-# 	"""получить иконку по даданному соответствию"""
-# 	if name in QFDEF:
-# 		return qficon(QFDEF[name])
-# 	else:
-# 		return qficon(name)
+def dicon(name):
+	"""получить иконку по даданному соответствию"""
+	if not name in QFDEF:
+		name = "not_found"
+
+	return qicon(*QFDEF[name])

@@ -10,6 +10,7 @@ from PyQt5.QtWidgets import QAction, QFileDialog
 from . import events, qicon
 from .modals.CreateNotebook import CreateNotebook
 from .modals.OpenNotebook import OpenNotebook
+
 # from .ModalScan import ModalScan
 
 # from .icons import qicon

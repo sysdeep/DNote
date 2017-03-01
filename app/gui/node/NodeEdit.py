@@ -36,6 +36,7 @@ class NodeEdit(QWidget):
 	def __make_gui(self):
 
 		self.text_edit = QTextEdit()
+		self.text_edit.setAcceptRichText(False)					# disable ctrl+v rich text
 		self.main_layout.addWidget(self.text_edit)
 
 
@@ -46,6 +47,7 @@ class NodeEdit(QWidget):
 
 		self.btn_save = QPushButton("save")
 		self.btn_save.clicked.connect(self.__on_save)
+		# self.
 
 
 		controls.addStretch()
@@ -76,7 +78,8 @@ class NodeEdit(QWidget):
 		# self.setTitle(self.node.name + "["+self.node.meta.ntype+"]")
 
 		text = self.node.page.raw_text
-		self.text_edit.setText(text)
+		# self.text_edit.setText(text)
+		self.text_edit.setPlainText(text)
 
 
 
