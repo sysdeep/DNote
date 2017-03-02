@@ -26,6 +26,8 @@ class Storage(object):
 		self.current_node	= None						# тек. нода
 		# self.__emitter		= EventEmitter()
 
+		self.copy_node_uuid = None
+
 		self.__load()
 
 	# def load_project(self, project_path):
@@ -113,7 +115,11 @@ class Storage(object):
 		return NODE_TYPES
 
 
+	
 
+
+	def set_copy_node(self, node_uuid):
+		self.copy_node_uuid = node_uuid
 
 
 	# def shutdown(self):

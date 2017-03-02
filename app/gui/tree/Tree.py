@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from PyQt5.QtWidgets import QWidget, QVBoxLayout, QTreeView, QLabel, QAction
+from PyQt5.QtWidgets import QWidget, QVBoxLayout, QTreeView, QLabel, QAction, QAbstractItemView
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QIcon, QStandardItemModel, QStandardItem
 
@@ -33,6 +33,18 @@ class Tree(QTreeView):
 		self.current_index 	= None			# элемент с флагом current = True - для автоматического выбора(modelIndex)
 		self.expand_indexes = []			# список элементов, которые необходимо раскрыть
 
+
+
+		#--- dnd
+		# self.setDragDropMode(QAbstractItemView.InternalMove)
+		# self.setDragEnabled(True)
+		# self.viewport().setAcceptDrops(True)
+		# self.setDropIndicatorShown(True)
+
+
+
+
+
 		#--- menu
 		self.__make_cmenu()
 
@@ -56,13 +68,19 @@ class Tree(QTreeView):
 		# self.__remake_tree()
 
 
+	# def dropEvent(self, ev):
+	# 	print("drop")
+	# 	print(ev)
+
+	# 	ev.accept()
+
 	def __remake_tree(self):
 		print("remake tree")
 
 		self.storage = smanager.get_storage()
 		self.tree = self.storage.project.get_tree()
 
-		print(self.storage)
+		# print(self.storage)
 
 		self.current_uuid 	= None			# текущий uuid элемента
 		self.current_index 	= None			# элемент с флагом current = True - для автоматического выбора(modelIndex)
@@ -95,6 +113,7 @@ class Tree(QTreeView):
 		edit_name 			= QAction("Изменить название", self)
 		edit_icon 			= QAction("Изменить иконки", self)
 		show_info 			= QAction("Информация", self)
+		act_copy 			= QAction("Копировать", self)
 
 		remove_item 		= QAction("Удалить запись", self)
 
@@ -111,7 +130,10 @@ class Tree(QTreeView):
 		self.addAction(edit_name)
 		self.addAction(edit_icon)
 		self.addAction(show_info)
+		self.addAction(act_copy)
+
 		self.addAction(separator2)
+		
 		self.addAction(remove_item)
 		# self.addSeparetor()
 
@@ -122,6 +144,7 @@ class Tree(QTreeView):
 		edit_name.setIcon(qicon("actions", "edit.png"))
 		edit_icon.setIcon(qicon("actions", "frame_image.png"))
 		show_info.setIcon(qicon("actions", "kdeprint_printer_infos.png"))
+		act_copy.setIcon(qicon("actions", "editcopy.png"))
 		remove_item.setIcon(qicon("actions", "remove.png"))
 
 		create_new_root.triggered.connect(self.__act_create_new_root)
@@ -130,6 +153,7 @@ class Tree(QTreeView):
 		edit_name.triggered.connect(self.__act_edit_name)
 		edit_icon.triggered.connect(self.__act_edit_icon)
 		show_info.triggered.connect(self.__act_show_info)
+		act_copy.triggered.connect(self.__act_copy)
 		remove_item.triggered.connect(self.__act_remove_item)
 
 
@@ -307,4 +331,14 @@ class Tree(QTreeView):
 		"""информация о ноде"""
 
 		events.show_current_node_info()
+
+
+
+	def __act_copy(self):
+		"""копирование ветки"""
+
+		log.debug("copy node: " + self.current_uuid)
+
+		self.storage.set_copy_node(self.current_uuid)
+
 	#--- user actions ---------------------------------------------------------

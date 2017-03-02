@@ -63,6 +63,17 @@ def selected_icon(ipack, icon):
 	emitter.emit("selected_icon", ipack, icon)
 
 
+
+
+
+
+
+
+
+
+
+
+
 # def set_scan_path(path):
 # 	emitter.emit("set_scan_path", path)
 
