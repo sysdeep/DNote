@@ -14,13 +14,14 @@ import os
 import json
 
 from app import log
-from app.rc import FILE_PROJECT
 
 from .NSTree import NSTree
 
 from .. import sevents
 
+
 class Project(object):
+	"""объект проекта - содержит дерево"""
 	def __init__(self):
 		self.file_name 		= "project.json"			# название файла проекта
 		self.file_path 		= ""						# полный путь к файлу проекта
@@ -31,9 +32,6 @@ class Project(object):
 		self.tree 			= NSTree()					# дерево проекта
 
 
-
-	# def set_project_dir(self, project_path):
-	# 	self.file_path = os.path.join(project_path, self.file_name)
 
 
 	def load(self, project_path):
@@ -47,9 +45,11 @@ class Project(object):
 
 		data = json.loads(data_json)
 
+		#--- set data
 		self.name = data["name"]
-
 		self.tree.load(data["tree"])
+
+
 		sevents.project_loaded()
 
 
@@ -119,6 +119,13 @@ class Project(object):
 
 		
 
+	#--- moves ----------------------------------------------------------------
+	def move_node_up(self, node_uuid):
+		log.debug("move_node_up: " + node_uuid)
+
+	def move_node_down(self, node_uuid):
+		log.debug("move_node_down: " + node_uuid)
+	#--- moves ----------------------------------------------------------------
 
 
 

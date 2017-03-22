@@ -9,29 +9,35 @@ from . import sevents
 
 
 class Manager(object):
+	"""
+		менеджер хранилищ
+	"""
 	def __init__(self):
 
-		self.storage = None
-		self.storage_path = None
-
-		# self.__event_emitter = EventEmitter()
-
+		self.storage 		= None				# тек. хранилище
+		self.storage_path 	= None				# путь к тек хранилищу
 
 
 	def get_storage(self):
 		return self.storage
 
+
 	def open_storage(self, path):
+		"""
+			открыть хранилище по заданному пути
+		"""
 		log.debug("SManager - open storage")
 		self.storage_path = path
 		self.storage = Storage(self.storage_path)
-		# self.storage.open()
 		sevents.storage_opened()
 
 
 
 
 	def create_storage(self, name, path):
+		"""
+			Создать новое хранилище
+		"""
 		log.info("SManager - create new store: {} in {}".format(name, path))
 		# self.storage_path = path
 

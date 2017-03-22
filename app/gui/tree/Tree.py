@@ -115,6 +115,9 @@ class Tree(QTreeView):
 		show_info 			= QAction("Информация", self)
 		act_copy 			= QAction("Копировать", self)
 
+		move_up				= QAction("Выше", self)
+		move_down			= QAction("Ниже", self)
+
 		remove_item 		= QAction("Удалить запись", self)
 
 		separator1 = QAction(self)
@@ -122,6 +125,9 @@ class Tree(QTreeView):
 
 		separator2 = QAction(self)
 		separator2.setSeparator(True)
+
+		separator3 = QAction(self)
+		separator3.setSeparator(True)
 		
 		self.addAction(create_new_root)
 		self.addAction(create_new_parent)
@@ -134,6 +140,11 @@ class Tree(QTreeView):
 
 		self.addAction(separator2)
 		
+		self.addAction(move_up)
+		self.addAction(move_down)
+
+		self.addAction(separator3)
+
 		self.addAction(remove_item)
 		# self.addSeparetor()
 
@@ -154,6 +165,10 @@ class Tree(QTreeView):
 		edit_icon.triggered.connect(self.__act_edit_icon)
 		show_info.triggered.connect(self.__act_show_info)
 		act_copy.triggered.connect(self.__act_copy)
+
+		move_up.triggered.connect(self.__act_move_up)
+		move_down.triggered.connect(self.__act_move_down)
+
 		remove_item.triggered.connect(self.__act_remove_item)
 
 
@@ -341,4 +356,13 @@ class Tree(QTreeView):
 
 		self.storage.set_copy_node(self.current_uuid)
 
+
+
+	def __act_move_up(self):
+		log.debug("move up")
+		self.storage.project.move_node_up(self.current_uuid)
+
+	def __act_move_down(self):
+		log.debug("move down")
+		self.storage.project.move_node_down(self.current_uuid)
 	#--- user actions ---------------------------------------------------------

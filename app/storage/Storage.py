@@ -18,42 +18,37 @@ from . import sevents
 
 
 class Storage(object):
-	def __init__(self, project_path):
+	"""
+		Объект хранилища
+	"""
+	def __init__(self, storage_path):
+
+		self.storage_path 	= storage_path				# полный путь к каталогу хранилища
+
 		self.nodes 			= Nodes()					# управление нодами
 		self.project		= Project()					# управление файлом проекта
-		self.project_path 	= project_path				# полный путь к каталогу проекта
 
 		self.current_node	= None						# тек. нода
-		# self.__emitter		= EventEmitter()
 
 		self.copy_node_uuid = None
 
 		self.__load()
 
-	# def load_project(self, project_path):
-	# 	"""загрузить проект по заданному пути"""
-	# 	self.project_path 	= project_path
-	# 	self.project.load(self.project_path)
-	# 	self.nodes.set_project_path(self.project_path)
 
 
-	# def create(self):
-
-
-
-	# def open(self):
-	# 	self.__load()
 
 	def __load(self):
 		"""загрузить проект по заданному пути"""
-		self.project.load(self.project_path)
-		self.nodes.set_project_path(self.project_path)
+
+		#--- загружаем данные проекта
+		self.project.load(self.storage_path)
+
+		#--- настраиваем объект записей
+		self.nodes.set_project_path(self.storage_path)
 
 
-	# def create_project(self, name, path):
-	# 	"""создать новое хранилище"""
-	# 	self.project_path = path
-	# 	self.pro
+
+
 
 	def get_current_node(self):
 		return self.current_node

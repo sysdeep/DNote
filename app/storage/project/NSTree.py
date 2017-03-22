@@ -6,14 +6,17 @@ from .NSNode import NSNode
 
 
 class NSTree(object):
+	"""nested tree object"""
 	def __init__(self):
-		self.nodes = []
-		self.root = None
+		self.nodes = []			# список нод
+		self.root = None		# основная нода
 
+		#--- инициализируем пустое дерево
 		self.__set_new()
 
 
 	def __set_new(self):
+		"""инициализация пустого дерева"""
 		root_node 				= NSNode()
 		root_node.tree_lk 		= 0
 		root_node.tree_rk 		= 1
@@ -25,6 +28,58 @@ class NSTree(object):
 
 
 
+
+	#--- public ---------------------------------------------------------------
+	def load(self, nodes_list):
+		"""загрузка данных в дерево"""
+		self.nodes = []
+		nodes_list.sort(key=lambda a: a["tree_lk"])
+
+		for node_data in nodes_list:
+			node = NSNode()
+			node.load(node_data)
+			self.nodes.append(node)
+
+			#--- ссылка на корень
+			if node_data["tree_lk"] == 0:
+				self.root = node
+
+	def create_node(self, parent_node):
+		"""создание новой ноды от родителя"""
+		log.debug("создание новой ноды для родителя: " + parent_node.uuid)
+		new_node = NSNode()
+		self.__insert(parent_node, new_node)
+		return new_node
+
+	# def create_node_file(self, parent_node, new_node_name):
+	# 	new_node = NodeFile()
+	# 	new_node.name = new_node_name
+	# 	self.insert(parent_node, new_node)
+	# 	return new_node
+
+
+
+	def remove_node(self, node_uuid):
+		"""удаление заданной ноды из дерева"""
+		log.debug("удаление заданной ноды из дерева: " + node_uuid)
+		node = self.find_node_by_uuid(node_uuid)
+
+		if node:
+			self.__remove(node)
+
+
+	def find_node_by_uuid(self, uuid):
+		fnode = None
+		for node in self.nodes:
+			if node.uuid == uuid:
+				fnode = node
+				break
+
+		if fnode is None:
+			log.error("not found node: " + uuid)
+
+		return fnode
+	#--- public ---------------------------------------------------------------
 
 
 	# def set_nodes(self, nodes_list):
@@ -55,28 +110,27 @@ class NSTree(object):
 
 
 	def __insert(self, parent_node, new_node):
+		"""добавление новой ноды к родительской ветви"""
 		
 		parent_rk = parent_node.tree_rk
 		parent_lk = parent_node.tree_lk
 
-		# // 1 - update after
+		#--- 1 - update after
 		for node in self.nodes:
 			if node.tree_lk > parent_rk:
 				node.tree_lk += 2
 				node.tree_rk += 2
 
-		# // 2 - update parent
+		#--- 2 - update parent
 		for node in self.nodes:
 			if node.tree_rk >= parent_rk and node.tree_lk < parent_rk:
 				node.tree_rk += 2
 
-		# // 3 - add node
+		#--- 3 - add node
 		new_node.tree_level = parent_node.tree_level + 1
 		new_node.tree_lk = parent_rk
 		new_node.tree_rk = parent_rk + 1
 
-
-		print(new_node.tree_rk)
 
 		self.nodes.append(new_node)
 		
@@ -84,7 +138,7 @@ class NSTree(object):
 
 
 	def __remove(self, node):
-		""""""
+		"""удаление заданной ноды(со всеми потомками)"""
 
 		node_lk = node.tree_lk
 		node_rk = node.tree_rk
@@ -93,7 +147,7 @@ class NSTree(object):
 		del_nodes = [n for n in self.nodes if n.tree_lk >= node_lk and n.tree_rk <= node_rk]
 		# print(del_nodes)
 
-		#--- 2 - remve nodes from list
+		#--- 2 - remove nodes from list
 		for n in del_nodes:
 			self.nodes.remove(n)
 
@@ -113,36 +167,12 @@ class NSTree(object):
 
 
 
-	def create_node(self, parent_node):
-		new_node = NSNode()
-		self.__insert(parent_node, new_node)
-		return new_node
 
-	# def create_node_file(self, parent_node, new_node_name):
-	# 	new_node = NodeFile()
-	# 	new_node.name = new_node_name
-	# 	self.insert(parent_node, new_node)
-	# 	return new_node
-
-
-
-	def remove_node(self, node_uuid):
-		"""удаление заданной ноды из дерева"""
-		log.debug("удаление заданной ноды из дерева: " + node_uuid)
-		node = self.find_node_by_uuid(node_uuid)
-
-		if node:
-			self.__remove(node)
 		
 
 
-	def find_node_by_uuid(self, uuid):
-		result = [node for node in self.nodes if node.uuid == uuid]
-		if result:
-			return result[0]
-		else:
-			log.error("not found node: " + uuid)
-			return None
+
+
 
 
 	def find_parent_node(self, node_uuid):
@@ -158,21 +188,11 @@ class NSTree(object):
 		if result:
 			return result[0]
 		else:
-			log.error("not found parent for node: " + uuid)
+			log.error("not found parent for node: " + node_uuid)
 			return None
 
 
-	def load(self, nodes_list):
-		self.nodes = []
-		nodes_list.sort(key=lambda a: a["tree_lk"])
 
-		for node_data in nodes_list:
-			node = NSNode()
-			node.load(node_data)
-			self.nodes.append(node)
-
-			if node_data["tree_lk"] == 0:
-				self.root = node
 
 
 
@@ -197,6 +217,21 @@ class NSTree(object):
 	# 	# print("----------------------")
 	# 	return node
 
+
+
+
+	# def move_node_up(self, node_uuid):
+	# 	pass
+
+
+
+	# def __find_ne_nodes(self, snode):
+	# 	"""поиск соседей"""
+
+	# 	nodel = [node for node in self.nodes
+	# 			if node.tree_level == snode.tree_level
+	# 			and
+	# 	]
 
 
 	def get_childrens(self, parent_node):
