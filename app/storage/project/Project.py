@@ -72,7 +72,17 @@ class Project(object):
 		return self.tree.root
 
 	def find_node_by_uuid(self, uuid):
-		return self.tree.find_node_by_uuid(uuid)
+
+
+		print("parent: ", self.tree.find_parent_node(uuid))
+		print("childrens: ", self.tree.find_childrens(uuid))
+		print("parent branch: ", self.tree.find_parent_branch(uuid))
+		print("branch: ", self.tree.find_branch(uuid))
+
+		return self.tree.get_node(uuid)
+
+
+
 
 	def find_parent_node(self, uuid):
 		return self.tree.find_parent_node(uuid)
@@ -83,7 +93,8 @@ class Project(object):
 
 
 	def create_node(self, parent_node, uuid, name):
-		node = self.tree.create_node(parent_node)
+		# node = self.tree.create_node(parent_node)
+		node = self.tree.create_node(parent_node.uuid)
 		node.uuid = uuid
 		node.name = name
 
@@ -108,14 +119,20 @@ class Project(object):
 
 	def set_node_name(self, node_uuid, name):
 		"""установить новое название ноды"""
+		# node = self.find_node_by_uuid(node_uuid)
 		node = self.find_node_by_uuid(node_uuid)
 		node.name = name
 
 
-	def set_current_flag(self, uuid):
-		"""установить флаг текущей ноды - у других сбросить"""
+	def set_current_flag(self, node_uuid):
+		"""
+			установить флаг текущей ноды - у других сбросить
+			вызывается при выборе ноды в дереве
+		"""
+		log.debug("set_current_flag: " + node_uuid)
+
 		for node in self.tree.nodes:
-			if node.uuid == uuid:
+			if node.uuid == node_uuid:
 				node.current = True
 			else:
 				node.current = False

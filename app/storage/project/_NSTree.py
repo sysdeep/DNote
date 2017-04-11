@@ -48,10 +48,9 @@ class NSTree(object):
 
 
 
-	def create_node(self, parent_node_uuid):
+	def create_node(self, parent_node):
 		"""создание новой ноды от родителя"""
-		log.debug("создание новой ноды для родителя: " + parent_node_uuid)
-		parent_node = self.nodes_map[parent_node_uuid]
+		log.debug("создание новой ноды для родителя: " + parent_node.uuid)
 		new_node = NSNode()
 		self.__insert(parent_node, new_node)
 		return new_node
@@ -61,34 +60,23 @@ class NSTree(object):
 	def remove_node(self, node_uuid):
 		"""удаление заданной ноды из дерева"""
 		log.debug("удаление заданной ноды из дерева: " + node_uuid)
-		node = self.get_node(node_uuid)
+		node = self.find_node_by_uuid(node_uuid)
 
 		if node:
-			return self.__remove(node)
-		else:
-			return False
+			self.__remove(node)
 
 
-	def get_node(self, node_uuid):
+	def find_node_by_uuid(self, uuid):
+		fnode = None
+		for node in self.nodes:
+			if node.uuid == uuid:
+				fnode = node
+				break
 
-		node = self.nodes_map.get(node_uuid)
-		if node is None:
-			log.error("get_node - no node found with uuid: " + node_uuid)
+		if fnode is None:
+			log.error("not found node: " + uuid)
 
-		return node
-
-
-	# def find_node_by_uuid(self, uuid):
-	# 	fnode = None
-	# 	for node in self.nodes:
-	# 		if node.uuid == uuid:
-	# 			fnode = node
-	# 			break
-	#
-	# 	if fnode is None:
-	# 		log.error("not found node: " + uuid)
-	#
-	# 	return fnode
+		return fnode
 	#--- public ---------------------------------------------------------------
 
 
@@ -143,7 +131,6 @@ class NSTree(object):
 
 
 		self.nodes.append(new_node)
-		self.nodes_map[new_node.uuid] = new_node
 		
 	
 
@@ -161,7 +148,6 @@ class NSTree(object):
 		#--- 2 - remove nodes from list
 		for n in del_nodes:
 			self.nodes.remove(n)
-			del(self.nodes_map[n.uuid])
 
 		#--- 3 - update nodes before
 		for n in self.nodes:
@@ -186,12 +172,10 @@ class NSTree(object):
 
 
 
-	#--- tree finds -----------------------------------------------------------
+
 	def find_parent_node(self, node_uuid):
 		"""поиск родителя заданной ноды"""
-		snode = self.get_node(node_uuid)
-		if snode is None:
-			return None
+		snode = self.find_node_by_uuid(node_uuid)
 
 		result = [node for node in self.nodes
 					if node.tree_lk < snode.tree_lk 
@@ -207,59 +191,45 @@ class NSTree(object):
 
 
 
-	def find_childrens(self, node_uuid):
-		"""поиск детёнышей заданной ноды след. уровня"""
-		parent_node = self.get_node(node_uuid)
-		if parent_node is None:
-			return []
 
-		childrens = [node for node in self.nodes
-				if node.tree_lk > parent_node.tree_lk
-				and node.tree_rk < parent_node.tree_rk
-				and node.tree_level - 1 == parent_node.tree_level]
+	# def find_nodes
 
-		childrens.sort(key=lambda row: row.tree_lk)
-		return childrens
+	# def get_node_tree_path(self, path_array):
+	# 	# print("----------------------")
+	# 	pa = path_array[1:]
+	# 	node = self.root
+	# 	# print(pa)
 
 
 
+	# 	for path_item in pa:
+	# 		childrens = self.get_childrens(node)
 
+	# 		nodes = [node for node in childrens if node.name == path_item]
 
-	def find_parent_branch(self, node_uuid):
-		"""получить полный путь от корня до заданной ноды(включая)"""
-		snode = self.get_node(node_uuid)
-		if snode is None:
-			return []
+	# 		# print(nodes)
+	# 		# print(nodes)
+	# 		if len(nodes) > 0:
+	# 			node = nodes[0]
 
-
-		nodes = [node for node in self.nodes
-				 if node.tree_lk <= snode.tree_lk
-				 and node.tree_rk >= snode.tree_rk]
-
-		nodes.sort(key=lambda row: row.tree_lk)
-		return nodes
+	# 	# print("----------------------")
+	# 	return node
 
 
 
 
-	def find_branch(self, node_uuid):
-		"""получить полную ветку нод, включая родительскую"""
-
-		snode = self.get_node(node_uuid)
-		if snode is None:
-			return []
-
-		nodes = [node for node in self.nodes
-				 if node.tree_lk >= snode.tree_lk
-				 and node.tree_rk <= snode.tree_rk]
-
-		nodes.sort(key=lambda row: row.tree_lk)
-		return nodes
-
-	#--- tree finds -----------------------------------------------------------
+	# def move_node_up(self, node_uuid):
+	# 	pass
 
 
 
+	# def __find_ne_nodes(self, snode):
+	# 	"""поиск соседей"""
+
+	# 	nodel = [node for node in self.nodes
+	# 			if node.tree_level == snode.tree_level
+	# 			and
+	# 	]
 
 
 	def get_childrens(self, parent_node):
@@ -354,51 +324,16 @@ class NSTree(object):
 
 
 
-	def __swap_nodes(self, node_1, node_2):
+	def __swap_nodes(self, node_a, node_b):
 
-		#--- очерёдность
-		if node_1.tree_lk < node_2.tree_lk:
-			node_a = node_1
-			node_b = node_2
-		else:
-			node_a = node_2
-			node_b = node_1
+		lk_a = node_a.tree_lk
+		rk_a = node_a.tree_rk
 
+		node_a.tree_lk = node_b.tree_lk
+		node_a.tree_rk = node_b.tree_rk
 
-		#--- получаем ветки нод
-		branch_a = self.find_branch(node_a.uuid)
-		branch_b = self.find_branch(node_b.uuid)
-
-
-
-		# print(branch_a)
-		# print(branch_b)
-
-
-		#--- вычисляем различия
-		lk_diff = node_b.tree_lk - node_a.tree_lk
-		rk_diff = node_b.tree_rk - node_a.tree_rk
-
-		#--- обновляем ветки
-		for node in branch_b:
-			#--- уменьшаем ключи для нижней ветки на разницу в lk
-			node.tree_lk -= lk_diff
-			node.tree_rk -= lk_diff
-
-		for node in branch_a:
-			#--- увеличиваем ключи для верхней ветки на разницу в rk
-			node.tree_lk += rk_diff
-			node.tree_rk += rk_diff
-
-
-		# lk_a = node_a.tree_lk
-		# rk_a = node_a.tree_rk
-		#
-		# node_a.tree_lk = node_b.tree_lk
-		# node_a.tree_rk = node_b.tree_rk
-		#
-		# node_b.tree_lk = lk_a
-		# node_b.tree_rk = rk_a
+		node_b.tree_lk = lk_a
+		node_b.tree_rk = rk_a
 
 
 	
