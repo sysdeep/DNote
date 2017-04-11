@@ -10,6 +10,7 @@ class NSTree(object):
 	def __init__(self):
 		self.nodes = []			# список нод
 		self.root = None		# основная нода
+		self.nodes_map = {}		# {node_uuid: node}
 
 		#--- инициализируем пустое дерево
 		self.__set_new()
@@ -39,6 +40,7 @@ class NSTree(object):
 			node = NSNode()
 			node.load(node_data)
 			self.nodes.append(node)
+			self.nodes_map[node.uuid] = node
 
 			#--- ссылка на корень
 			if node_data["tree_lk"] == 0:
@@ -194,7 +196,7 @@ class NSTree(object):
 
 
 
-
+	# def find_nodes
 
 	# def get_node_tree_path(self, path_array):
 	# 	# print("----------------------")
@@ -239,6 +241,8 @@ class NSTree(object):
 				if node.tree_lk > parent_node.tree_lk 
 				and node.tree_rk < parent_node.tree_rk 
 				and node.tree_level - 1 == parent_node.tree_level]
+
+		childrens.sort(key=lambda row: row.tree_lk)
 		return childrens
 
 	def get_nodes_level(self, level):
@@ -260,6 +264,80 @@ class NSTree(object):
 		self.nodes = []
 		self.__set_new()
 
+
+
+
+	def move_node_up(self, node_uuid):
+		"""перемещение ноды вверх
+			!!!! не реализовано перемещение поддерева !!!!
+		"""
+
+		parent_node = self.find_parent_node(node_uuid)
+		childrens = self.get_childrens(parent_node)
+		childrens_uuid = [node.uuid for node in childrens]
+
+
+		index = childrens_uuid.index(node_uuid)
+
+		node_a = childrens[index]
+		if node_a.tree_rk - node_a.tree_lk > 1:
+			log.warning("невозможно переместить ноду - она имеет потомков!!!")
+			return False
+
+		if index > 0:
+
+			node_b = childrens[index - 1]
+
+			self.__swap_nodes(node_a, node_b)
+
+
+
+			return True
+
+		return False
+
+
+
+
+	def move_node_down(self, node_uuid):
+		"""перемещение ноды вверх
+			!!!! не реализовано перемещение поддерева !!!!
+		"""
+		parent_node = self.find_parent_node(node_uuid)
+		childrens = self.get_childrens(parent_node)
+		childrens_uuid = [node.uuid for node in childrens]
+
+
+		index = childrens_uuid.index(node_uuid)
+
+		node_a = childrens[index]
+		if node_a.tree_rk - node_a.tree_lk > 1:
+			log.warning("невозможно переместить ноду - она имеет потомков!!!")
+			return False
+
+		if index + 1 < len(childrens_uuid):
+
+			node_b = childrens[index + 1]
+
+			self.__swap_nodes(node_a, node_b)
+
+			return True
+
+		return False
+
+
+
+
+	def __swap_nodes(self, node_a, node_b):
+
+		lk_a = node_a.tree_lk
+		rk_a = node_a.tree_rk
+
+		node_a.tree_lk = node_b.tree_lk
+		node_a.tree_rk = node_b.tree_rk
+
+		node_b.tree_lk = lk_a
+		node_b.tree_rk = rk_a
 
 
 	

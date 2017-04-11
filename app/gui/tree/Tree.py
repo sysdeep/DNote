@@ -179,7 +179,7 @@ class Tree(QTreeView):
 		self.blockSignals(True)
 
 		#--- все элементы корня
-		root_items = self.tree.get_nodes_level(1)		
+		root_items = self.tree.get_nodes_level(1)
 
 		#--- запуск обхода дерева(рекурсия)
 		for item in root_items:
@@ -219,6 +219,7 @@ class Tree(QTreeView):
 			# 	# icon = QIcon(get_icon_path("document-open.png"))
 			# else:
 			# 	icon = QIcon(get_icon_path("list-remove.png"))
+
 
 			if node.ipack and node.icon:
 				icon = QIcon(get_icon_path(node.ipack, node.icon))
@@ -281,7 +282,7 @@ class Tree(QTreeView):
 			log.debug("tree - update current for project")
 			self.current_uuid = uuid
 			#--- update tree node(in project.json)
-			smanager.storage.project.set_current_node(node.uuid)
+			smanager.storage.project.set_current_flag(node.uuid)
 
 		# print(self.current_index)
 		# print(self.select_cb)
@@ -360,9 +361,14 @@ class Tree(QTreeView):
 
 	def __act_move_up(self):
 		log.debug("move up")
-		self.storage.project.move_node_up(self.current_uuid)
+		result = self.storage.project.move_node_up(self.current_uuid)
+		if result:
+			self.__update_tree()
+
 
 	def __act_move_down(self):
 		log.debug("move down")
-		self.storage.project.move_node_down(self.current_uuid)
+		result = self.storage.project.move_node_down(self.current_uuid)
+		if result:
+			self.__update_tree()
 	#--- user actions ---------------------------------------------------------

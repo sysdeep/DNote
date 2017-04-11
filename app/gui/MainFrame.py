@@ -136,14 +136,14 @@ class MainFrame(QWidget):
 		self.current_node = storage.get_node(uuid)
 		print(self.current_node)
 		
-		# shared.set_current_node(self.current_node)
+		# shared.set_current_flag(self.current_node)
 		
 		# self.node_info.update_node(self.current_node)
 		# self.node_editor.update_node(self.current_node)
 		# self.node_files.update_node(self.current_node)
 
 		#--- update tree node(in project.json)
-		storage.project.set_current_node(self.current_node.uuid)
+		storage.project.set_current_flag(self.current_node.uuid)
 
 
 

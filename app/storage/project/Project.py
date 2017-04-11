@@ -79,13 +79,7 @@ class Project(object):
 
 
 
-	def set_current_node(self, uuid):
-		"""установить флаг текущей ноды - у других сбросить"""
-		for node in self.tree.nodes:
-			if node.uuid == uuid:
-				node.current = True
-			else:
-				node.current = False
+
 
 
 	def create_node(self, parent_node, uuid, name):
@@ -93,7 +87,7 @@ class Project(object):
 		node.uuid = uuid
 		node.name = name
 
-		self.set_current_node(uuid)
+		self.set_current_flag(uuid)
 		sevents.project_node_created()
 
 
@@ -117,14 +111,25 @@ class Project(object):
 		node = self.find_node_by_uuid(node_uuid)
 		node.name = name
 
+
+	def set_current_flag(self, uuid):
+		"""установить флаг текущей ноды - у других сбросить"""
+		for node in self.tree.nodes:
+			if node.uuid == uuid:
+				node.current = True
+			else:
+				node.current = False
+
 		
 
 	#--- moves ----------------------------------------------------------------
 	def move_node_up(self, node_uuid):
 		log.debug("move_node_up: " + node_uuid)
+		return self.tree.move_node_up(node_uuid)
 
 	def move_node_down(self, node_uuid):
 		log.debug("move_node_down: " + node_uuid)
+		return self.tree.move_node_down(node_uuid)
 	#--- moves ----------------------------------------------------------------
 
 
