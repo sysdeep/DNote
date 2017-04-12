@@ -98,6 +98,18 @@ class Project(object):
 		return node
 
 
+	#--- !!!
+	# def copy_node(self, node_uuid):
+	# 	nodes = self.tree.find_branch(node_uuid)
+	# 	print(nodes)
+	#
+	# 	new_nodes = []
+	# 	for node in nodes:
+	# 		node_data = node.export()
+	#
+
+
+
 	def remove_node(self, node_uuid):
 		"""удаление ноды"""
 		log.info("удаление ноды: " + node_uuid)
@@ -146,6 +158,10 @@ class Project(object):
 	def move_node_down(self, node_uuid):
 		log.debug("move_node_down: " + node_uuid)
 		return self.tree.move_node_down(node_uuid)
+
+
+	def move_node(self, node_uuid, dest_node_uuid):
+		self.tree.move_node(node_uuid, dest_node_uuid)
 	#--- moves ----------------------------------------------------------------
 
 

@@ -60,9 +60,20 @@ class Nodes(object):
 		return node
 
 
-
-
-
+	#--- !!!
+	# def copy_node(self, node_uuid):
+	#
+	# 	src_node_path = os.path.join(self.nodes_path, node_uuid)
+	#
+	# 	new_node_uuid = str(uuid.uuid1())
+	# 	dst_node_path = os.path.join(self.nodes_path, new_node_uuid)
+	#
+	# 	print(dst_node_path)
+	#
+	# 	# shutil.copytree(src_node_path, dst_node_path)
+	# 	#
+	# 	# node = Node(new_node_uuid, dst_node_path)
+	# 	# return node
 
 
 

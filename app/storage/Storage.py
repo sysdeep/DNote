@@ -31,16 +31,12 @@ class Storage(object):
 		self.nmanager 		= Nodes(self.storage_path)					# управление нодами
 		self.pmanager		= Project(self.storage_path)					# управление файлом проекта
 
-		# self.current_node	= None						# тек. нода
-
-
-		# self.snode = None
-		# self.copy_node_uuid = None
-
 		self.nnode = None
 		self.pnode = None
 
-		# self.__load()
+
+		# self.copy_node_uuid = None
+
 
 
 
@@ -121,9 +117,13 @@ class Storage(object):
 
 
 
-
-
-
+	#--- !!!
+	# def copy_node(self, node_uuid, parent_node_uuid):
+	# 	log.debug("копирование ноды")
+	#
+	# 	self.nnode = self.nmanager.copy_node(node_uuid)
+	#
+	# 	self.pnode = self.pmanager.copy_node(node_uuid)
 
 
 
@@ -135,9 +135,9 @@ class Storage(object):
 
 	
 
-
-	def set_copy_node(self, node_uuid):
-		self.copy_node_uuid = node_uuid
+	#
+	# def set_copy_node(self, node_uuid):
+	# 	self.copy_node_uuid = node_uuid
 
 
 

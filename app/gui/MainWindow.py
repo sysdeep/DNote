@@ -12,22 +12,9 @@ from app import log
 
 from .MainFrame import MainFrame
 
-# from app.logic import get_tree, load_tree, load_tree_demo
-# from .Controller import Controller
 
-
-# from .utils.WalkerDispatcher import WalkerDispatcher
-# from ..logic import get_server, get_project
-# from .modals import LoginWindow
-# from ..storage import ulog
-# from app.rc import get_font_path
-# from .Controller import Controller
 from .BarMenu import BarMenu
-# from .SystemTray import SystemTray
-# from . import events
 from . import qicon
-# from app.logic import twalker
-# from app.rc import DIR_SCAN
 
 from . import actions
 

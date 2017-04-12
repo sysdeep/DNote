@@ -46,13 +46,16 @@ class Tree(QTreeView):
 
 
 		#--- dnd
+		self.setDragEnabled(True)
+		# self.setDragDropMode(QAbstractItemView.DragOnly)
+		# self.setDragDropMode(QAbstractItemView.DragDrop)
 		# self.setDragDropMode(QAbstractItemView.InternalMove)
-		# self.setDragEnabled(True)
-		# self.viewport().setAcceptDrops(True)
+		self.viewport().setAcceptDrops(True)
 		# self.setDropIndicatorShown(True)
 
 
 		self.modal_icons = None
+		self.copy_node_uuid = None
 
 
 
@@ -76,14 +79,21 @@ class Tree(QTreeView):
 		# self.__remake_tree()
 
 
-	# def dropEvent(self, ev):
-	# 	print("drop")
-	# 	print(ev)
+	def dropEvent(self, ev):
+		index = self.indexAt(ev.pos())
+		uuid = index.data(Qt.UserRole + 1)
 
-	# 	ev.accept()
+		ev.accept()
+
+		self.storage.pmanager.move_node(self.current_uuid, uuid)
+		self.storage.update_project_file()
+
+
+
+
 
 	def __remake_tree(self):
-		print("remake tree")
+		# print("remake tree")
 
 		self.storage = smanager.get_storage()
 		self.tree = self.storage.project.get_tree()
@@ -116,17 +126,18 @@ class Tree(QTreeView):
 		self.setContextMenuPolicy(Qt.ActionsContextMenu)
 		create_new_root 	= QAction("Новая корневая запись", self)
 		create_new_parent 	= QAction("Новая запись для данного элемента", self)
-		# create_new_level 	= QAction("Новая запись такого же уровня", self)
+		create_new_level 	= QAction("Новая запись такого же уровня", self)
 		
 		edit_name 			= QAction("Изменить название", self)
 		edit_icon 			= QAction("Изменить иконки", self)
 		show_info 			= QAction("Информация", self)
-		act_copy 			= QAction("Копировать", self)
+		# act_copy 			= QAction("Копировать", self)
+		# act_paste 			= QAction("Вставить", self)
 
 		move_up				= QAction("Выше", self)
 		move_down			= QAction("Ниже", self)
 
-		remove_item 		= QAction("Удалить запись", self)
+		remove_item 		= QAction("Удалить запись(ветку)", self)
 
 		separator1 = QAction(self)
 		separator1.setSeparator(True)
@@ -139,12 +150,13 @@ class Tree(QTreeView):
 		
 		self.addAction(create_new_root)
 		self.addAction(create_new_parent)
-		# self.addAction(create_new_level)
+		self.addAction(create_new_level)
 		self.addAction(separator1)
 		self.addAction(edit_name)
 		self.addAction(edit_icon)
 		self.addAction(show_info)
-		self.addAction(act_copy)
+		# self.addAction(act_copy)
+		# self.addAction(act_paste)
 
 		self.addAction(separator2)
 		
@@ -159,11 +171,11 @@ class Tree(QTreeView):
 
 		create_new_root.setIcon(qicon("filesystems", "folder_blue.png"))
 		create_new_parent.setIcon(qicon("filesystems", "folder_green.png"))
-		# create_new_level.setIcon(qicon("filesystems", "folder_orange.png"))
+		create_new_level.setIcon(qicon("filesystems", "folder_orange.png"))
 		edit_name.setIcon(qicon("actions", "edit.png"))
 		edit_icon.setIcon(qicon("actions", "frame_image.png"))
 		show_info.setIcon(qicon("actions", "kdeprint_printer_infos.png"))
-		act_copy.setIcon(qicon("actions", "editcopy.png"))
+		# act_copy.setIcon(qicon("actions", "editcopy.png"))
 		remove_item.setIcon(qicon("actions", "remove.png"))
 
 		move_up.setIcon(qicon("actions", "arrow_up.png"))
@@ -171,11 +183,12 @@ class Tree(QTreeView):
 
 		create_new_root.triggered.connect(self.__act_create_new_root)
 		create_new_parent.triggered.connect(self.__act_create_new_parent)
-		# create_new_level.triggered.connect(self.__act_create_new_level)
+		create_new_level.triggered.connect(self.__act_create_new_level)
 		edit_name.triggered.connect(self.__act_edit_name)
 		edit_icon.triggered.connect(self.__act_edit_icon)
 		show_info.triggered.connect(self.__act_show_info)
-		act_copy.triggered.connect(self.__act_copy)
+		# act_copy.triggered.connect(self.__act_copy)
+		# act_paste.triggered.connect(self.__act_paste)
 
 		move_up.triggered.connect(self.__act_move_up)
 		move_down.triggered.connect(self.__act_move_down)
@@ -348,15 +361,13 @@ class Tree(QTreeView):
 
 	def __act_create_new_level(self):
 		"""выбранная нода - находится у родителя - пока отключено!!!!!"""
-		pass
-		# parent_pnode = self.storage.project.find_parent_node(self.current_uuid)
-		#
-		# #--- если родитель - корень, то вызываем модал как и у __act_create_new_root
-		# if parent_pnode.tree_lk == 0:
-		# 	parent_pnode = None
-		#
-		# # events.show_modal_create_node(parent_node=parent_pnode)
-		# actions.show_modal_create_node(parent_node=parent_pnode)
+		parent_pnode = self.storage.pmanager.find_parent_node(self.current_uuid)
+
+		#--- если родитель - корень, то вызываем модал как и у __act_create_new_root
+		if parent_pnode.tree_lk == 0:
+			parent_pnode = None
+
+		actions.show_modal_create_node(parent_pnode.uuid)
 		
 
 
@@ -386,12 +397,25 @@ class Tree(QTreeView):
 
 
 
-	def __act_copy(self):
-		"""копирование ветки"""
 
-		log.debug("copy node: " + self.current_uuid)
 
-		# self.storage.set_copy_node(self.current_uuid)
+
+
+	# def __act_copy(self):
+	# 	"""копирование ветки"""
+	#
+	# 	log.debug("copy node: " + self.current_uuid)
+	# 	self.copy_node_uuid = self.current_uuid
+	#
+	#
+	# def __act_paste(self):
+	# 	log.debug(self.current_uuid)
+	# 	log.debug(self.copy_node_uuid)
+	#
+	# 	self.storage.copy_node(self.copy_node_uuid, self.current_uuid)
+
+
+
 
 
 
