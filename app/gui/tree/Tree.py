@@ -255,7 +255,8 @@ class Tree(QTreeView):
 			# child_items = [node for node in simple_obj_list
 			# 			   if (node["tree_lk"] > node_lk) and (node["tree_rk"] < node_rk) and(node["tree_level"] == node_level+1)]
 
-			child_items = self.tree.get_childrens(node)
+			# child_items = self.tree.get_childrens(node)
+			child_items = self.tree.find_childrens(node.uuid)
 			# child_items = node.childrens
 
 
