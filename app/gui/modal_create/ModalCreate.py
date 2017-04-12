@@ -16,16 +16,16 @@ from app.storage import smanager
 
 
 class ModalCreate(QDialog):
-	def __init__(self, parent_node=None, parent=None):
+	def __init__(self, parent_node_uuid=None, parent=None):
 		super(ModalCreate, self).__init__(parent)
 
 		self.setWindowTitle("Создание новой записи")
 		self.storage 		= smanager.get_storage()
 		
-		if parent_node is None:
-			self.parent_node = self.storage.project.get_root_node()
+		if parent_node_uuid is None:
+			self.parent_node_uuid = self.storage.pmanager.get_root_node().uuid
 		else:
-			self.parent_node 	= parent_node
+			self.parent_node_uuid 	= parent_node_uuid
 
 
 		self.types = self.storage.get_node_types()
@@ -42,8 +42,8 @@ class ModalCreate(QDialog):
 	def __make_gui(self):
 		
 
-		label_root_name = QLabel("Родитель: {}".format(self.parent_node.name))
-		self.main_layout.addWidget(label_root_name)		
+		# label_root_name = QLabel("Родитель: {}".format(self.parent_node.name))
+		# self.main_layout.addWidget(label_root_name)
 
 
 		#--- edit
@@ -104,12 +104,15 @@ class ModalCreate(QDialog):
 		text = self.edit_text.toPlainText()
 
 
-		#--- создание дефолтных записей ноды
-		node = self.storage.create_node(self.parent_node, name)
 
-		#--- обновление данных
-		node.meta.ntype = node_type
-		node.update_page_text(text)
+		self.storage.create_node(self.parent_node_uuid, name, node_type, text)
+
+		# #--- создание дефолтных записей ноды
+		# node = self.storage.create_node(self.parent_node, name)
+		#
+		# #--- обновление данных
+		# node.meta.ntype = node_type
+		# node.update_page_text(text)
 
 		self.close()
 

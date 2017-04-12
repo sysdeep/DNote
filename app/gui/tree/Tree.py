@@ -35,7 +35,7 @@ class Tree(QTreeView):
 
 		# self.storage = get_storage()
 		self.storage = smanager.get_storage()
-		self.tree = self.storage.project.get_tree()
+		self.tree = self.storage.get_tree()
 		self.select_cb = None
 
 
@@ -60,10 +60,7 @@ class Tree(QTreeView):
 
 
 
-		# events.on("update_tree", self.__update_tree)
-		# self.storage.project.eon("node_created", self.__update_tree)
-		# self.storage.project.eon("node_removed", self.__update_tree)
-		# self.__make_tree()
+
 		sevents.eon("storage_opened", self.__remake_tree)
 		sevents.eon("project_updated", self.__update_tree)
 
@@ -118,7 +115,7 @@ class Tree(QTreeView):
 		self.setContextMenuPolicy(Qt.ActionsContextMenu)
 		create_new_root 	= QAction("Новая корневая запись", self)
 		create_new_parent 	= QAction("Новая запись для данного элемента", self)
-		create_new_level 	= QAction("Новая запись такого же уровня", self)
+		# create_new_level 	= QAction("Новая запись такого же уровня", self)
 		
 		edit_name 			= QAction("Изменить название", self)
 		edit_icon 			= QAction("Изменить иконки", self)
@@ -141,7 +138,7 @@ class Tree(QTreeView):
 		
 		self.addAction(create_new_root)
 		self.addAction(create_new_parent)
-		self.addAction(create_new_level)
+		# self.addAction(create_new_level)
 		self.addAction(separator1)
 		self.addAction(edit_name)
 		self.addAction(edit_icon)
@@ -161,16 +158,19 @@ class Tree(QTreeView):
 
 		create_new_root.setIcon(qicon("filesystems", "folder_blue.png"))
 		create_new_parent.setIcon(qicon("filesystems", "folder_green.png"))
-		create_new_level.setIcon(qicon("filesystems", "folder_orange.png"))
+		# create_new_level.setIcon(qicon("filesystems", "folder_orange.png"))
 		edit_name.setIcon(qicon("actions", "edit.png"))
 		edit_icon.setIcon(qicon("actions", "frame_image.png"))
 		show_info.setIcon(qicon("actions", "kdeprint_printer_infos.png"))
 		act_copy.setIcon(qicon("actions", "editcopy.png"))
 		remove_item.setIcon(qicon("actions", "remove.png"))
 
+		move_up.setIcon(qicon("actions", "arrow_up.png"))
+		move_down.setIcon(qicon("actions", "arrow_down.png"))
+
 		create_new_root.triggered.connect(self.__act_create_new_root)
 		create_new_parent.triggered.connect(self.__act_create_new_parent)
-		create_new_level.triggered.connect(self.__act_create_new_level)
+		# create_new_level.triggered.connect(self.__act_create_new_level)
 		edit_name.triggered.connect(self.__act_edit_name)
 		edit_icon.triggered.connect(self.__act_edit_icon)
 		show_info.triggered.connect(self.__act_show_info)
@@ -298,20 +298,22 @@ class Tree(QTreeView):
 		uuid = index.data(Qt.UserRole + 1)
 
 
-		#--- get node from storage
-		node = smanager.storage.get_node(uuid)
+		smanager.storage.select_node(uuid)
 
-		#--- set current node + emit
-		smanager.storage.set_current_node(node)
-
-
-		if uuid == self.current_uuid:
-			return False
-
+		# #--- get node from storage
+		# node = smanager.storage.get_node(uuid)
+		#
+		# #--- set current node + emit
+		# smanager.storage.set_current_node(node)
+		#
+		#
+		# if uuid == self.current_uuid:
+		# 	return False
+		#
 		self.current_uuid = uuid
-
-		#--- update tree node(in project.json)
-		smanager.storage.project.set_current_flag(node.uuid)
+		#
+		# #--- update tree node(in project.json)
+		# smanager.storage.project.set_current_flag(node.uuid)
 
 
 
@@ -321,12 +323,12 @@ class Tree(QTreeView):
 	def __on_expanded(self, model_index):
 		"""раскрытие узла"""
 		uuid = model_index.data(Qt.UserRole + 1)
-		self.storage.project.set_node_expanded(uuid, True)
+		self.storage.pmanager.set_node_expanded(uuid, True)
 
 	def __on_collapsed(self, model_index):
 		"""закрытие узла"""
 		uuid = model_index.data(Qt.UserRole + 1)
-		self.storage.project.set_node_expanded(uuid, False)
+		self.storage.pmanager.set_node_expanded(uuid, False)
 
 
 
@@ -335,28 +337,25 @@ class Tree(QTreeView):
 
 	def __act_create_new_root(self):
 		"""запрос на создание ноды от корня"""
-		# events.show_modal_create_node(parent_node=None)
-		actions.show_modal_create_node(parent_node=None)
+		actions.show_modal_create_node(None)
 		
-
 
 	def __act_create_new_parent(self):
 		"""выбранная нода - является родительской"""
-		parent_pnode = self.storage.project.get_node(self.current_uuid)
-		# events.show_modal_create_node(parent_node=parent_pnode)
-		actions.show_modal_create_node(parent_node=parent_pnode)
+		actions.show_modal_create_node(self.current_uuid)
 		
 
 	def __act_create_new_level(self):
-		"""выбранная нода - находится у родителя"""
-		parent_pnode = self.storage.project.find_parent_node(self.current_uuid)
-
-		#--- если родитель - корень, то вызываем модал как и у __act_create_new_root
-		if parent_pnode.tree_lk == 0:
-			parent_pnode = None
-
-		# events.show_modal_create_node(parent_node=parent_pnode)
-		actions.show_modal_create_node(parent_node=parent_pnode)
+		"""выбранная нода - находится у родителя - пока отключено!!!!!"""
+		pass
+		# parent_pnode = self.storage.project.find_parent_node(self.current_uuid)
+		#
+		# #--- если родитель - корень, то вызываем модал как и у __act_create_new_root
+		# if parent_pnode.tree_lk == 0:
+		# 	parent_pnode = None
+		#
+		# # events.show_modal_create_node(parent_node=parent_pnode)
+		# actions.show_modal_create_node(parent_node=parent_pnode)
 		
 
 
@@ -365,7 +364,7 @@ class Tree(QTreeView):
 
 	def __act_remove_item(self):
 		"""удаление ноды"""
-		actions.show_modal_remove_node(self.current_uuid)
+		actions.show_modal_remove_node()
 
 
 	def __act_edit_name(self):
@@ -395,15 +394,13 @@ class Tree(QTreeView):
 
 
 	def __act_move_up(self):
-		log.debug("move up")
-		result = self.storage.project.move_node_up(self.current_uuid)
+		result = self.storage.pmanager.move_node_up(self.current_uuid)
 		if result:
-			self.__update_tree()
+			self.storage.update_project_file()
 
 
 	def __act_move_down(self):
-		log.debug("move down")
-		result = self.storage.project.move_node_down(self.current_uuid)
+		result = self.storage.pmanager.move_node_down(self.current_uuid)
 		if result:
-			self.__update_tree()
+			self.storage.update_project_file()
 	#--- user actions ---------------------------------------------------------

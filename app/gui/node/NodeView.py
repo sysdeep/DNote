@@ -21,7 +21,7 @@ class NodeViewe(QWidget):
 		# self.setTitle("viewer")
 		self.main_layout = QVBoxLayout(self)
 
-		self.node = None
+		# self.node = None
 		# self.storage = get_storage()
 		self.storage = smanager.get_storage()
 
@@ -45,9 +45,8 @@ class NodeViewe(QWidget):
 
 
 	def __on_node_selected(self):
-		print("selected")
 		# self.node = self.storage.get_current_node()
-		self.node = smanager.storage.get_current_node()
+		# self.node = smanager.storage.get_current_node()
 		self.__set_content()
 		
 
@@ -66,15 +65,21 @@ class NodeViewe(QWidget):
 
 		# self.setTitle(self.node.name + "["+self.node.meta.ntype+"]")
 
-		text = self.node.page.raw_text
 
-		if self.node.meta.ntype == "text":
-			# self.web.setHtml(text)
-			html = markdown.markdown(text)
-			self.web.setHtml(html)
-		elif self.node.meta.ntype == "markdown":
-			html = markdown.markdown(text)
-			self.web.setHtml(html)
+		# text = self.node.page.raw_text
+		text = self.storage.nnode.page.raw_text
+
+
+		html = markdown.markdown(text)
+		self.web.setHtml(html)
+
+		# if self.node.meta.ntype == "text":
+		# 	# self.web.setHtml(text)
+		# 	html = markdown.markdown(text)
+		# 	self.web.setHtml(html)
+		# elif self.node.meta.ntype == "markdown":
+		# 	html = markdown.markdown(text)
+		# 	self.web.setHtml(html)
 
 
 

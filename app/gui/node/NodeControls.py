@@ -64,16 +64,12 @@ class NodeControls(QWidget):
 
 	def __create_node(self):
 		"""создание новой ноды от родителя"""
-		node = smanager.storage.get_current_node()
-		parent_project_node = smanager.storage.project.get_node(node.uuid)
-		actions.show_modal_create_node(parent_node=parent_project_node)
+		actions.show_modal_create_node(smanager.storage.pnode.uuid)
 
 
 	def __remove_node(self):
 		"""удаление ноды от родителя"""
-		node = smanager.storage.get_current_node()
-		# events.show_remove_node(node.uuid)
-		actions.show_modal_remove_node(node.uuid)
+		actions.show_modal_remove_node()
 
 
 	def __show_icons(self):

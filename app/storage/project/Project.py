@@ -17,26 +17,27 @@ from app import log
 
 from .NSTree import NSTree
 
-from .. import sevents
+# from .. import sevents
 
 
 class Project(object):
 	"""объект проекта - содержит дерево"""
-	def __init__(self):
+	def __init__(self, project_path):
 		self.file_name 		= "project.json"			# название файла проекта
 		self.file_path 		= ""						# полный путь к файлу проекта
-		self.project_path	= ""						# полный путь к каталогу проекта
+		self.project_path	= project_path				# полный путь к каталогу проекта
 
 		#--- данные проекта
 		self.name 			= ""						# название проекта
 		self.tree 			= NSTree()					# дерево проекта
 
 
+		self.load()
 
 
-	def load(self, project_path):
+	def load(self):
 		"""загрузка данных проекта по указанному пути"""
-		self.project_path = project_path
+		# self.project_path = project_path
 		log.debug("загрузка проекта: " + self.project_path)
 		self.file_path = os.path.join(self.project_path, self.file_name)
 
@@ -50,7 +51,7 @@ class Project(object):
 		self.tree.load(data["tree"])
 
 
-		sevents.project_loaded()
+		# sevents.project_loaded()
 
 
 
@@ -85,22 +86,26 @@ class Project(object):
 
 
 
-	def create_node(self, parent_node, uuid, name):
+	def create_node(self, parent_node_uuid, uuid, name, ntype="text"):
 		"""создание нового узла"""
-		node = self.tree.create_node(parent_node.uuid, uuid, name)
+		node = self.tree.create_node(parent_node_uuid, uuid, name, ntype)
 
 		#--- установка флага текущего
 		self.set_current_flag(uuid)
 		self.write_file()
-		sevents.project_node_created()
+		# sevents.project_node_created()
+
+		return node
 
 
 	def remove_node(self, node_uuid):
 		"""удаление ноды"""
 		log.info("удаление ноды: " + node_uuid)
-		self.tree.remove_node(node_uuid)
+		remove_nodes = self.tree.remove_node(node_uuid)
 		self.write_file()
-		sevents.project_node_removed()
+		# sevents.project_node_removed()
+
+		return remove_nodes
 
 
 
@@ -111,11 +116,11 @@ class Project(object):
 
 
 
-	def set_node_name(self, node_uuid, name):
-		"""установить новое название ноды"""
-		# node = self.get_node(node_uuid)
-		node = self.tree.get_node(node_uuid)
-		node.name = name
+	# def set_node_name(self, node_uuid, name):
+	# 	"""установить новое название ноды"""
+	# 	# node = self.get_node(node_uuid)
+	# 	node = self.tree.get_node(node_uuid)
+	# 	node.name = name
 
 
 	def set_current_flag(self, node_uuid):
@@ -123,7 +128,7 @@ class Project(object):
 			установить флаг текущей ноды - у других сбросить
 			вызывается при выборе ноды в дереве
 		"""
-		log.debug("set_current_flag: " + node_uuid)
+		# log.debug("set_current_flag: " + node_uuid)
 
 		for node in self.tree.nodes:
 			if node.uuid == node_uuid:
@@ -161,7 +166,7 @@ class Project(object):
 		with open(self.file_path, "w", encoding="utf-8") as fd:
 			data = fd.write(data_json)
 
-		sevents.project_updated()
+		# sevents.project_updated()
 
 
 
@@ -189,22 +194,5 @@ class Project(object):
 
 
 
-
-
-
-	
-
-if __name__ == '__main__':
-	
-	from app.rc import DIR_PROJECT
-
-	project = Project()
-	project.set_project_dir(DIR_PROJECT)
-	project.load()
-
-	print(project)
-
-
-	project.tree.print_nodes()
 
 

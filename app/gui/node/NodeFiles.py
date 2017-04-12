@@ -24,7 +24,7 @@ class NodeFiles(QWidget):
 
 		self.main_layout = QVBoxLayout(self)
 
-		self.node = None
+		# self.node = None
 		self.storage = smanager.get_storage()
 		# self.storage = get_storage()
 		
@@ -70,7 +70,7 @@ class NodeFiles(QWidget):
 
 
 	def __update_node_data(self):
-		self.node = smanager.storage.get_current_node()
+		# self.node = smanager.storage.get_current_node()
 		self.__load_files()
 		
 
@@ -84,7 +84,7 @@ class NodeFiles(QWidget):
 
 		self.clist.clear()
 
-		files = self.node.files.files
+		files = self.storage.nnode.files.files
 
 		# self.clist.clear()
 		for f in files:
@@ -105,7 +105,7 @@ class NodeFiles(QWidget):
 		# print(fname)
 
 		if fname[0]:
-			self.node.create_file(fname[0])
+			self.storage.nnode.create_file(fname[0])
 
 			#--- send events
 			# events.update_current_node()				# update_tree - вызовет и это
@@ -114,8 +114,7 @@ class NodeFiles(QWidget):
 
 
 	def __on_remove_action(self):
-		# print(self.current_file)
-		self.node.remove_file(self.current_file)
+		self.storage.nnode.remove_file(self.current_file)
 
 		self.__load_files()
 

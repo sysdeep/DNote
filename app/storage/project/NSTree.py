@@ -8,7 +8,7 @@ http://www.getinfo.ru/article610.html
 	public:
 		load(nodes_list)
 		create_node(parent_node_uuid, node_uuid, name="")	-> node
-		remove_node(node_uuid)								-> removed_count(int)
+		remove_node(node_uuid)								-> [node]
 		get_node(node_uuid)									-> node
 		move_node_up(node_uuid)								-> bool
 		move_node_down(node_uuid)							-> bool
@@ -82,13 +82,14 @@ class NSTree(object):
 
 
 
-	def create_node(self, parent_node_uuid, node_uuid, name=""):
+	def create_node(self, parent_node_uuid, node_uuid, name="", ntype="text"):
 		"""создание новой ноды от родителя"""
 		log.debug("создание новой ноды для родителя: " + parent_node_uuid)
 		parent_node = self.nodes_map[parent_node_uuid]
 		new_node = NSNode()
 		new_node.uuid = node_uuid
 		new_node.name = name
+		new_node.ntype = ntype
 		self.__insert_node(parent_node, new_node)
 		return new_node
 
@@ -100,9 +101,9 @@ class NSTree(object):
 		node = self.get_node(node_uuid)
 
 		if node:
-			return len(self.__remove_branch(node))
+			return self.__remove_branch(node)
 		else:
-			return 0
+			return []
 
 
 	def get_node(self, node_uuid):
@@ -121,6 +122,7 @@ class NSTree(object):
 		prev_node = self.find_prev_node(node_uuid)
 
 		if prev_node is None:
+			log.debug("prev node is None")
 			return False
 
 		node = self.get_node(node_uuid)
@@ -140,6 +142,7 @@ class NSTree(object):
 		next_node = self.find_next_node(node_uuid)
 
 		if next_node is None:
+			log.debug("next node is None")
 			return False
 
 		node = self.get_node(node_uuid)

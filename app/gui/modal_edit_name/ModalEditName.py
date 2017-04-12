@@ -21,8 +21,9 @@ class ModalEditName(QDialog):
 
 		
 		self.storage 		= smanager.get_storage()				# тек. хранилище
-		self.node 			= self.storage.get_current_node()		# тек. нода
+		# self.node 			= self.storage.get_current_node()		# тек. нода
 		self.types 			= self.storage.get_node_types()			# типы контента
+		self.node			= self.storage.pnode
 		
 		
 		self.__make_gui()
@@ -66,7 +67,7 @@ class ModalEditName(QDialog):
 
 
 	def __load_data(self):
-		ntype = self.node.meta.ntype
+		ntype = self.node.ntype
 		index = self.types.index(ntype)
 		self.edit_type.setCurrentIndex(index)
 
@@ -85,20 +86,15 @@ class ModalEditName(QDialog):
 		node_type = self.types[index]
 
 		#--- update node data
-		self.node.meta.ntype = node_type
-		self.node.update_node_name(name)
-
-		#--- update project data
-		self.storage.project.set_node_name(self.node.uuid, name)
-		self.storage.project.write_file()
+		self.node.name = name
+		self.node.ntype = node_type
 
 
-		#--- new test
-		# snode = self.storage.snode
-		# snode.name = name
-		# snode.ntype = node_type
-		# snode.save()
-		#--- new test
+		#--- update project file
+		self.storage.update_project_file()
+
+
+
 
 
 		self.close()

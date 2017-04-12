@@ -17,7 +17,17 @@ class NSNode(object):
 		self.current	= False			# флаг текущей ноды 
 		self.icon		= ""			# название иконки
 		self.ipack		= ""			# название пака иконки
-		
+
+
+		#--- from meta
+		self.ntype	= "text"			# тип ноды
+		self.ctime	= 0					# время создания
+		self.mtime	= 0					# время модификации
+		self.atime	= 0					# время последнего доступа(?)
+		self.tags	= []				# список тэгов
+
+
+
 
 	def export(self):
 		data = {
@@ -29,7 +39,9 @@ class NSNode(object):
 			"expanded"		: self.expanded,
 			"current"		: self.current,
 			"icon"			: self.icon,
-			"ipack"			: self.ipack
+			"ipack"			: self.ipack,
+
+			"ntype"			: self.ntype
 		}
 
 		return data
@@ -47,6 +59,8 @@ class NSNode(object):
 		self.icon		= data.get("icon", "")
 		self.ipack		= data.get("ipack", "")
 
+
+		self.ntype		= data.get("ntype", "text")
 
 
 

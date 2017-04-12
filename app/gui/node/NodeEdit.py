@@ -5,10 +5,9 @@
 from PyQt5.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QLabel, QTextEdit, QPushButton, QLineEdit
 from PyQt5.QtWebKitWidgets import QWebView
 
-from vendors import markdown
+
 from app.storage import get_storage, smanager, sevents
 
-from .. import events
 
 
 
@@ -21,14 +20,13 @@ class NodeEdit(QWidget):
 		# self.setTitle("viewer")
 		self.main_layout = QVBoxLayout(self)
 
-		self.node = None
+		# self.node = None
 		self.storage = smanager.get_storage()
 		# self.storage = get_storage()
 
 		self.__make_gui()
 
 		sevents.eon("node_selected", self.__on_node_selected)
-		# self.storage.eon("node_updated", self.__on_node_updated)
 
 
 
@@ -58,7 +56,7 @@ class NodeEdit(QWidget):
 
 
 	def __on_node_selected(self):
-		self.node = smanager.storage.get_current_node()
+		# self.node = smanager.storage.get_current_node()
 		self.__set_content()
 		
 
@@ -74,11 +72,7 @@ class NodeEdit(QWidget):
 
 	def __set_content(self):
 
-
-		# self.setTitle(self.node.name + "["+self.node.meta.ntype+"]")
-
-		text = self.node.page.raw_text
-		# self.text_edit.setText(text)
+		text = self.storage.nnode.page.raw_text
 		self.text_edit.setPlainText(text)
 
 
@@ -89,6 +83,9 @@ class NodeEdit(QWidget):
 		text = self.text_edit.toPlainText()
 
 		#--- update node data
-		self.node.update_page_text(text)
+		self.storage.nnode.update_page_text(text)
+
+		#--- send event
+		self.storage.update_node_event()
 
 

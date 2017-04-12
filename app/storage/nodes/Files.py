@@ -21,7 +21,7 @@ class Files(object):
 		self.files 		= []				# список файлов в каталоге
 		self.path 		= os.path.join(node_path, self.dir_name)		# полный путь до каталога с файлами
 
-		# self.load()
+		self.load()
 
 
 

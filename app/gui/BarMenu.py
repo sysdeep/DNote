@@ -79,7 +79,7 @@ class BarMenu(object):
 
 	def __file_create_root_item_action(self):
 		# events.show_modal_create_node(parent_node=None)
-		actions.show_modal_create_node(parent_node=None)
+		actions.show_modal_create_node(None)
 
 	
 	def __file_create_new_notebook(self):

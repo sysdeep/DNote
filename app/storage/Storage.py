@@ -28,98 +28,103 @@ class Storage(object):
 
 		self.storage_path 	= storage_path				# полный путь к каталогу хранилища
 
-		self.nodes 			= Nodes()					# управление нодами
-		self.project		= Project()					# управление файлом проекта
+		self.nmanager 		= Nodes(self.storage_path)					# управление нодами
+		self.pmanager		= Project(self.storage_path)					# управление файлом проекта
 
-		self.current_node	= None						# тек. нода
+		# self.current_node	= None						# тек. нода
 
 
 		# self.snode = None
 		# self.copy_node_uuid = None
 
-		self.__load()
+		self.nnode = None
+		self.pnode = None
+
+		# self.__load()
 
 
 
 
-	def __load(self):
-		"""загрузить проект по заданному пути"""
-
-		#--- загружаем данные проекта
-		self.project.load(self.storage_path)
-
-		#--- настраиваем объект записей
-		self.nodes.set_project_path(self.storage_path)
+	def get_tree(self):
+		return self.pmanager.get_tree()
 
 
 
 
 
-	def get_current_node(self):
-		return self.current_node
 
-	def set_current_node(self, node):
-		self.current_node = node
+
+
+
+	def select_node(self, uuid):
+		"""выбор текущих нод"""
+		self.nnode = self.nmanager.get_node(uuid)
+		self.pnode = self.pmanager.get_node(uuid)
+		self.pmanager.set_current_flag(uuid)
 		sevents.node_selected()
 
 
 
-	def get_node(self, uuid):
-		"""получить заданную ноду из хранилища"""
-		node = self.nodes.get_node(uuid)
-		node.storage = self
-		# self.set_current_node(node)
-
-
-		#--- new test
-		# pnode = self.project.get_node(uuid)
-		# self.snode = SNode(node, pnode, self.project)
-
-		# print(self.snode.name)
-		# print(self.snode.uuid)
-
-		#--- new test
 
 
 
-		return node
-
-
-
-	def create_node(self, parent_node, name):
+	def create_node(self, parent_node_uuid, name, ntype="text", content=""):
 		"""создать новую ноду"""
 		log.debug("создание новой ноды")
 
 		#--- создание файлов ноды
-		node = self.nodes.create_node(name, storage=self)
+		self.nnode = self.nmanager.create_node(content)
 
 		#--- создание ноды в файле проекта
-		self.project.create_node(parent_node, node.uuid, name)
-
-		#--- выбираем созданную
-		self.set_current_node(node)
+		self.pnode = self.pmanager.create_node(parent_node_uuid, self.nnode.uuid, name, ntype)
 
 		sevents.node_created()
-		return node
+		sevents.project_updated()
 
 
 
 	
 	def remove_node(self, uuid):
-		"""удалить заданную ноду"""
+		"""удалить заданную ноду или ветвь"""
 		log.debug("удаление ноды: " + uuid)
 
-		#--- удаление файлов ноды
-		self.nodes.remove_node(uuid)
+		#--- удаление ноды(ветки) в файле проекта
+		remove_nodes = self.pmanager.remove_node(uuid)
 
-		#--- удаление ноды в файле проекта
-		self.project.remove_node(uuid)
+
+		for node in remove_nodes:
+			#--- удаление файлов ноды
+			self.nmanager.remove_node(node.uuid)
+
+
 
 		#--- сброс текущей
-		self.current_node = None
+		self.nnode = None
+		self.pnode = None
 
 		sevents.node_removed()
-		return True
+		sevents.project_updated()
+
+
+
+
+
+	def update_project_file(self):
+		self.pmanager.write_file()
+
+		sevents.project_updated()
+
+
+	def update_node_event(self):
+
+		sevents.node_updated()
+
+
+
+
+
+
+
 
 
 

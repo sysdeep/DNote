@@ -14,12 +14,13 @@ from .. import events
 
 
 class ModalRemove(QDialog):
-	def __init__(self, node_uuid, parent=None):
+	def __init__(self, parent=None):
 		super(ModalRemove, self).__init__(parent)
 
 		self.main_layout 	= QVBoxLayout(self)
 
-		self.node_uuid 		= node_uuid
+
+		self.storage = smanager.get_storage()
 		
 		
 		self.node_items 	= ("ntype", "uuid", "name", "ctime", "mtime", "path")
@@ -61,20 +62,20 @@ class ModalRemove(QDialog):
 
 	def __load_data(self):
 
-		node = smanager.storage.get_node(self.node_uuid)
-		self.node_labels["ntype"].setText(node.meta.ntype)
-		self.node_labels["uuid"].setText(node.meta.uuid)
-		self.node_labels["name"].setText(node.meta.name)
-		self.node_labels["path"].setText(node.meta.path)
-		self.node_labels["ctime"].setText(node.meta.get_ctime())
-		self.node_labels["mtime"].setText(node.meta.get_mtime())
+		node = self.storage.pnode
+		self.node_labels["ntype"].setText(node.ntype)
+		self.node_labels["uuid"].setText(node.uuid)
+		self.node_labels["name"].setText(node.name)
+		# self.node_labels["path"].setText(node.meta.path)
+		# self.node_labels["ctime"].setText(node.meta.get_ctime())
+		# self.node_labels["mtime"].setText(node.meta.get_mtime())
 
 
 
 	def __remove(self):
 		"""удаление ноды"""
 
-		smanager.storage.remove_node(self.node_uuid)
+		self.storage.remove_node(self.storage.pnode.uuid)
 		
 		self.close()
 

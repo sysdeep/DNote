@@ -16,17 +16,17 @@ NODE_TYPES = ("text", "markdown")
 
 
 class Nodes(object):
-	def __init__(self):
+	def __init__(self, nodes_path):
 		self.nodes_dir		= "nodes"			# каталог с нодами
-		self.project_path 	= ""				# полный путь к каталогу проекта
-		self.nodes_path		= ""				# полный путь к каталогу с нодами
+		self.project_path 	= nodes_path		# полный путь к каталогу проекта
+		self.nodes_path		= os.path.join(self.project_path, self.nodes_dir)		# полный путь к каталогу с нодами
 
 
-
-	def set_project_path(self, project_path):
-		"""установить переменные путей"""
-		self.project_path = project_path
-		self.nodes_path = os.path.join(self.project_path, self.nodes_dir)
+	#
+	# def set_project_path(self, project_path):
+	# 	"""установить переменные путей"""
+	# 	self.project_path = project_path
+	# 	self.nodes_path = os.path.join(self.project_path, self.nodes_dir)
 
 
 
@@ -35,8 +35,6 @@ class Nodes(object):
 		"""получить объект заданной ноды(загрузка)"""
 		node_path = os.path.join(self.nodes_path, uuid)
 		node = Node(uuid, node_path)
-		node.load()
-		# node.load(node_path)
 		return node
 
 
@@ -48,7 +46,7 @@ class Nodes(object):
 
 
 
-	def create_node(self, name, storage=None):
+	def create_node(self, content=""):
 		log.debug("создание новой ноды")
 
 		node_uuid = str(uuid.uuid1())
@@ -56,16 +54,18 @@ class Nodes(object):
 		os.mkdir(node_dir_path)
 
 		node = Node(node_uuid, node_dir_path)
-		node.name = name
-		node.storage = storage
 
-		node.make()
+		node.make(content)
 
 		return node
 
 
 
-	
+
+
+
+
+
 
 	def remove_node(self, node_uuid):
 		"""удаление всех файлов ноды"""
@@ -76,10 +76,10 @@ class Nodes(object):
 
 
 
-
-
-	def update_node(self, uuid):
-		pass
+	#
+	#
+	# def update_node(self, uuid):
+	# 	pass
 
 
 
