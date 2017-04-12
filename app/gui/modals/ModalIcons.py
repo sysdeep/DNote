@@ -17,14 +17,14 @@ from .. import events
 
 
 class ModalIcons(QDialog):
-	def __init__(self, parent=None):
+	def __init__(self, cb, parent=None):
 		super(ModalIcons, self).__init__(parent)
 
 		self.setWindowTitle("Выбор иконки")
 		self.main_layout = QVBoxLayout(self)
 		self.setMinimumWidth(400)
 		self.setMinimumHeight(400)
-
+		self.cb = cb
 
 		self.cbox 	= None					# спсиок пакетов
 		self.clist 	= None					# список иконок в пакете
@@ -117,13 +117,17 @@ class ModalIcons(QDialog):
 	def __on_apply_select(self):
 		"""применение иконки"""
 		
-		events.selected_icon(self.current_ipack, self.current_icon)
+		# events.selected_icon(self.current_ipack, self.current_icon)
+		self.cb(self.current_ipack, self.current_icon)
 
-		self.close()
+
+		# self.close()
 
 	
 
-
+	def set_close(self):
+		self.cb = None
+		self.close()
 
 
 

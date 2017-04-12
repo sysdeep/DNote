@@ -31,37 +31,37 @@ def on(event_name, cb):
 # 	"""запрос на изменение имени ноды"""
 # 	emitter.emit("show_edit_name", node_uuid)
 
-def show_edit_icon(node_uuid):
-	"""запрос на изменение иконки ноды"""
-	emitter.emit("show_edit_icon", node_uuid)
-
-
-def show_edit_files(node):
-	"""запрос на изменение иконки ноды"""
-	emitter.emit("show_edit_files", node)
-
-def show_current_node_info():
-	"""запрос на отображение модала с информацией о тек. ноде"""
-	emitter.emit("show_current_node_info")
-
-
-
-
+# def show_edit_icon(node_uuid):
+# 	"""запрос на изменение иконки ноды"""
+# 	emitter.emit("show_edit_icon", node_uuid)
+#
+#
+# def show_edit_files(node):
+# 	"""запрос на изменение иконки ноды"""
+# 	emitter.emit("show_edit_files", node)
+#
+# def show_current_node_info():
+# 	"""запрос на отображение модала с информацией о тек. ноде"""
+# 	emitter.emit("show_current_node_info")
+#
 
 
 
-def update_tree():
-	emitter.emit("update_tree")
-
-
-def update_current_node():
-	emitter.emit("update_current_node")
-
-
-
-def selected_icon(ipack, icon):
-	emitter.emit("selected_icon", ipack, icon)
-
+#
+#
+#
+# def update_tree():
+# 	emitter.emit("update_tree")
+#
+#
+# def update_current_node():
+# 	emitter.emit("update_current_node")
+#
+#
+#
+# def selected_icon(ipack, icon):
+# 	emitter.emit("selected_icon", ipack, icon)
+#
 
 
 

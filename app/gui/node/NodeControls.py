@@ -6,6 +6,8 @@ from PyQt5.QtWidgets import QGroupBox, QGridLayout, QLabel, QWidget, QHBoxLayout
 from app import shared
 from app.storage import smanager
 
+
+from ..modals.ModalIcons import ModalIcons
 from .. import events, qicon
 from .. import actions
 
@@ -15,6 +17,9 @@ class NodeControls(QWidget):
 		super(NodeControls, self).__init__(parent)
 
 		# self.storage = get_storage()
+
+
+		self.modal_icons = None
 
 		self.main_layout = QHBoxLayout(self)
 
@@ -73,17 +78,26 @@ class NodeControls(QWidget):
 
 
 	def __show_icons(self):
-
-		node = smanager.storage.get_current_node()
-		events.show_edit_icon(node.uuid)
+		self.modal_icons = ModalIcons(self.__on_icon_selected, parent=self)
+		self.modal_icons.show()
 
 
 	def __show_node_info(self):
-		# node = shared.get_current_node()
-		# events.show_node_info(node.uuid)
-		events.show_current_node_info()
+		actions.show_modal_node_info()
 
 
 	def __show_ch_name(self):
-		# events.show_edit_name()
 		actions.show_modal_edit_name()
+
+
+
+	def __on_icon_selected(self, ipack, icon):
+
+		node = smanager.storage.pnode
+		node.ipack = ipack
+		node.icon = icon
+
+		self.modal_icons.set_close()
+		self.modal_icons = None
+
+		smanager.storage.update_project_file()

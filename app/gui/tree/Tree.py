@@ -13,7 +13,7 @@ from .. import events, qicon
 
 from .. import actions
 
-
+from ..modals.ModalIcons import ModalIcons
 
 
 
@@ -52,6 +52,7 @@ class Tree(QTreeView):
 		# self.setDropIndicatorShown(True)
 
 
+		self.modal_icons = None
 
 
 
@@ -374,13 +375,14 @@ class Tree(QTreeView):
 	def __act_edit_icon(self):
 		"""редактирование иконки"""
 
-		events.show_edit_icon(self.current_uuid)
+		# events.show_edit_icon(self.current_uuid)
+		self.modal_icons = ModalIcons(self.__on_icon_selected, parent=self)
+		self.modal_icons.show()
 
 
 	def __act_show_info(self):
 		"""информация о ноде"""
-
-		events.show_current_node_info()
+		actions.show_modal_node_info()
 
 
 
@@ -404,3 +406,17 @@ class Tree(QTreeView):
 		if result:
 			self.storage.update_project_file()
 	#--- user actions ---------------------------------------------------------
+
+
+
+
+	def __on_icon_selected(self, ipack, icon):
+
+		node = smanager.storage.pnode
+		node.ipack = ipack
+		node.icon = icon
+
+		self.modal_icons.set_close()
+		self.modal_icons = None
+
+		smanager.storage.update_project_file()

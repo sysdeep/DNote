@@ -4,11 +4,11 @@
 
 from PyQt5.QtWidgets import QLabel, QDialog, QPushButton, QHBoxLayout, QVBoxLayout, QGridLayout, QFileDialog, QTextEdit, QFormLayout, QLineEdit
 from PyQt5.QtGui import QFont
-
+from app.storage import smanager
 
 
 class NodeInfo(QDialog):
-	def __init__(self, node, parent=None):
+	def __init__(self, parent=None):
 		super(NodeInfo, self).__init__(parent)
 
 		self.setWindowTitle("Node info")
@@ -20,8 +20,10 @@ class NodeInfo(QDialog):
 		self.main_layout = QVBoxLayout(self)
 
 
+		self.storage = smanager.get_storage()
 		
-		self.node = node
+		self.pnode = self.storage.pnode
+		self.nnode = self.storage.nnode
 		self.node_items = ("ntype", "uuid", "name", "ctime", "mtime", "path")
 		self.node_labels = {}
 
@@ -40,7 +42,7 @@ class NodeInfo(QDialog):
 
 		#--- files
 		index += 1
-		node_files = self.node.files
+		node_files = self.nnode.files
 		grid.addWidget(QLabel("Files:"), index, 0)
 		grid.addWidget(QLabel( str(len(node_files.files)) ), index, 1)
 
@@ -65,9 +67,9 @@ class NodeInfo(QDialog):
 
 
 	def __update_current(self):
-		self.node_labels["ntype"].setText(self.node.meta.ntype)
-		self.node_labels["uuid"].setText(self.node.meta.uuid)
-		self.node_labels["name"].setText(self.node.meta.name)
-		self.node_labels["path"].setText(self.node.meta.path)
-		self.node_labels["ctime"].setText(self.node.meta.get_ctime())
-		self.node_labels["mtime"].setText(self.node.meta.get_mtime())
+		self.node_labels["ntype"].setText(self.pnode.ntype)
+		self.node_labels["uuid"].setText(self.pnode.uuid)
+		self.node_labels["name"].setText(self.pnode.name)
+		# self.node_labels["path"].setText(self.node.meta.path)
+		# self.node_labels["ctime"].setText(self.node.meta.get_ctime())
+		# self.node_labels["mtime"].setText(self.node.meta.get_mtime())

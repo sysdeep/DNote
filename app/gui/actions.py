@@ -5,6 +5,7 @@ from .modal_edit_name.ModalEditName import ModalEditName
 from .modal_create.ModalCreate import ModalCreate
 from .modal_remove.ModalRemove import ModalRemove
 # from .modals.ModalIcons import ModalIcons
+from .modals.NodeInfo import NodeInfo
 
 DATA = {
 	"parent": None
@@ -39,6 +40,10 @@ def show_modal_remove_node():
 	modal = ModalRemove(parent=get_parent())
 	modal.show()
 
+
+def show_modal_node_info():
+	modal = NodeInfo(parent=get_parent())
+	modal.show()
 
 # def show_modal_icons():
 # 	modal = ModalIcons(parent=get_parent())
