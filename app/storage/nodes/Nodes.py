@@ -48,7 +48,7 @@ class Nodes(object):
 
 
 
-	def create_node(self, name):
+	def create_node(self, name, storage=None):
 		log.debug("создание новой ноды")
 
 		node_uuid = str(uuid.uuid1())
@@ -57,6 +57,7 @@ class Nodes(object):
 
 		node = Node(node_uuid, node_dir_path)
 		node.name = name
+		node.storage = storage
 
 		node.make()
 

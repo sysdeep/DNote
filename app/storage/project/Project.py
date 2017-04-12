@@ -91,6 +91,7 @@ class Project(object):
 
 		#--- установка флага текущего
 		self.set_current_flag(uuid)
+		self.write_file()
 		sevents.project_node_created()
 
 
@@ -98,6 +99,7 @@ class Project(object):
 		"""удаление ноды"""
 		log.info("удаление ноды: " + node_uuid)
 		self.tree.remove_node(node_uuid)
+		self.write_file()
 		sevents.project_node_removed()
 
 

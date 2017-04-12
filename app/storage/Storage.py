@@ -14,6 +14,9 @@ from .project.Project import Project
 from . import sevents
 
 
+# from .SNode import SNode
+
+
 
 
 
@@ -30,7 +33,9 @@ class Storage(object):
 
 		self.current_node	= None						# тек. нода
 
-		self.copy_node_uuid = None
+
+		# self.snode = None
+		# self.copy_node_uuid = None
 
 		self.__load()
 
@@ -57,11 +62,26 @@ class Storage(object):
 		self.current_node = node
 		sevents.node_selected()
 
+
+
 	def get_node(self, uuid):
 		"""получить заданную ноду из хранилища"""
 		node = self.nodes.get_node(uuid)
 		node.storage = self
 		# self.set_current_node(node)
+
+
+		#--- new test
+		# pnode = self.project.get_node(uuid)
+		# self.snode = SNode(node, pnode, self.project)
+
+		# print(self.snode.name)
+		# print(self.snode.uuid)
+
+		#--- new test
+
+
+
 		return node
 
 
@@ -71,16 +91,15 @@ class Storage(object):
 		log.debug("создание новой ноды")
 
 		#--- создание файлов ноды
-		node = self.nodes.create_node(name)
-		node_uuid = node.uuid
-		node.storage = self
-		# self.current_node = node
-		# self.emit("node_selected")
-		self.set_current_node(node)
-		#--- создание ноды в файле проекта
-		self.project.create_node(parent_node, node_uuid, name)
-		self.project.write_file()
+		node = self.nodes.create_node(name, storage=self)
 
+		#--- создание ноды в файле проекта
+		self.project.create_node(parent_node, node.uuid, name)
+
+		#--- выбираем созданную
+		self.set_current_node(node)
+
+		sevents.node_created()
 		return node
 
 
@@ -95,16 +114,17 @@ class Storage(object):
 
 		#--- удаление ноды в файле проекта
 		self.project.remove_node(uuid)
-		# self.project.tree.print_nodes()
-		
-		self.project.write_file()
 
+		#--- сброс текущей
 		self.current_node = None
+
+		sevents.node_removed()
 		return True
 
 
 
 	def get_node_types(self):
+		"""получить список поддерживаемых форматов"""
 		return NODE_TYPES
 
 
@@ -115,51 +135,8 @@ class Storage(object):
 		self.copy_node_uuid = node_uuid
 
 
-	# def shutdown(self):
-	# 	self.__emitter.eoffa()
-
-
-	#--- events ---------------------------------------------------------------
-	# def eon(self, event_name, cb):
-	# 	"""подписаться на события"""
-	# 	self.__emitter.eon(event_name, cb)
-
-	# def eoff(self, event_name, cb):
-	# 	self.__emitter.eoff(event_name, cb)
-
-	# def emit(self, event, *args, **kwargs):
-	# 	self.__emitter.emit(event, *args, **kwargs)
-	#--- events ---------------------------------------------------------------
 
 
 
 
 
-	
-
-
-
-
-
-
-
-
-
-
-if __name__ == '__main__':
-	
-
-	controller = Storage()
-	controller.load_project_default()
-	# controller.create_node()
-
-	controller.project.tree.print_nodes()
-
-
-	# controller.create_top_node("test_1")
-	# controller.create_top_node("test_2")
-	# controller.create_top_node("test_3")
-
-
-
-	# controller.project.tree.print_nodes()

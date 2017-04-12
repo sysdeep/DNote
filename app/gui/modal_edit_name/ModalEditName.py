@@ -92,6 +92,15 @@ class ModalEditName(QDialog):
 		self.storage.project.set_node_name(self.node.uuid, name)
 		self.storage.project.write_file()
 
+
+		#--- new test
+		# snode = self.storage.snode
+		# snode.name = name
+		# snode.ntype = node_type
+		# snode.save()
+		#--- new test
+
+
 		self.close()
 
 

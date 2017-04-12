@@ -44,4 +44,10 @@ def node_selected():
 
 def node_updated():
 	__event_emitter.emit("node_updated")
+
+def node_created():
+	__event_emitter.emit("node_created")
+
+def node_removed():
+	__event_emitter.emit("node_removed")
 #--- storage ------------------------------------------------------------------
