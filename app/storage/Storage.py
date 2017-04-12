@@ -61,9 +61,7 @@ class Storage(object):
 		"""получить заданную ноду из хранилища"""
 		node = self.nodes.get_node(uuid)
 		node.storage = self
-		# self.current_node = node
-		# self.emit("node_selected")
-		self.set_current_node(node)
+		# self.set_current_node(node)
 		return node
 
 

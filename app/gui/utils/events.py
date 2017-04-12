@@ -19,17 +19,17 @@ def on(event_name, cb):
 
 
 
-def show_modal_create_node(parent_node=None):
-	"""запрос на создание новой ноды"""
-	emitter.emit("show_modal_create_node", parent_node)
+# def show_modal_create_node(parent_node=None):
+# 	"""запрос на создание новой ноды"""
+# 	emitter.emit("show_modal_create_node", parent_node)
 
-def show_remove_node(node_uuid):
-	"""запрос на удаление ноды"""
-	emitter.emit("show_remove_node", node_uuid)
+# def show_remove_node(node_uuid):
+# 	"""запрос на удаление ноды"""
+# 	emitter.emit("show_remove_node", node_uuid)
 
-def show_edit_name(node_uuid=None):
-	"""запрос на изменение имени ноды"""
-	emitter.emit("show_edit_name", node_uuid)
+# def show_edit_name(node_uuid=None):
+# 	"""запрос на изменение имени ноды"""
+# 	emitter.emit("show_edit_name", node_uuid)
 
 def show_edit_icon(node_uuid):
 	"""запрос на изменение иконки ноды"""

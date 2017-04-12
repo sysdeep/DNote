@@ -4,7 +4,7 @@ from PyQt5.QtWidgets import QAction, QFileDialog
 # from PyQt5.QtGui import QIcon, QStandardItemModel, QStandardItem
 
 # from app.rc import get_icon_path
-
+from . import actions
 
 
 from . import events, qicon
@@ -78,7 +78,8 @@ class BarMenu(object):
 
 
 	def __file_create_root_item_action(self):
-		events.show_modal_create_node(parent_node=None)
+		# events.show_modal_create_node(parent_node=None)
+		actions.show_modal_create_node(parent_node=None)
 
 	
 	def __file_create_new_notebook(self):

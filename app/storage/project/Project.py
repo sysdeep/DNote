@@ -71,14 +71,10 @@ class Project(object):
 	def get_root_node(self):
 		return self.tree.root
 
-	def find_node_by_uuid(self, uuid):
 
 
-		print("parent: ", self.tree.find_parent_node(uuid))
-		print("childrens: ", self.tree.find_childrens(uuid))
-		print("parent branch: ", self.tree.find_parent_branch(uuid))
-		print("branch: ", self.tree.find_branch(uuid))
 
+	def get_node(self, uuid):
 		return self.tree.get_node(uuid)
 
 
@@ -89,15 +85,11 @@ class Project(object):
 
 
 
-
-
-
 	def create_node(self, parent_node, uuid, name):
-		# node = self.tree.create_node(parent_node)
-		node = self.tree.create_node(parent_node.uuid)
-		node.uuid = uuid
-		node.name = name
+		"""создание нового узла"""
+		node = self.tree.create_node(parent_node.uuid, uuid, name)
 
+		#--- установка флага текущего
 		self.set_current_flag(uuid)
 		sevents.project_node_created()
 
@@ -112,15 +104,15 @@ class Project(object):
 
 	def set_node_expanded(self, node_uuid, status):
 		"""установка состояния раскрытия заданной ноды"""
-		node = self.find_node_by_uuid(node_uuid)
+		node = self.tree.get_node(node_uuid)
 		node.expanded = status
 
 
 
 	def set_node_name(self, node_uuid, name):
 		"""установить новое название ноды"""
-		# node = self.find_node_by_uuid(node_uuid)
-		node = self.find_node_by_uuid(node_uuid)
+		# node = self.get_node(node_uuid)
+		node = self.tree.get_node(node_uuid)
 		node.name = name
 
 

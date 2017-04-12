@@ -29,6 +29,7 @@ from . import qicon
 # from app.logic import twalker
 # from app.rc import DIR_SCAN
 
+from . import actions
 
 
 class MainWindow(QMainWindow):
@@ -61,7 +62,7 @@ class MainWindow(QMainWindow):
 		# QFontDatabase.addApplicationFont(get_font_path("roboto", "RobotoMono-Regular.ttf"))
 
 
-
+		actions.set_parent(self)
 		self.controller = Controller(parent=self)
 
 

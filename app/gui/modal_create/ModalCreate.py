@@ -7,7 +7,7 @@ from PyQt5.QtGui import QFont
 
 
 from app.storage import smanager
-from .. import events
+
 
 
 
@@ -110,12 +110,7 @@ class ModalCreate(QDialog):
 		#--- обновление данных
 		node.meta.ntype = node_type
 		node.update_page_text(text)
-		# node.page.raw_text = text
-		# node.write_node()
 
-		# events.update_tree()
-
-		
 		self.close()
 
 
@@ -130,24 +125,3 @@ class ModalCreate(QDialog):
 
 
 
-
-
-
-
-
-if __name__ == "__main__":
-	from PyQt5.QtWidgets import QApplication
-	import sys
-	# from PyQt5.QtWidgets import QStyleFactory
-	# from PyQt5.QtCore import QStyleFactory
-
-	app = QApplication(sys.argv)
-
-	# app.setStyle(QStyleFactory.create("fusion"))
-
-	modal = ModalEdit()
-	# main_win.DEBUG = True
-	# main_win.start_net()
-	modal.show()
-
-	app.exec_()

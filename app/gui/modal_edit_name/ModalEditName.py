@@ -6,7 +6,7 @@ from PyQt5.QtGui import QFont
 
 
 from app.storage import smanager
-from .. import events
+# from .. import events
 
 
 
@@ -20,9 +20,9 @@ class ModalEditName(QDialog):
 		self.main_layout 	= QVBoxLayout(self)
 
 		
-		self.storage 		= smanager.get_storage()
-		self.node 			= self.storage.get_current_node()
-		self.types 			= self.storage.get_node_types()
+		self.storage 		= smanager.get_storage()				# тек. хранилище
+		self.node 			= self.storage.get_current_node()		# тек. нода
+		self.types 			= self.storage.get_node_types()			# типы контента
 		
 		
 		self.__make_gui()
@@ -32,22 +32,17 @@ class ModalEditName(QDialog):
 	def __make_gui(self):
 		
 		
-		# self.edit_name = QLineEdit(self.node.name)
-		# self.main_layout.addWidget(self.edit_name)
 
-		#--- edit
-		
 
 		form = QFormLayout()
 		self.main_layout.addLayout(form)
 
-
+		#--- name
 		self.edit_name = QLineEdit(self.node.name)
 
+		#--- type
 		self.edit_type = QComboBox()
 		self.edit_type.addItems(self.types)
-
-
 
 
 		form.addRow("Название", self.edit_name)
@@ -92,20 +87,11 @@ class ModalEditName(QDialog):
 		#--- update node data
 		self.node.meta.ntype = node_type
 		self.node.update_node_name(name)
-		# self.node.set_name(name)
-		# self.node.write_node()
-
 
 		#--- update project data
 		self.storage.project.set_node_name(self.node.uuid, name)
 		self.storage.project.write_file()
 
-
-		#--- send events
-		# events.update_tree()
-
-
-		# self.storage.remove_node(self.node_uuid)
 		self.close()
 
 

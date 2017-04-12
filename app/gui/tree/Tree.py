@@ -11,6 +11,16 @@ from app.storage import get_storage, smanager, sevents
 
 from .. import events, qicon
 
+from .. import actions
+
+
+
+
+
+
+
+
+
 
 class Tree(QTreeView):
 	def __init__(self, parent=None):
@@ -180,6 +190,7 @@ class Tree(QTreeView):
 
 		#--- все элементы корня
 		root_items = self.tree.get_nodes_level(1)
+		root_items.sort(key=lambda node: node.tree_lk)
 
 		#--- запуск обхода дерева(рекурсия)
 		for item in root_items:
@@ -270,49 +281,70 @@ class Tree(QTreeView):
 
 
 
-	def __on_select(self, index):
-		"""событие от дерева о выбранном элементе"""		
-		uuid = index.data(Qt.UserRole+1)
-		log.debug("tree on select: " + uuid)
-
-		node = smanager.storage.get_node(uuid)
 
 
-
-		if uuid != self.current_uuid:
-			log.debug("tree - update current for project")
-			self.current_uuid = uuid
-			#--- update tree node(in project.json)
-			smanager.storage.project.set_current_flag(node.uuid)
-
-		# print(self.current_index)
-		# print(self.select_cb)
-		# if self.select_cb:
-		# 	print("cb")
-		# 	self.select_cb(self.current_uuid)
-
-
-	def __on_expanded(self, model_index):
-		uuid = model_index.data(Qt.UserRole+1)
-		self.storage.project.set_node_expanded(uuid, True)
-
-	def __on_collapsed(self, model_index):
-		uuid = model_index.data(Qt.UserRole+1)
-		self.storage.project.set_node_expanded(uuid, False)
 
 
 
 
 	#--- user actions ---------------------------------------------------------
+	def __on_select(self, index):
+		"""
+			событие от дерева о выбранном элементе
+			прилетает сразу при построении дерева
+			причём current_uuid == uuid
+		"""
+		#--- get selected uuid
+		uuid = index.data(Qt.UserRole + 1)
+
+
+		#--- get node from storage
+		node = smanager.storage.get_node(uuid)
+
+		#--- set current node + emit
+		smanager.storage.set_current_node(node)
+
+
+		if uuid == self.current_uuid:
+			return False
+
+		self.current_uuid = uuid
+
+		#--- update tree node(in project.json)
+		smanager.storage.project.set_current_flag(node.uuid)
+
+
+
+
+
+
+	def __on_expanded(self, model_index):
+		"""раскрытие узла"""
+		uuid = model_index.data(Qt.UserRole + 1)
+		self.storage.project.set_node_expanded(uuid, True)
+
+	def __on_collapsed(self, model_index):
+		"""закрытие узла"""
+		uuid = model_index.data(Qt.UserRole + 1)
+		self.storage.project.set_node_expanded(uuid, False)
+
+
+
+
+
+
 	def __act_create_new_root(self):
-		events.show_modal_create_node(parent_node=None)
+		"""запрос на создание ноды от корня"""
+		# events.show_modal_create_node(parent_node=None)
+		actions.show_modal_create_node(parent_node=None)
 		
 
 
 	def __act_create_new_parent(self):
 		"""выбранная нода - является родительской"""
-		parent_pnode = self.storage.project.find_node_by_uuid(self.current_uuid)
-		events.show_modal_create_node(parent_node=parent_pnode)
+		parent_pnode = self.storage.project.get_node(self.current_uuid)
+		# events.show_modal_create_node(parent_node=parent_pnode)
+		actions.show_modal_create_node(parent_node=parent_pnode)
 		
 
 	def __act_create_new_level(self):
@@ -323,20 +355,22 @@ class Tree(QTreeView):
 		if parent_pnode.tree_lk == 0:
 			parent_pnode = None
 
-		events.show_modal_create_node(parent_node=parent_pnode)
+		# events.show_modal_create_node(parent_node=parent_pnode)
+		actions.show_modal_create_node(parent_node=parent_pnode)
 		
+
+
+
 
 
 	def __act_remove_item(self):
 		"""удаление ноды"""
-
-		events.show_remove_node(self.current_uuid)
+		actions.show_modal_remove_node(self.current_uuid)
 
 
 	def __act_edit_name(self):
 		"""редактирование названия"""
-
-		events.show_edit_name(self.current_uuid)
+		actions.show_modal_edit_name()
 
 	def __act_edit_icon(self):
 		"""редактирование иконки"""
@@ -356,7 +390,7 @@ class Tree(QTreeView):
 
 		log.debug("copy node: " + self.current_uuid)
 
-		self.storage.set_copy_node(self.current_uuid)
+		# self.storage.set_copy_node(self.current_uuid)
 
 
 

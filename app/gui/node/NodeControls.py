@@ -7,6 +7,7 @@ from app import shared
 from app.storage import smanager
 
 from .. import events, qicon
+from .. import actions
 
 
 class NodeControls(QWidget):
@@ -64,13 +65,16 @@ class NodeControls(QWidget):
 	def __create_node(self):
 		"""создание новой ноды от родителя"""
 		node = smanager.storage.get_current_node()
-		parent_project_node = smanager.storage.project.find_node_by_uuid(node.uuid)
-		events.show_modal_create_node(parent_node=parent_project_node)
+		parent_project_node = smanager.storage.project.get_node(node.uuid)
+		actions.show_modal_create_node(parent_node=parent_project_node)
+
 
 	def __remove_node(self):
 		"""удаление ноды от родителя"""
 		node = smanager.storage.get_current_node()
-		events.show_remove_node(node.uuid)
+		# events.show_remove_node(node.uuid)
+		actions.show_modal_remove_node(node.uuid)
+
 
 	def __show_icons(self):
 
@@ -85,4 +89,5 @@ class NodeControls(QWidget):
 
 
 	def __show_ch_name(self):
-		events.show_edit_name()
+		# events.show_edit_name()
+		actions.show_modal_edit_name()
