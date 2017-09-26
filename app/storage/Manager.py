@@ -6,6 +6,7 @@ from app import log
 from app.rc import DIR_DEFAULTS
 from .Storage import Storage
 from . import sevents
+from app.lib import dbus
 
 
 class Manager(object):
@@ -16,6 +17,8 @@ class Manager(object):
 
 		self.storage 		= None				# тек. хранилище
 		self.storage_path 	= None				# путь к тек хранилищу
+
+		dbus.eon(dbus.STORAGE_OPEN, self.open_storage)
 
 
 	def get_storage(self):
@@ -29,7 +32,8 @@ class Manager(object):
 		log.debug("SManager - open storage")
 		self.storage_path = path
 		self.storage = Storage(self.storage_path)
-		sevents.storage_opened()
+		# sevents.storage_opened()
+		dbus.emit(dbus.STORAGE_OPENED, self.storage_path)
 
 
 

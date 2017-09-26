@@ -6,8 +6,8 @@ import os
 from PyQt5.QtWidgets import QLabel, QDialog, QPushButton, QHBoxLayout, QVBoxLayout, QGridLayout, QFileDialog, QTextEdit, QFormLayout, QLineEdit
 from PyQt5.QtGui import QFont
 
-from app.storage import smanager
-
+# from app.storage import smanager
+from app.lib import dbus
 
 
 
@@ -52,9 +52,10 @@ class OpenNotebook(QDialog):
 	def __on_open(self):
 		path = self.edit_path.text()
 
-		print(path)
+		# print(path)
 
-		smanager.open_storage(path)
+		# smanager.open_storage(path)
+		dbus.emit(dbus.STORAGE_OPEN, path)
 
 		self.close()
 

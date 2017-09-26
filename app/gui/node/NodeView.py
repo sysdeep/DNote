@@ -9,7 +9,7 @@ from vendors import markdown
 from app.storage import get_storage, smanager, sevents
 
 from .. import events
-
+# from .mdext.Img import CImgExtension
 
 
 
@@ -23,7 +23,7 @@ class NodeViewe(QWidget):
 
 		# self.node = None
 		# self.storage = get_storage()
-		self.storage = smanager.get_storage()
+		# self.storage = smanager.get_storage()
 
 		self.__make_gui()
 
@@ -67,10 +67,12 @@ class NodeViewe(QWidget):
 
 
 		# text = self.node.page.raw_text
-		text = self.storage.nnode.page.raw_text
+		storage = smanager.get_storage()
+		text = storage.nnode.page.raw_text
 
 
-		html = markdown.markdown(text)
+		# html = markdown.markdown(text, extensions=[CImgExtension(), 'vendors.markdown.extensions.tables'])
+		html = markdown.markdown(text, extensions=['vendors.markdown.extensions.tables'])
 		self.web.setHtml(html)
 
 		# if self.node.meta.ntype == "text":

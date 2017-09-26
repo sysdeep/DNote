@@ -3,9 +3,10 @@
 
 
 import time, signal, sys
-from app import log
-
 from PyQt5.QtWidgets import QApplication
+
+from app import log
+from app.lib import dbus
 
 from .gui.MainWindow import MainWindow
 
@@ -21,9 +22,6 @@ class App(object):
 
 
 		self.qtapp = QApplication(sys.argv)
-
-
-
 
 		signal.signal(signal.SIGINT, self.__signal_handler)		# обработка Ctrl+C
 
@@ -42,12 +40,12 @@ class App(object):
 
 
 
-	def start(self):
+	def start(self, storage_path):
 		"""запуск приложения"""
 		log.info("запуск приложения")
 
 		self.main_window = MainWindow()
-		# self.main_window.start_net()
+		dbus.emit(dbus.STORAGE_OPEN, storage_path)
 		self.qtapp.exec_()
 
 		#
@@ -60,7 +58,6 @@ class App(object):
 		# #--- по окончании основного потока - выходим
 		# log.info("приложение остановленно")
 		# sys.exit(0)
-
 
 
 

@@ -17,6 +17,7 @@ from .BarMenu import BarMenu
 from . import qicon
 
 from . import actions
+from app.lib import dbus
 
 
 class MainWindow(QMainWindow):
@@ -74,6 +75,7 @@ class MainWindow(QMainWindow):
 		# tray.show()
 
 
+		dbus.eon(dbus.STORAGE_OPENED, self.__on_storage_opened)
 		
 
 
@@ -132,16 +134,23 @@ class MainWindow(QMainWindow):
 		controls_bar = QHBoxLayout()
 		central_box.addLayout(controls_bar)
 
+		self.label_storage_path = QLabel()
+
 
 		btn_exit = QPushButton("Выход")
 		btn_exit.setIcon(qicon("actions", "system_shutdown.png"))
 		btn_exit.clicked.connect(self.exit)
 
+		controls_bar.addWidget(self.label_storage_path)
 		controls_bar.addStretch()
 		controls_bar.addWidget(btn_exit)
 
 	
 
+
+	def __on_storage_opened(self, storage_path):
+		"""обработка события открытия хранилища"""
+		self.label_storage_path.setText(storage_path)
 
 
 

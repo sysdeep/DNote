@@ -21,7 +21,7 @@ class NodeViewer(QGroupBox):
 		self.main_layout = QVBoxLayout(self)
 
 
-		self.storage = smanager.get_storage()
+		# self.storage = smanager.get_storage()
 
 
 		self.__make_gui()
@@ -56,8 +56,8 @@ class NodeViewer(QGroupBox):
 
 	def __reload_data(self):
 
-
-		title = "{}[{}]".format(self.storage.pnode.name, self.storage.pnode.ntype)
+		storage = smanager.get_storage()
+		title = "{}[{}]".format(storage.pnode.name, storage.pnode.ntype)
 		self.setTitle(title)
 
 

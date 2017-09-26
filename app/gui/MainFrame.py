@@ -112,8 +112,8 @@ class MainFrame(QWidget):
 
 	def start(self):
 		"""запуск"""
-		self.tree_view.update_tree()
-		# pass
+		# self.tree_view.update_tree()
+		pass
 
 
 

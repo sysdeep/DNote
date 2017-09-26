@@ -3,10 +3,10 @@
 
 
 from app.App import App
-
+from app.rc import DIR_PROJECT
 
 
 
 
 app = App()
-app.start()
+app.start(DIR_PROJECT)

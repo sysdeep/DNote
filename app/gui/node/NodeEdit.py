@@ -21,7 +21,7 @@ class NodeEdit(QWidget):
 		self.main_layout = QVBoxLayout(self)
 
 		# self.node = None
-		self.storage = smanager.get_storage()
+		# self.storage = smanager.get_storage()
 		# self.storage = get_storage()
 
 		self.__make_gui()
@@ -71,21 +71,24 @@ class NodeEdit(QWidget):
 
 
 	def __set_content(self):
-
-		text = self.storage.nnode.page.raw_text
+		storage = smanager.get_storage()
+		text = storage.nnode.page.raw_text
 		self.text_edit.setPlainText(text)
 
 
 
 
 	def __on_save(self):
+
+		storage = smanager.get_storage()
+
 		#--- get data
 		text = self.text_edit.toPlainText()
 
 		#--- update node data
-		self.storage.nnode.update_page_text(text)
+		storage.nnode.update_page_text(text)
 
 		#--- send event
-		self.storage.update_node_event()
+		storage.update_node_event()
 
 

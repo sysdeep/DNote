@@ -14,7 +14,7 @@ from .. import events, qicon
 from .. import actions
 
 from ..modals.ModalIcons import ModalIcons
-
+from app.lib import dbus
 
 
 
@@ -34,8 +34,8 @@ class Tree(QTreeView):
 		self.setFixedWidth(300)
 
 		# self.storage = get_storage()
-		self.storage = smanager.get_storage()
-		self.tree = self.storage.get_tree()
+		# self.storage = smanager.get_storage()
+		# self.tree = self.storage.get_tree()
 		self.select_cb = None
 
 
@@ -65,10 +65,10 @@ class Tree(QTreeView):
 
 
 
-		sevents.eon("storage_opened", self.__remake_tree)
+		# sevents.eon("storage_opened", self.__remake_tree)
 		sevents.eon("project_updated", self.__update_tree)
 
-
+		dbus.eon(dbus.STORAGE_OPENED, self.__on_storage_opened)
 
 		#--- signals
 		self.pressed.connect(self.__on_select)
@@ -77,6 +77,11 @@ class Tree(QTreeView):
 
 
 		# self.__remake_tree()
+
+
+	def __on_storage_opened(self, storage_path):
+		self.__remake_tree()
+
 
 
 	def dropEvent(self, ev):
@@ -93,10 +98,10 @@ class Tree(QTreeView):
 
 
 	def __remake_tree(self):
-		# print("remake tree")
+		print("remake tree")
 
 		self.storage = smanager.get_storage()
-		self.tree = self.storage.project.get_tree()
+		self.tree = self.storage.get_tree()
 
 		# print(self.storage)
 
