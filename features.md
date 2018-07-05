@@ -1,0 +1,128 @@
+# 2018.07.05 - features from cherrytree
+
+features :
+
+- rich text (foreground color, background color, bold, italic, underline, strikethrough, small, h1, h2, h3, subscript, superscript, monospace)
+- syntax highlighting supporting several programming languages
+- images handling: insertion in the text, edit (resize/rotate), save as png file
+- embedded files handling: insertion in the text, save to disk
+- multi-level lists handling (bulleted, numbered, to-do and switch between them, multiline with shift+enter)
+- simple tables handling (cells with plain text), cut/copy/paste row, import/export as csv file
+- codeboxes handling: boxes of plain text (optionally with syntax highlighting) into rich text, import/export as text file
+- execution of the code for code nodes and codeboxes; the terminal and the command per syntax highlighting is configurable in the preferences dialog
+- alignment of text, images, tables and codeboxes (left/center/right/fill)
+- hyperlinks associated to text and images (links to webpages, links to nodes/nodes + anchors, links to files, links to folders)
+- spell check (using pygtkspellcheck and pyenchant)
+- intra application copy/paste: supported single images, single codeboxes, single tables and a compound selection of rich text, images, codeboxes and tables
+- cross application copy/paste (tested with libreoffice and gmail): supported single images, single codeboxes, single tables and a compound selection of rich text, images, codeboxes and tables
+- copying a list of files from the file manager and pasting in cherrytree will create a list of links to files, images are recognized and inserted in the text
+- print & save as pdf file of a selection / node / node and subnodes / the whole tree
+- export to html of a selection / node / node and subnodes / the whole tree
+- export to plain text of a selection / node / node and subnodes / the whole tree
+- toc generation for a node / node and subnodes / the whole tree, based on headers h1, h2 and h3
+- find a node, find in selected node, find in selected node and subnodes, find in all nodes
+- replace in nodes names, replace in selected node, replace in selected node and subnodes, replace in all nodes
+- iteration of the latest find, iteration of the latest replace, iteration of the latest applied text formatting
+- import from html file, import from folder of html files
+- import from plain text file, import from folder of plain text files
+- import from basket, cherrytree, epim html, gnote, keepnote, keynote, knowit, mempad, notecase, rednotebook, tomboy, treepad lite, tuxcards, zim
+- export to cherrytree file of a selection / node / node and subnodes / the whole tree
+- password protection (using http://www.7-zip.org/) – NOTE: while a cherrytree password protected document is opened, an unprotected copy is extracted to a temporary folder of the filesystem; this copy is removed when you close cherrytree
+- tree nodes drag and drop
+- automatic link to web page if writing the URL
+- automatic link to node if writing node name either with no spaces and camelcase or surrounded by [[node name]]
+
+WISH-LIST:
+
+- open several cherrytree files (notebooks) at the same time with tabs (all in the same window-single instance)
+- cut copy and paste nodes
+- option to edit pictures with external editor
+- user defined text style (font, bold, color,…), custom properties for h1,h2,h3
+- option to set the max line length/max page width
+- spreadsheet node
+- opportunity for a node to have columns
+- allow drag n drop of images and files to cherrytree
+- allow to open a formatting tag for future text
+- better table export to html (respect column width, text align, single line border)
+- do not truncate codebox width in export to html
+- export to html: option to have different color background for the tree
+- export to html: option to have the nodes to collapse/expand
+- numbered lists: double space after one digit numbers to be aligned with 2 digits numbers
+- option to make text double-spaced
+- export a node with its subnodes to .odt
+- utility (dialog) where it’s possible to see all the tags (tree of the only tags) plus statistics about the tags
+- more options for the tables (automatic expand the table to the width of the screen)
+- import from pdf
+- export to LaTeX
+- utility to insert formulas (using LaTex that converts to png or something else))
+- option to have the font in nodes names decrease automatically proportionally to the node depth
+- selecting a set of text (e.g. space separated) and create a table with it or paste text into a table
+- customizable menus font size
+- add crop capability to image resize dialog
+- multiple selection of nodes for move and delete
+- opportunity to have multiple nodes point to the same data (many node-views pointing to the same node-data)
+- option to sort text rows by selection
+- cherrytree for android
+- improve the numbers handling in nodes sorting
+- option to display hierarchy in node name header
+- option to print node name/hierarchy with a menu/shortcut
+- option to enable tooltips over nodes names in the tree
+- allow to select text and edit equivalent html in a dialog, then insert html from dialog to text
+- proxy support (for copy/paste from web browser)
+- export to epub
+- option to use double click to visit links
+- strip leading and trailing empty spaces when applying a list type to selected text, option to ensure trailing char (e.g. “;”)
+- option to skip codeboxes and tables when pasting when pasting from web page
+- option to call a script at autosave time
+- bug: replace text in node but not tables/codeboxes
+- option to recall latest find and replace patterns
+- export to markdown
+- option to insert tags also in text maybe with shortcuts
+- import from iPython notebook
+- more headings (h4 and h5)
+- multiple rows selection for cut/copy/paste/delete in tables
+- option in export to txt of multiple nodes to save hierarchically creating subfolders
+- preserve text alignment in print/export to pdf
+- option to link to a node + a line number
+- export/import text with indentation, each tab marking a level
+- pick existing formatting from the text below the cursor and use the formatting elsewhere
+- allow colored text in table cells
+- configurable auto-close of document after set time of inactivity
+- possibility to execute using python mathematical expression in node (writing expression and result)
+- add one or more custom commands to be executed on the selected text
+- support for Right-to-Left languages (lost in export to HTML and PDF)
+- add possibility to automatically have navigation links at the bottom of nodes like in the manual
+- handle link to email address and link to thunderbird mails like thunderlink://messageid=…
+- option to have borders around the images in image properties
+- bug: sort doesn’t work right with German umlauts (öäüÖÄÜ)
+- node comments optionally printable
+- add a command to make the first table row become the header automatically
+- option to display the linked images
+- link to the download section with the notification of new version available
+- optionally include the node title/tags in the nodes content search
+- user could define both the foreground and the background color of selected text
+- auto-height for code boxes from selected text
+- export to html single document similar to treepad export for outliner (android) import
+- if there is nothing to save, make the save button grey/insensitive
+- move deleted nodes to a trash node rather than erase forever
+- creation of links using drag-n-drop of files, folders & web addresses
+- improve tree info dialog with clickable list and location of objects (in particular embedded files)
+- preserve history of visited nodes (fw/bw arrows) between sessions
+- add configurable option to swap Ctl+V and Ctrl+Shift+V (default plain or rich)
+- support inserting image from the internet (e.g. http://www.giuspen.com/icons_submenu/bug.png), not only from local disk
+- support for links in table cells
+- one or more user definable strings optionally colored that the user can quickly insert with right click
+- import from one note
+- validate internal links for broken/auto-mark if broken
+- improve bookmarks allowing to group into folders
+- possibility to define header and footer for the exported pdf
+- bookmarks icons same as node icon
+- possibility to set custom font for a node
+- possibility to hide the codebox with an expander
+- export to txt from the command line to single txt file
+- possibility to edit multiple nodes attributes at once
+- Alt+1 to switch to the first bookmarked node and so on for Alt+2, Alt+3… up to Alt+9
+- option to add “Back to top” link behind each header when a TOC is inserted
+- calendar node, with the ability to put in events and appointments (jcal?)
+- which pages directs to the current page (backlinks)
+
