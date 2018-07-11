@@ -3,15 +3,21 @@
 
 from app.rc import DIR_PROJECT
 from .Manager import Manager
+from .Storage import Storage
 
 
 
-from .loader import get_storage, load_default_project, open_storage
+storage = Storage()
 
 
-
-smanager = Manager()
-# smanager.open_storage(DIR_PROJECT)
-
-
-# set_up()
+#
+#
+# from .loader import get_storage, load_default_project, open_storage
+#
+#
+#
+# smanager = Manager()
+# # smanager.open_storage(DIR_PROJECT)
+#
+#
+# # set_up()

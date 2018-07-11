@@ -5,7 +5,8 @@ import webbrowser
 from PyQt5.QtWidgets import QGroupBox, QGridLayout, QLabel, QWidget, QHBoxLayout, QVBoxLayout, QPushButton, QToolBar
 
 from app import shared
-from app.storage import smanager
+# from app.storage import smanager
+from app.storage import storage
 
 
 from ..modals.ModalIcons import ModalIcons
@@ -74,7 +75,7 @@ class NodeControls(QWidget):
 
 	def __create_node(self):
 		"""создание новой ноды от родителя"""
-		actions.show_modal_create_node(smanager.storage.pnode.uuid)
+		actions.show_modal_create_node(storage.pnode.uuid)
 
 
 	def __remove_node(self):
@@ -98,20 +99,19 @@ class NodeControls(QWidget):
 
 	def __on_icon_selected(self, ipack, icon):
 
-		node = smanager.storage.pnode
+		node = storage.pnode
 		node.ipack = ipack
 		node.icon = icon
 
 		self.modal_icons.set_close()
 		self.modal_icons = None
 
-		smanager.storage.update_project_file()
+		storage.update_project_file()
 
 
 	def __open_node_folder(self):
-		store = smanager.get_storage()
+		"""открыть каталог ноды во внешнем браузере"""
+
+		webbrowser.open(storage.nnode.path)
 
 
-		path = store.nnode.path
-		print(path)
-		webbrowser.open(path)

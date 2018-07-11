@@ -6,7 +6,7 @@ from PyQt5.QtGui import QFont, QIcon
 from PyQt5.QtCore import Qt
 
 
-from app.storage import get_storage
+# from app.storage import get_storage
 from app.rc import get_icon_path, ICON_PACKS, get_list_icons_pack
 from ..utils.icons import qicon, dicon
 from .. import events

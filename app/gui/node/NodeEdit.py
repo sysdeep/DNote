@@ -6,7 +6,9 @@ from PyQt5.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QLabel, QTextEdit
 from PyQt5.QtWebKitWidgets import QWebView
 
 
-from app.storage import get_storage, smanager, sevents
+from app.lib.EventEmitter import Signal
+# from app.storage import get_storage, smanager, sevents
+from app.storage import storage
 
 
 
@@ -15,23 +17,14 @@ from app.storage import get_storage, smanager, sevents
 
 
 class NodeEdit(QWidget):
+
+	s_updated = Signal()
+
 	def __init__(self, parent=None):
 		super(NodeEdit, self).__init__(parent)
 		# self.setTitle("viewer")
 		self.main_layout = QVBoxLayout(self)
 
-		# self.node = None
-		# self.storage = smanager.get_storage()
-		# self.storage = get_storage()
-
-		self.__make_gui()
-
-		sevents.eon("node_selected", self.__on_node_selected)
-
-
-
-
-	def __make_gui(self):
 
 		self.text_edit = QTextEdit()
 		self.text_edit.setAcceptRichText(False)					# disable ctrl+v rich text
@@ -54,33 +47,18 @@ class NodeEdit(QWidget):
 		
 
 
+	def update_data(self):
 
-	def __on_node_selected(self):
-		# self.node = smanager.storage.get_current_node()
-		self.__set_content()
-		
-
-
-
-
-	# def __on_node_updated(self):
-	# 	self.__set_content()
-
-	
-
-
-
-	def __set_content(self):
-		storage = smanager.get_storage()
 		text = storage.nnode.page.raw_text
 		self.text_edit.setPlainText(text)
 
 
 
 
+
 	def __on_save(self):
 
-		storage = smanager.get_storage()
+		# storage = smanager.get_storage()
 
 		#--- get data
 		text = self.text_edit.toPlainText()
@@ -88,7 +66,5 @@ class NodeEdit(QWidget):
 		#--- update node data
 		storage.nnode.update_page_text(text)
 
-		#--- send event
-		storage.update_node_event()
-
+		self.s_updated.emit()
 

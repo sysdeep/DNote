@@ -109,6 +109,43 @@ class EventEmitter(object):
 
 
 
+
+
+
+class Signal(object):
+	"""
+		using:
+
+		my_signal = Signal()
+		my_signal.emit(any_data)
+
+		#--- somewhere
+		my_signal.connect(lambda any_data: print(any_data))
+
+	"""
+	def __init__(self):
+		self.handlers = []
+
+	def emit(self, *args, **kwargs):
+		for fn in self.handlers:
+			try:
+				fn(*args, **kwargs)
+			except:
+				print("Sig - error emit!!!")
+				print(fn)
+				print(*args, **kwargs)
+
+	def connect(self, fn):
+		self.handlers.append(fn)
+
+	def disconnect(self, fn):
+		if fn in self.handlers:
+			self.handlers.remove(fn)
+
+
+
+
+
 if __name__ == "__main__":
 
 

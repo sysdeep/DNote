@@ -6,7 +6,8 @@ import os
 from PyQt5.QtWidgets import QLabel, QDialog, QPushButton, QHBoxLayout, QVBoxLayout, QGridLayout, QFileDialog, QTextEdit, QFormLayout, QLineEdit
 from PyQt5.QtGui import QFont
 
-from app.storage import smanager
+# from app.storage import smanager
+from app.storage import storage
 
 
 
@@ -49,9 +50,11 @@ class CreateNotebook(QDialog):
 
 
 		print(name, path)
+		print("!!!!CreateNotebook - not implement")
 
 
-		smanager.create_storage(name, path)
+		# smanager.create_storage(name, path)
+
 		#--- create root
 		# node_path = os.path.join(path, name)
 

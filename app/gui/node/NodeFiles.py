@@ -7,7 +7,8 @@ from PyQt5.QtWidgets import QWidget, QGridLayout, QLabel, QPushButton, QListWidg
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QKeySequence
 from .. import events
-from app.storage import get_storage, smanager, sevents
+# from app.storage import get_storage, smanager, sevents
+from app.storage import storage
 
 
 
@@ -26,10 +27,7 @@ class NodeFiles(QWidget):
 
 		self.main_layout = QVBoxLayout(self)
 
-		# self.node = None
-		# self.storage = smanager.get_storage()
-		# self.storage = get_storage()
-		
+
 
 		edit_box = QHBoxLayout()
 		self.main_layout.addLayout(edit_box)
@@ -58,15 +56,6 @@ class NodeFiles(QWidget):
 		self.current_file = None
 
 
-		sevents.eon("node_selected", self.__update_node_data)
-		#--- events
-		# events.on("update_current_node", self.__update_current)
-
-	# def update_node(self, node):
-	# 	self.node = node
-	# 	self.__update_current()
-	# 	self.__load_files()
-		
 
 	def keyPressEvent(self, QKeyEvent):
 		"""обработка сочетаний клавиш"""
@@ -81,7 +70,7 @@ class NodeFiles(QWidget):
 				print("image")
 				image = clipboard.image()
 
-				node = smanager.get_storage().nnode
+				node = storage.nnode
 				file_path = os.path.join(node.files.path, "pasted_{}.png".format(time.time()))
 				print(file_path)
 				image.save(file_path)
@@ -92,30 +81,26 @@ class NodeFiles(QWidget):
 
 			if mime.hasText():
 				print("Text")
-
 				print(clipboard.text())
 			# print(mime)
 
 
-	def __update_node_data(self):
-		# self.node = smanager.storage.get_current_node()
-		self.__load_files()
+	# def __update_node_data(self):
+	# 	# self.node = smanager.storage.get_current_node()
+	# 	self.__load_files()
 		
 
-	def __show_files_modal(self):
+	def update_data(self):
+		self.__load_files()
 
-		events.show_edit_files(self.node)
 
 
 	def __load_files(self):
-		# self.current_ipack = ICON_PACKS[index]
 
 		self.clist.clear()
 
-		storage = smanager.get_storage()
 		files = storage.nnode.files.files
 
-		# self.clist.clear()
 		for f in files:
 
 			# icon = QIcon(get_icon_path(self.current_ipack, f))
@@ -134,7 +119,6 @@ class NodeFiles(QWidget):
 		# print(fname)
 
 		if fname[0]:
-			storage = smanager.get_storage()
 			storage.nnode.create_file(fname[0])
 
 			#--- send events
@@ -144,7 +128,7 @@ class NodeFiles(QWidget):
 
 
 	def __on_remove_action(self):
-		storage = smanager.get_storage()
+		# storage = smanager.get_storage()
 		storage.nnode.remove_file(self.current_file)
 
 		self.__load_files()

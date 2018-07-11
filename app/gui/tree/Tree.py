@@ -7,7 +7,8 @@ from PyQt5.QtGui import QIcon, QStandardItemModel, QStandardItem
 
 from app import log
 from app.rc import get_icon_path
-from app.storage import get_storage, smanager, sevents
+# from app.storage import get_storage, smanager, sevents
+from app.storage import storage, sevents
 
 from .. import events, qicon
 
@@ -68,7 +69,8 @@ class Tree(QTreeView):
 		# sevents.eon("storage_opened", self.__remake_tree)
 		sevents.eon("project_updated", self.__update_tree)
 
-		dbus.eon(dbus.STORAGE_OPENED, self.__on_storage_opened)
+		# dbus.eon(dbus.STORAGE_OPENED, self.__on_storage_opened)
+		storage.s_opened.connect(self.__on_storage_opened)
 
 		#--- signals
 		self.pressed.connect(self.__on_select)
@@ -79,7 +81,8 @@ class Tree(QTreeView):
 		# self.__remake_tree()
 
 
-	def __on_storage_opened(self, storage_path):
+	def __on_storage_opened(self):
+		log.debug("__on_storage_opened")
 		self.__remake_tree()
 
 
@@ -98,10 +101,9 @@ class Tree(QTreeView):
 
 
 	def __remake_tree(self):
-		print("remake tree")
+		log.debug("remake tree")
 
-		self.storage = smanager.get_storage()
-		self.tree = self.storage.get_tree()
+		self.tree = storage.get_tree()
 
 		# print(self.storage)
 
@@ -117,6 +119,7 @@ class Tree(QTreeView):
 
 
 	def __update_tree(self):
+		log.debug("__update_tree")
 		self.current_index = None
 		self.tmodel.clear()
 		self.__make_tree()
@@ -205,15 +208,18 @@ class Tree(QTreeView):
 
 	def __make_tree(self):
 		"""строим дерево"""
+		log.debug("__make_tree")
 		self.blockSignals(True)
 
 		#--- все элементы корня
 		root_items = self.tree.get_nodes_level(1)
 		root_items.sort(key=lambda node: node.tree_lk)
 
+
 		#--- запуск обхода дерева(рекурсия)
 		for item in root_items:
 			self.__wnode(item, self.tmodel)
+
 
 
 		#--- выбираем элемент у которого флаг current
@@ -227,12 +233,15 @@ class Tree(QTreeView):
 			self.__on_select(index)
 
 
+
 		#--- разворачиваем элементы, у которых стоит флаг expanded
 		for i in self.expand_indexes:
 			self.expand(i)
 		self.expand_indexes = []
 
 		self.blockSignals(False)
+
+
 
 
 
@@ -313,11 +322,12 @@ class Tree(QTreeView):
 			прилетает сразу при построении дерева
 			причём current_uuid == uuid
 		"""
+		log.debug("__on_select: {}".format(index))
 		#--- get selected uuid
 		uuid = index.data(Qt.UserRole + 1)
 
 
-		smanager.storage.select_node(uuid)
+		storage.select_node(uuid)
 
 		# #--- get node from storage
 		# node = smanager.storage.get_node(uuid)
@@ -342,12 +352,12 @@ class Tree(QTreeView):
 	def __on_expanded(self, model_index):
 		"""раскрытие узла"""
 		uuid = model_index.data(Qt.UserRole + 1)
-		self.storage.pmanager.set_node_expanded(uuid, True)
+		storage.pmanager.set_node_expanded(uuid, True)
 
 	def __on_collapsed(self, model_index):
 		"""закрытие узла"""
 		uuid = model_index.data(Qt.UserRole + 1)
-		self.storage.pmanager.set_node_expanded(uuid, False)
+		storage.pmanager.set_node_expanded(uuid, False)
 
 
 
@@ -366,13 +376,13 @@ class Tree(QTreeView):
 
 	def __act_create_new_level(self):
 		"""выбранная нода - находится у родителя - пока отключено!!!!!"""
-		parent_pnode = self.storage.pmanager.find_parent_node(self.current_uuid)
+		parent_pnode = storage.pmanager.find_parent_node(self.current_uuid)
+
 
 		#--- если родитель - корень, то вызываем модал как и у __act_create_new_root
-		if parent_pnode.tree_lk == 0:
-			parent_pnode = None
+		parent_uuid = parent_pnode.uuid if parent_pnode.tree_lk > 0 else None
 
-		actions.show_modal_create_node(parent_pnode.uuid)
+		actions.show_modal_create_node(parent_uuid)
 		
 
 
@@ -425,15 +435,15 @@ class Tree(QTreeView):
 
 
 	def __act_move_up(self):
-		result = self.storage.pmanager.move_node_up(self.current_uuid)
+		result = storage.pmanager.move_node_up(self.current_uuid)
 		if result:
-			self.storage.update_project_file()
+			storage.update_project_file()
 
 
 	def __act_move_down(self):
-		result = self.storage.pmanager.move_node_down(self.current_uuid)
+		result = storage.pmanager.move_node_down(self.current_uuid)
 		if result:
-			self.storage.update_project_file()
+			storage.update_project_file()
 	#--- user actions ---------------------------------------------------------
 
 
@@ -441,11 +451,11 @@ class Tree(QTreeView):
 
 	def __on_icon_selected(self, ipack, icon):
 
-		node = smanager.storage.pnode
+		node = storage.pnode
 		node.ipack = ipack
 		node.icon = icon
 
 		self.modal_icons.set_close()
 		self.modal_icons = None
 
-		smanager.storage.update_project_file()
+		storage.update_project_file()

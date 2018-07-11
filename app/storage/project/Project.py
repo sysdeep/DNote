@@ -22,15 +22,38 @@ from .NSTree import NSTree
 
 class Project(object):
 	"""объект проекта - содержит дерево"""
-	def __init__(self, project_path):
+	def __init__(self):
 		self.file_name 		= "project.json"			# название файла проекта
 		self.file_path 		= ""						# полный путь к файлу проекта
-		self.project_path	= project_path				# полный путь к каталогу проекта
+		# self.project_path	= project_path				# полный путь к каталогу проекта
+		#
+		# #--- данные проекта
+		# self.name 			= ""						# название проекта
+		# self.tree 			= NSTree()					# дерево проекта
+		#
+		#
+		# self.load()
+		#
+	#
+	# def __init__(self, project_path):
+	# 	self.file_name 		= "project.json"			# название файла проекта
+	# 	self.file_path 		= ""						# полный путь к файлу проекта
+	# 	self.project_path	= project_path				# полный путь к каталогу проекта
+	#
+	# 	#--- данные проекта
+	# 	self.name 			= ""						# название проекта
+	# 	self.tree 			= NSTree()					# дерево проекта
+	#
+	#
+	# 	self.load()
+
+
+	def setup(self, storage_path):
+		self.project_path	= storage_path				# полный путь к каталогу проекта
 
 		#--- данные проекта
 		self.name 			= ""						# название проекта
 		self.tree 			= NSTree()					# дерево проекта
-
 
 		self.load()
 

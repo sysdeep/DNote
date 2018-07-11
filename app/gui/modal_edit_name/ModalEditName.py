@@ -5,7 +5,8 @@ from PyQt5.QtWidgets import QLabel, QDialog, QPushButton, QHBoxLayout, QVBoxLayo
 from PyQt5.QtGui import QFont
 
 
-from app.storage import smanager
+# from app.storage import smanager
+from app.storage import storage
 # from .. import events
 
 
@@ -20,10 +21,10 @@ class ModalEditName(QDialog):
 		self.main_layout 	= QVBoxLayout(self)
 
 		
-		self.storage 		= smanager.get_storage()				# тек. хранилище
+		# self.storage 		= smanager.get_storage()				# тек. хранилище
 		# self.node 			= self.storage.get_current_node()		# тек. нода
-		self.types 			= self.storage.get_node_types()			# типы контента
-		self.node			= self.storage.pnode
+		self.types 			= storage.get_node_types()			# типы контента
+		self.node			= storage.pnode
 		
 		
 		self.__make_gui()
@@ -91,7 +92,7 @@ class ModalEditName(QDialog):
 
 
 		#--- update project file
-		self.storage.update_project_file()
+		storage.update_project_file()
 
 
 

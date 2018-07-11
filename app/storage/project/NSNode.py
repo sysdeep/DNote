@@ -67,4 +67,4 @@ class NSNode(object):
 
 
 	def __repr__(self):
-		return "{} - lk: {}, rk: {}".format(self.name, self.tree_lk, self.tree_rk)
+		return "{} - lk: {}, rk: {}, uuid: {}".format(self.name, self.tree_lk, self.tree_rk, self.uuid)

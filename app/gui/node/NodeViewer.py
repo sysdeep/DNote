@@ -4,7 +4,8 @@
 
 from PyQt5.QtWidgets import QGroupBox, QHBoxLayout, QVBoxLayout, QLabel, QTextEdit, QPushButton, QLineEdit, QTabWidget
 
-from app.storage import smanager, sevents
+# from app.storage import smanager, sevents
+from app.storage import storage
 
 from .NodeView import NodeViewe
 from .NodeEdit import NodeEdit
@@ -24,30 +25,25 @@ class NodeViewer(QGroupBox):
 		# self.storage = smanager.get_storage()
 
 
-		self.__make_gui()
-
-
-		sevents.eon("project_updated", self.__reload_data)
-		sevents.eon("node_selected", self.__reload_data)
-
-
-
-
-
-	def __make_gui(self):
-
-
 		tabs = QTabWidget()
 		self.main_layout.addWidget(tabs)
 
 
-		node_view = NodeViewe()
-		node_edit = NodeEdit()
-		node_files = NodeFiles()
+		self.node_view = NodeViewe()
+		self.node_edit = NodeEdit()
+		self.node_files = NodeFiles()
 
-		tabs.addTab(node_view, "Просмотр")
-		tabs.addTab(node_edit, "Редактирование")
-		tabs.addTab(node_files, "Файлы")
+		tabs.addTab(self.node_view, "Просмотр")
+		tabs.addTab(self.node_edit, "Редактирование")
+		tabs.addTab(self.node_files, "Файлы")
+
+
+		# sevents.eon("project_updated", self.__reload_data)
+
+
+		storage.s_selected.connect(self.__reload_data)
+
+		self.node_edit.s_updated.connect(self.node_view.update_data)
 
 
 
@@ -56,9 +52,13 @@ class NodeViewer(QGroupBox):
 
 	def __reload_data(self):
 
-		storage = smanager.get_storage()
+
 		title = "{}[{}]".format(storage.pnode.name, storage.pnode.ntype)
 		self.setTitle(title)
+
+		self.node_view.update_data()
+		self.node_edit.update_data()
+		self.node_files.update_data()
 
 
 

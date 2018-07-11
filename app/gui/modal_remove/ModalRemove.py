@@ -5,7 +5,8 @@ from PyQt5.QtWidgets import QLabel, QDialog, QPushButton, QHBoxLayout, QVBoxLayo
 from PyQt5.QtGui import QFont
 
 
-from app.storage import smanager
+from app.storage import storage
+# from app.storage import smanager
 from .. import events
 
 
@@ -20,7 +21,7 @@ class ModalRemove(QDialog):
 		self.main_layout 	= QVBoxLayout(self)
 
 
-		self.storage = smanager.get_storage()
+		# self.storage = smanager.get_storage()
 		
 		
 		self.node_items 	= ("ntype", "uuid", "name", "ctime", "mtime", "path")
@@ -62,7 +63,7 @@ class ModalRemove(QDialog):
 
 	def __load_data(self):
 
-		node = self.storage.pnode
+		node = storage.pnode
 		self.node_labels["ntype"].setText(node.ntype)
 		self.node_labels["uuid"].setText(node.uuid)
 		self.node_labels["name"].setText(node.name)
@@ -75,7 +76,7 @@ class ModalRemove(QDialog):
 	def __remove(self):
 		"""удаление ноды"""
 
-		self.storage.remove_node(self.storage.pnode.uuid)
+		storage.remove_node(storage.pnode.uuid)
 		
 		self.close()
 

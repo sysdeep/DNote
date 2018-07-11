@@ -4,7 +4,8 @@
 
 from PyQt5.QtWidgets import QLabel, QDialog, QPushButton, QHBoxLayout, QVBoxLayout, QGridLayout, QFileDialog, QTextEdit, QFormLayout, QLineEdit
 from PyQt5.QtGui import QFont
-from app.storage import smanager
+from app.storage import storage
+# from app.storage import smanager
 
 
 class NodeInfo(QDialog):
@@ -20,10 +21,10 @@ class NodeInfo(QDialog):
 		self.main_layout = QVBoxLayout(self)
 
 
-		self.storage = smanager.get_storage()
+		# self.storage = smanager.get_storage()
 		
-		self.pnode = self.storage.pnode
-		self.nnode = self.storage.nnode
+		self.pnode = storage.pnode
+		self.nnode = storage.nnode
 		self.node_items = ("ntype", "uuid", "name", "ctime", "mtime", "path")
 		self.node_labels = {}
 

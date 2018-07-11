@@ -16,10 +16,17 @@ NODE_TYPES = ("text", "markdown")
 
 
 class Nodes(object):
-	def __init__(self, nodes_path):
+	def __init__(self):
 		self.nodes_dir		= "nodes"			# каталог с нодами
-		self.project_path 	= nodes_path		# полный путь к каталогу проекта
-		self.nodes_path		= os.path.join(self.project_path, self.nodes_dir)		# полный путь к каталогу с нодами
+		# self.project_path 	= nodes_path		# полный путь к каталогу проекта
+		# self.nodes_path		= os.path.join(self.project_path, self.nodes_dir)		# полный путь к каталогу с нодами
+
+
+	# def __init__(self, nodes_path):
+	# 	self.nodes_dir		= "nodes"			# каталог с нодами
+	# 	self.project_path 	= nodes_path		# полный путь к каталогу проекта
+	# 	self.nodes_path		= os.path.join(self.project_path, self.nodes_dir)		# полный путь к каталогу с нодами
+
 
 
 	#
@@ -28,6 +35,13 @@ class Nodes(object):
 	# 	self.project_path = project_path
 	# 	self.nodes_path = os.path.join(self.project_path, self.nodes_dir)
 
+
+
+
+
+	def setup(self, storage_path):
+		self.project_path 	= storage_path		# полный путь к каталогу проекта
+		self.nodes_path		= os.path.join(self.project_path, self.nodes_dir)		# полный путь к каталогу с нодами
 
 
 

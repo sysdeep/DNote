@@ -9,6 +9,7 @@ from app import log
 from app.lib import dbus
 
 from .gui.MainWindow import MainWindow
+from app.storage import storage
 
 
 
@@ -45,7 +46,8 @@ class App(object):
 		log.info("запуск приложения")
 
 		self.main_window = MainWindow()
-		dbus.emit(dbus.STORAGE_OPEN, storage_path)
+		# dbus.emit(dbus.STORAGE_OPEN, storage_path)
+		storage.open_storage(storage_path)
 		self.qtapp.exec_()
 
 		#

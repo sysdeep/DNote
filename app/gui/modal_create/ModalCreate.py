@@ -6,7 +6,8 @@ from PyQt5.QtGui import QFont
 
 
 
-from app.storage import smanager
+# from app.storage import smanager
+from app.storage import storage
 
 
 
@@ -20,15 +21,15 @@ class ModalCreate(QDialog):
 		super(ModalCreate, self).__init__(parent)
 
 		self.setWindowTitle("Создание новой записи")
-		self.storage 		= smanager.get_storage()
+		# self.storage 		= smanager.get_storage()
 		
 		if parent_node_uuid is None:
-			self.parent_node_uuid = self.storage.pmanager.get_root_node().uuid
+			self.parent_node_uuid = storage.pmanager.get_root_node().uuid
 		else:
 			self.parent_node_uuid 	= parent_node_uuid
 
 
-		self.types = self.storage.get_node_types()
+		self.types = storage.get_node_types()
 
 
 		self.main_layout = QVBoxLayout(self)
@@ -105,7 +106,7 @@ class ModalCreate(QDialog):
 
 
 
-		self.storage.create_node(self.parent_node_uuid, name, node_type, text)
+		storage.create_node(self.parent_node_uuid, name, node_type, text)
 
 		# #--- создание дефолтных записей ноды
 		# node = self.storage.create_node(self.parent_node, name)

@@ -7,7 +7,7 @@ import uuid
 import os
 
 from app import log
-# from app.lib import EventEmitter
+from app.lib.EventEmitter import EventEmitter, Signal
 
 from .nodes.Nodes import Nodes, NODE_TYPES
 from .project.Project import Project
@@ -24,19 +24,51 @@ class Storage(object):
 	"""
 		Объект хранилища
 	"""
-	def __init__(self, storage_path):
 
-		self.storage_path 	= storage_path				# полный путь к каталогу хранилища
+	s_opened = Signal()				# storage was opened
+	s_selected = Signal()			# node was selected
+	s_updated = Signal()
 
-		self.nmanager 		= Nodes(self.storage_path)					# управление нодами
-		self.pmanager		= Project(self.storage_path)					# управление файлом проекта
+	def __init__(self):
+
+		self.storage_path 	= ""				# полный путь к каталогу хранилища
+
+		self.nmanager 		= Nodes()					# управление нодами
+		self.pmanager		= Project()					# управление файлом проекта
 
 		self.nnode = None
 		self.pnode = None
 
 
+		self.__events = EventEmitter()
+
 		# self.copy_node_uuid = None
 
+
+	# def __init__(self, storage_path):
+	#
+	# 	self.storage_path 	= storage_path				# полный путь к каталогу хранилища
+	#
+	# 	self.nmanager 		= Nodes(self.storage_path)					# управление нодами
+	# 	self.pmanager		= Project(self.storage_path)					# управление файлом проекта
+	#
+	# 	self.nnode = None
+	# 	self.pnode = None
+
+
+
+
+
+	def open_storage(self, storage_path):
+		"""открытие нового хранилища"""
+		log.debug("открытие хранилища: " + storage_path)
+		self.storage_path = storage_path
+
+		self.nmanager.setup(storage_path)
+		self.pmanager.setup(storage_path)
+
+		log.debug("хранилище открыто")
+		self.s_opened.emit()
 
 
 
@@ -57,7 +89,7 @@ class Storage(object):
 		self.nnode = self.nmanager.get_node(uuid)
 		self.pnode = self.pmanager.get_node(uuid)
 		self.pmanager.set_current_flag(uuid)
-		sevents.node_selected()
+		self.s_selected.emit()
 
 
 
@@ -142,6 +174,23 @@ class Storage(object):
 
 
 
+
+	#--- 2018.07.11 -----------------------------------------------------------
+	# def update_page_text(self, text):
+	# 	self.nnode.update_page_text(text)
+	#
+	# 	#--- send event
+	# 	storage.update_node_event()
+	#--- 2018.07.11 -----------------------------------------------------------
+
+
+
+
+	def eon(self, event, cb):
+		self.__events.eon(event, cb)
+
+	def emit(self, event_name, *args, **kwargs):
+		self.__events.emit(event_name, *args, **kwargs)
 
 
 

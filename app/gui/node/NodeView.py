@@ -6,10 +6,8 @@ from PyQt5.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QLabel, QTextEdit
 from PyQt5.QtWebKitWidgets import QWebView
 
 from vendors import markdown
-from app.storage import get_storage, smanager, sevents
+from app.storage import storage
 
-from .. import events
-# from .mdext.Img import CImgExtension
 
 
 
@@ -25,38 +23,16 @@ class NodeViewe(QWidget):
 		# self.storage = get_storage()
 		# self.storage = smanager.get_storage()
 
-		self.__make_gui()
-
-		sevents.eon("node_selected", self.__on_node_selected)
-		# sevents.eon("storage_opened", self.__on_storage_opened)
-		sevents.eon("node_updated", self.__on_node_updated)
-
-
-
-
-	def __make_gui(self):
-
-
 		self.web = QWebView()
 		self.main_layout.addWidget(self.web)
 		# self.web.setHtml(html)
 
 
 
-
-	def __on_node_selected(self):
-		# self.node = self.storage.get_current_node()
-		# self.node = smanager.storage.get_current_node()
-		self.__set_content()
-		
-
-
-
-
-	def __on_node_updated(self):
+	def update_data(self):
 		self.__set_content()
 
-	
+
 
 
 
@@ -67,7 +43,7 @@ class NodeViewe(QWidget):
 
 
 		# text = self.node.page.raw_text
-		storage = smanager.get_storage()
+		# storage = smanager.get_storage()
 		text = storage.nnode.page.raw_text
 
 
