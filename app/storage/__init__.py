@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+"""
+	2018.08.11 - новая реализация хранилища - singleton
+"""
 from app.rc import DIR_PROJECT
 from .Manager import Manager
 from .Storage import Storage

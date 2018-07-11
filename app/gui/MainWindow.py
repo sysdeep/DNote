@@ -34,7 +34,7 @@ class MainWindow(QMainWindow):
 		self.max_x = 800
 		self.max_y = 600
 
-		self.setWindowTitle("DCat")
+		self.setWindowTitle("DNote")
 		self.setMinimumWidth(self.max_x)							# min width
 		self.setMinimumHeight(self.max_y)
 
