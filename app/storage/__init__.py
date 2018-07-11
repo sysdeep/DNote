@@ -9,6 +9,7 @@ import shutil
 # from app.rc import DIR_PROJECT
 from .Manager import Manager
 from .Storage import Storage
+from .nodes.Nodes import NODE_TYPES
 
 from app.rc import DIR_DEFAULTS
 

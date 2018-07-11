@@ -5,8 +5,8 @@ from PyQt5.QtWidgets import QLabel, QDialog, QPushButton, QHBoxLayout, QVBoxLayo
 from PyQt5.QtGui import QFont
 
 
-# from app.storage import smanager
-from app.storage import storage
+
+from app.storage import storage, NODE_TYPES
 # from .. import events
 
 
@@ -19,20 +19,11 @@ class ModalEditName(QDialog):
 		super(ModalEditName, self).__init__(parent)
 
 		self.main_layout 	= QVBoxLayout(self)
+		self.setWindowTitle("Изменение названия")
 
 		
-		# self.storage 		= smanager.get_storage()				# тек. хранилище
-		# self.node 			= self.storage.get_current_node()		# тек. нода
-		self.types 			= storage.get_node_types()			# типы контента
-		self.node			= storage.pnode
-		
-		
-		self.__make_gui()
-		self.__load_data()
-
-
-	def __make_gui(self):
-		
+		# self.types 			= storage.get_node_types()			# типы контента
+		# self.node			= storage.pnode
 		
 
 
@@ -40,15 +31,15 @@ class ModalEditName(QDialog):
 		self.main_layout.addLayout(form)
 
 		#--- name
-		self.edit_name = QLineEdit(self.node.name)
+		self.edit_name = QLineEdit(storage.pnode.name)
 
-		#--- type
-		self.edit_type = QComboBox()
-		self.edit_type.addItems(self.types)
+		# #--- type
+		# self.edit_type = QComboBox()
+		# self.edit_type.addItems(self.types)
 
 
 		form.addRow("Название", self.edit_name)
-		form.addRow("Тип", self.edit_type)
+		# form.addRow("Тип", self.edit_type)
 
 
 
@@ -56,10 +47,10 @@ class ModalEditName(QDialog):
 		controls = QHBoxLayout()
 		self.main_layout.addLayout(controls)
 
-		btn_close = QPushButton("Close")
+		btn_close = QPushButton("Закрыть")
 		btn_close.clicked.connect(self.close)
 
-		btn_save = QPushButton("Save")
+		btn_save = QPushButton("Сохранить")
 		btn_save.clicked.connect(self.__save)
 
 		controls.addWidget(btn_save)
@@ -67,10 +58,21 @@ class ModalEditName(QDialog):
 		controls.addWidget(btn_close)
 
 
-	def __load_data(self):
-		ntype = self.node.ntype
-		index = self.types.index(ntype)
-		self.edit_type.setCurrentIndex(index)
+		#
+		#
+		# #--- load current data
+		# self.__load_data()
+
+
+
+
+
+
+	#
+	# def __load_data(self):
+	# 	ntype = self.node.ntype
+	# 	index = self.types.index(ntype)
+	# 	self.edit_type.setCurrentIndex(index)
 
 
 
@@ -82,19 +84,17 @@ class ModalEditName(QDialog):
 		name = self.edit_name.text()
 
 
-		#--- тип
-		index = self.edit_type.currentIndex()
-		node_type = self.types[index]
+		# #--- тип
+		# index = self.edit_type.currentIndex()
+		# node_type = self.types[index]
 
 		#--- update node data
-		self.node.name = name
-		self.node.ntype = node_type
+		storage.pnode.name = name
+		# self.node.ntype = node_type
 
 
 		#--- update project file
 		storage.update_project_file()
-
-
 
 
 
