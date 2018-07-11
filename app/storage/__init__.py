@@ -4,9 +4,13 @@
 """
 	2018.08.11 - новая реализация хранилища - singleton
 """
-from app.rc import DIR_PROJECT
+import os.path
+import shutil
+# from app.rc import DIR_PROJECT
 from .Manager import Manager
 from .Storage import Storage
+
+from app.rc import DIR_DEFAULTS
 
 
 
@@ -24,3 +28,26 @@ storage = Storage()
 #
 #
 # # set_up()
+
+
+
+
+def create_storage(name, path):
+	"""
+		Создать новое хранилище
+	"""
+	# log.info("SManager - create new store: {} in {}".format(name, path))
+	# self.storage_path = path
+
+	# sevents.storage_created()
+
+	new_storage_path = os.path.join(path, name)
+
+	DIR_DEFAULT_STORAGE_1 = os.path.join(DIR_DEFAULTS, "sdir1")
+
+
+	shutil.copytree(DIR_DEFAULT_STORAGE_1, new_storage_path)
+
+	# self.open_storage(new_storage_path)
+	storage.close_storage()
+	storage.open_storage(new_storage_path)

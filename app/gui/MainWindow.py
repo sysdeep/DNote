@@ -17,7 +17,8 @@ from .BarMenu import BarMenu
 from . import qicon
 
 from . import actions
-from app.lib import dbus
+from app.rc import APP_NAME
+from app.storage import storage
 
 
 class MainWindow(QMainWindow):
@@ -34,7 +35,7 @@ class MainWindow(QMainWindow):
 		self.max_x = 800
 		self.max_y = 600
 
-		self.setWindowTitle("DNote")
+		self.setWindowTitle(APP_NAME)
 		self.setMinimumWidth(self.max_x)							# min width
 		self.setMinimumHeight(self.max_y)
 
@@ -75,7 +76,8 @@ class MainWindow(QMainWindow):
 		# tray.show()
 
 
-		dbus.eon(dbus.STORAGE_OPENED, self.__on_storage_opened)
+
+		storage.s_opened.connect(self.__on_storage_opened)
 		
 
 
@@ -148,9 +150,12 @@ class MainWindow(QMainWindow):
 	
 
 
-	def __on_storage_opened(self, storage_path):
+	def __on_storage_opened(self):
 		"""обработка события открытия хранилища"""
-		self.label_storage_path.setText(storage_path)
+		self.label_storage_path.setText(storage.storage_path)
+
+		title = "{} - {}".format(APP_NAME, storage.storage_path)
+		self.setWindowTitle(title)
 
 
 

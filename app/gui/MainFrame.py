@@ -66,9 +66,9 @@ class MainFrame(QWidget):
 		tree_side.addWidget(tmp_btn_refresh)
 
 
-		tmp_btn_save = QPushButton("save")
-		tmp_btn_save.clicked.connect(self.__force_save)
-		tree_side.addWidget(tmp_btn_save)
+		# tmp_btn_save = QPushButton("save")
+		# tmp_btn_save.clicked.connect(self.__force_save)
+		# tree_side.addWidget(tmp_btn_save)
 
 
 		# self.tree_stat = TreeStat()
@@ -164,9 +164,9 @@ class MainFrame(QWidget):
 
 
 
-
-	def __force_save(self):
-		log.debug("force save - not implement")
-		# self.storage.project.write_file()
-
+	#
+	# def __force_save(self):
+	# 	log.debug("force save - not implement")
+	# 	# self.storage.project.write_file()
+	#
 

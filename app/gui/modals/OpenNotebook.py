@@ -8,6 +8,7 @@ from PyQt5.QtGui import QFont
 
 # from app.storage import smanager
 from app.lib import dbus
+from app.storage import storage
 
 
 
@@ -50,12 +51,13 @@ class OpenNotebook(QDialog):
 
 
 	def __on_open(self):
+		"""открытие хранилища"""
 		path = self.edit_path.text()
 
-		# print(path)
 
-		# smanager.open_storage(path)
-		dbus.emit(dbus.STORAGE_OPEN, path)
+		storage.close_storage()
+		storage.open_storage(path)
+
 
 		self.close()
 
@@ -64,7 +66,6 @@ class OpenNotebook(QDialog):
 	def __on_select(self):
 		fname = QFileDialog.getExistingDirectory(self, "Open notebook", "/home/nia/Development/_Python/_DNote/")
 
-		print(fname)
 
 		self.edit_path.setText(fname)
 

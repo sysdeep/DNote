@@ -83,12 +83,12 @@ class BarMenu(object):
 
 	
 	def __file_create_new_notebook(self):
-		# modal = CreateNotebook(self.parent)
-		# modal.show()
-		print("BarMenu - create - not implement!!!!!")
+		modal = CreateNotebook(self.parent)
+		modal.show()
+		# print("BarMenu - create - not implement!!!!!")
 
 
 	def __file_open_notebook(self):
-		# modal = OpenNotebook(self.parent)
-		# modal.show()
-		print("BarMenu - open - not implement!!!!!")
+		modal = OpenNotebook(self.parent)
+		modal.show()
+		# print("BarMenu - open - not implement!!!!!")

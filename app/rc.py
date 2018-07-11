@@ -4,6 +4,9 @@
 
 import os
 
+
+APP_NAME = "DNote"
+
 #--- dirs
 DIR_SELF 		= os.path.dirname(os.path.abspath(__file__))
 DIR_MEDIA 		= os.path.normpath(os.path.join(DIR_SELF, "..", "media"))

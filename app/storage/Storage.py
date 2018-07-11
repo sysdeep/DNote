@@ -26,6 +26,7 @@ class Storage(object):
 	"""
 
 	s_opened = Signal()				# storage was opened
+	s_closed = Signal()				# storage was closed
 	s_selected = Signal()			# node was selected
 	s_updated = Signal()
 
@@ -57,18 +58,27 @@ class Storage(object):
 
 
 
-
-
+	#--- 2018.07.11 -----------------------------------------------------------
 	def open_storage(self, storage_path):
 		"""открытие нового хранилища"""
-		log.debug("открытие хранилища: " + storage_path)
+		log.info("открытие хранилища: " + storage_path)
 		self.storage_path = storage_path
 
 		self.nmanager.setup(storage_path)
 		self.pmanager.setup(storage_path)
 
-		log.debug("хранилище открыто")
+		log.info("хранилище открыто")
 		self.s_opened.emit()
+
+
+	def close_storage(self):
+		"""закрытие текущего хранилища"""
+		log.info("закрытие текущего хранилища: {}".format(self.storage_path))
+
+		# TODO: очистить все вложенные элементы
+
+		self.s_closed.emit()
+	#--- 2018.07.11 -----------------------------------------------------------
 
 
 
@@ -175,13 +185,7 @@ class Storage(object):
 
 
 
-	#--- 2018.07.11 -----------------------------------------------------------
-	# def update_page_text(self, text):
-	# 	self.nnode.update_page_text(text)
-	#
-	# 	#--- send event
-	# 	storage.update_node_event()
-	#--- 2018.07.11 -----------------------------------------------------------
+
 
 
 

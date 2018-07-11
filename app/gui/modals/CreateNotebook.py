@@ -7,9 +7,9 @@ from PyQt5.QtWidgets import QLabel, QDialog, QPushButton, QHBoxLayout, QVBoxLayo
 from PyQt5.QtGui import QFont
 
 # from app.storage import smanager
-from app.storage import storage
+from app.storage import create_storage
 
-
+# TODO: ввести проверки и рефакторинг
 
 class CreateNotebook(QDialog):
 	def __init__(self, parent=None):
@@ -53,21 +53,7 @@ class CreateNotebook(QDialog):
 		print("!!!!CreateNotebook - not implement")
 
 
-		# smanager.create_storage(name, path)
-
-		#--- create root
-		# node_path = os.path.join(path, name)
-
-		# try:
-		# 	os.mkdir(node_path)
-		# except:
-		# 	print("Error!!!!")
+		create_storage(name, path)
 
 
-
-"""
-
-/home/nia/Development/_Python/_DNote/tests
-
-
-"""
+		self.close()
