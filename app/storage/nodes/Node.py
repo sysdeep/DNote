@@ -115,8 +115,10 @@ class Node(object):
 		# self.meta.write_file()
 		# self.__event_updated()
 
+	def reload_files(self):
+		"""обновить список файлов"""
 
-
+		self.files.reload()
 
 
 

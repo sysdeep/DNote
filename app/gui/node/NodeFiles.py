@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-
-from PyQt5.QtWidgets import QWidget, QGridLayout, QLabel, QPushButton, QListWidget, QHBoxLayout, QVBoxLayout, QListWidgetItem, QFileDialog
+import os.path
+import time
+from PyQt5.QtWidgets import QWidget, QGridLayout, QLabel, QPushButton, QListWidget, QHBoxLayout, QVBoxLayout, QListWidgetItem, QFileDialog, QApplication
 from PyQt5.QtCore import Qt
+from PyQt5.QtGui import QKeySequence
 from .. import events
 from app.storage import get_storage, smanager, sevents
 
@@ -60,13 +62,39 @@ class NodeFiles(QWidget):
 		#--- events
 		# events.on("update_current_node", self.__update_current)
 
-
-
 	# def update_node(self, node):
 	# 	self.node = node
 	# 	self.__update_current()
 	# 	self.__load_files()
 		
+
+	def keyPressEvent(self, QKeyEvent):
+		"""обработка сочетаний клавиш"""
+
+		#--- вставка
+		if QKeyEvent.matches(QKeySequence.Paste):
+
+			clipboard = QApplication.clipboard()
+			mime = clipboard.mimeData()
+
+			if mime.hasImage():
+				print("image")
+				image = clipboard.image()
+
+				node = smanager.get_storage().nnode
+				file_path = os.path.join(node.files.path, "pasted_{}.png".format(time.time()))
+				print(file_path)
+				image.save(file_path)
+				node.reload_files()
+
+
+				self.__load_files()
+
+			if mime.hasText():
+				print("Text")
+
+				print(clipboard.text())
+			# print(mime)
 
 
 	def __update_node_data(self):
@@ -128,3 +156,5 @@ class NodeFiles(QWidget):
 
 		if not self.btn_remove.isEnabled():
 			self.btn_remove.setDisabled(False)
+
+

@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+import webbrowser
 from PyQt5.QtWidgets import QGroupBox, QGridLayout, QLabel, QWidget, QHBoxLayout, QVBoxLayout, QPushButton, QToolBar
 
 from app import shared
@@ -38,6 +39,10 @@ class NodeControls(QWidget):
 
 		action_info = self.bar.addAction(qicon("actions", "kdeprint_printer_infos.png"), "Info")
 		action_info.triggered.connect(self.__show_node_info)
+
+
+		action_open_dir = self.bar.addAction(qicon("actions", "book.png"), "Open folder")
+		action_open_dir.triggered.connect(self.__open_node_folder)
 
 		
 
@@ -101,3 +106,12 @@ class NodeControls(QWidget):
 		self.modal_icons = None
 
 		smanager.storage.update_project_file()
+
+
+	def __open_node_folder(self):
+		store = smanager.get_storage()
+
+
+		path = store.nnode.path
+		print(path)
+		webbrowser.open(path)

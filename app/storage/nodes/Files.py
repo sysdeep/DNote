@@ -37,7 +37,9 @@ class Files(object):
 		#--- читаем список файлов
 		self.__read_files()
 
-
+	def reload(self):
+		"""перезагрузить список файлов"""
+		self.__read_files()
 
 	def __read_files(self):
 		"""читаем список файлов"""
